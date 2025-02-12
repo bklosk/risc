@@ -1,21 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 
 export default function Landing() {
-  // risc paths! storing here for funsies
-  /* 
-  const paths = [
-    "M207,207h76.5v-49.5h-126v126H207V207z",
-    "M233.5,368.5H157V419h127v-64h-50.5V368.5z M158,293h125v48.5h-76.5V355H158V293z",
-    "M418,234.5V283H293v-48.5h38.2v-28H293V158 h125v48.5h-38.2v28H418z",
-    "M292,419h127v-50.5h-76.5v-26H419V292H292V419z",
-  ];
-  */
+  const { scrollY } = useScroll();
+  // Create an opacity value that fades from fully opaque to transparent between 100 and 300 scroll positions
+  const fadeOpacity = useTransform(scrollY, [100, 300], [1, 0]);
 
   return (
-    <div className="w-full grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 ">
+    <motion.div
+      style={{ opacity: fadeOpacity }} // fade out as it moves out of view
+      className="w-full grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 "
+    >
       <motion.video
         autoPlay
         loop
@@ -24,11 +21,11 @@ export default function Landing() {
         className="w-full object-cover px-8 md:px-0"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0, easing: "easeInOut" }}
-        transition={{ duration: 2, delay: 0.5 }}
+        transition={{ duration: 1.5, delay: 0.5 }}
       >
         <source src="/images/chicago.mp4" type="video/mp4" />
       </motion.video>
-      <div className="lg:pr-20 lg:mt-[50%] md:mt-[35%] md:w-full w-5/6  mt-12 pl-8 pr-6">
+      <motion.div className="lg:pr-20 lg:mt-[50%] md:mt-[35%] w-5/6  mt-12 pl-8 pr-6">
         <TypeAnimation
           sequence={[
             2000,
@@ -40,20 +37,26 @@ export default function Landing() {
             2000,
             "We are an innovation lab for radical solutions",
             2000,
-            "We are an innovation lab for a brighter future",
+            "We are an innovation lab for a sustainable future",
             2000,
           ]}
           wrapper="span"
+          speed={55}
           cursor={false}
           repeat={Infinity}
           className="text-4xl font-extrabold text-[#FC4512]"
         />
-        <p className="mt-4 lg:w-3/4 font-medium text-lg">
+        <motion.p
+          className="mt-4 lg:w-3/4 font-medium text-lg"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 4.5 }}
+        >
           Driven by curiosity. Unfettered by orthodoxy. Grounded in the sciences
           of human behavior. We’re investigating bold new ways to tackle the
           world’s biggest problems.
-        </p>
-      </div>
-    </div>
+        </motion.p>
+      </motion.div>
+    </motion.div>
   );
 }
