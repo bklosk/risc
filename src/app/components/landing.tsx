@@ -6,7 +6,7 @@ import { TypeAnimation } from "react-type-animation";
 export default function Landing() {
   const { scrollY } = useScroll();
   // Create an opacity value that fades from fully opaque to transparent between 100 and 300 scroll positions
-  const fadeOpacity = useTransform(scrollY, [100, 300], [1, 0]);
+  const fadeOpacity = useTransform(scrollY, [100, 275], [1, 0]);
 
   return (
     <motion.div
@@ -28,7 +28,7 @@ export default function Landing() {
       <motion.div className="lg:pr-20 lg:mt-[50%] md:mt-[35%] w-5/6  mt-12 pl-8 pr-6">
         <TypeAnimation
           sequence={[
-            2000,
+            1600,
             "We are an innovation lab for social change",
             2000, // Waits 1s
             "We are an innovation lab for risky ideas",
@@ -50,7 +50,7 @@ export default function Landing() {
           className="mt-4 lg:w-3/4 font-medium text-lg"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 4.5 }}
+          transition={{ duration: 0.5, delay: 4 }}
         >
           Driven by curiosity. Unfettered by orthodoxy. Grounded in the sciences
           of human behavior. We’re investigating bold new ways to tackle the
