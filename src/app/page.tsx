@@ -1,5 +1,6 @@
 import Landing from "./components/landing";
 import Work from "./components/work";
+import Team from "./components/team";
 
 export default function Page() {
   // risc paths! storing here for funsies
@@ -13,9 +14,10 @@ export default function Page() {
   */
 
   return (
-    <main className="">
+    <main>
       <Landing />
       <Work />
+      <Team />
     </main>
   );
 }
