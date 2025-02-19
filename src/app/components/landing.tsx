@@ -20,7 +20,7 @@ export default function Landing() {
         playsInline
         className="w-full object-cover px-8 md:px-0"
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0, easing: "easeInOut" }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.5, delay: 0.5 }}
       >
         <source src="/images/chicago.mp4" type="video/mp4" />

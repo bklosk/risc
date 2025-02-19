@@ -3,7 +3,7 @@
 import { motion, useScroll } from "framer-motion";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import team from "/public/data/team.json";
+import team from "../../../public/data/team.json";
 
 export default function Team() {
   const { scrollY } = useScroll();

@@ -168,7 +168,7 @@ export default function Work() {
               onMouseMove={handleMouseMove}
               onMouseEnter={() => setHeaderText(alt)}
               onMouseLeave={handleMouseLeave}
-              animate={{ easing: "easeInOut" }}
+              animate={{}}
             >
               {src && (
                 <div
