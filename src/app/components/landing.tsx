@@ -39,6 +39,12 @@ export default function Landing() {
             2000,
             "We are an innovation lab for a sustainable future",
             2000,
+            "We are an innovation lab for distruptive ideas",
+            2000,
+            "We are an innovation lab for system-level change",
+            2000,
+            "We are an innovation lab for unorthodox approaches",
+            2000,
           ]}
           wrapper="span"
           speed={55}

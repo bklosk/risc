@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Ben Thevathasan",
+    "position": "Lead Data Scientist",
+    "image": "/images/team/BenT.jpeg"
+  },
+  {
+    "name": "Noah Duncan",
+    "position": "Senior Analyst",
+    "image": "/images/team/Noah.png"
+  },
+  {
+    "name": "Jack Tait",
+    "position": "Senior Analyst",
+    "image": "/images/team/Jack.png"
+  },
+  {
+    "name": "Claire Sukumar",
+    "position": "Senior Analyst",
+    "image": "/images/team/Claire.png"
+  },
+  {
+    "name": "Ruby Rorty",
+    "position": "Analyst",
+    "image": "/images/team/Ruby.png"
+  },
+  {
+    "name": "David Johnstone",
+    "position": "Analyst",
+    "image": "/images/team/Davis.png"
+  },
+  {
+    "name": "Katherine Leahy",
+    "position": "Analyst",
+    "image": "/images/team/Katherine.png"
+  },
+  {
+    "name": "Cami Brix",
+    "position": "Analyst",
+    "image": "/images/team/Cami.png"
+  },
+  {
+    "name": "Devin Haas",
+    "position": "Analyst",
+    "image": "/images/team/Devin.jpeg"
+  },
+  {
+    "name": "Hana Horiuchi",
+    "position": "Analyst",
+    "image": "/images/team/Hana.png"
+  },
+  {
+    "name": "Daniela Shuman",
+    "position": "Analyst",
+    "image": "/images/team/Daniela.png"
+  },
+  {
+    "name": "Kali Enkhbayar",
+    "position": "Analyst",
+    "image": "/images/team/Khali.png"
+  },
+  {
+    "name": "Micah Ross",
+    "position": "Analyst",
+    "image": "/images/team/Micah.png"
+  },
+  {
+    "name": "Josie Maier",
+    "position": "Analyst",
+    "image": "/images/team/Josie.png"
+  },
+  {
+    "name": "Ben Klosky",
+    "position": "Analyst",
+    "image": "/images/team/BenK.png"
+  }
+]
