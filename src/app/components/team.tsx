@@ -11,7 +11,7 @@ export default function Team() {
   // Add state to trigger animation upon scrolling past 1000px
   const [animateTeam, setAnimateTeam] = useState(false);
   useEffect(() => {
-    const unsubscribe = scrollY.onChange((latest) => {
+    const unsubscribe = scrollY.on("change", (latest) => {
       if (latest > 1000) {
         setAnimateTeam(true);
         unsubscribe();
@@ -59,7 +59,7 @@ export default function Team() {
           {team.map((member, index) => (
             <motion.div
               key={index}
-              className="relative"
+              className="relative z-50"
               initial="hidden"
               animate={animateTeam ? "visible" : "hidden"}
               custom={index}
@@ -87,7 +87,7 @@ export default function Team() {
                   alt={`Team member ${index + 1}`}
                   width={150}
                   height={150}
-                  className="w-[150px] h-[150px] object-cover rounded-lg cursor-pointer hover:border-[#FC4512] hover:border-2 border-0 transition-all hover:shadow-xl duration-300 z-50"
+                  className="w-[150px] h-[150px] object-cover rounded-lg cursor-pointer hover:border-[#FC4512] hover:border-2 border-0 transition-all hover:shadow-xl duration-300"
                 />
               </motion.div>
               <p className="relative font-extrabold w-fit mt-2 mb-4 bg-opacity-50 rounded-sm">

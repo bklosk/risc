@@ -108,7 +108,7 @@ export default function Work() {
       className:
         "col-span-3 bg-[#cd7029] flex justify-center items-center z-20 rounded-md",
       dynamicStyle: pd_box,
-      src: "/images/work/pd_cream.png",
+      src: "/images/work/PD_cream.png",
       alt: "Helping kidney donors become eligible to donate",
       width: "w-3/4",
       height: "h-1/2",
@@ -177,6 +177,7 @@ export default function Work() {
                   <Image
                     src={src}
                     alt={alt}
+                    sizes={"auto"}
                     fill
                     style={{ objectFit: "contain" }}
                     className="select-none"
