@@ -61,9 +61,13 @@ export default function Team() {
         animate={introInView ? "visible" : "hidden"}
         variants={fadeInUp}
       >
-        <h1 className="text-6xl max-w-[400px] mx-auto font-extrabold text-[#FC4512]   mb-8">
-          Who we are:
+        <h1 className="text-6xl max-w-[400px] mx-auto font-extrabold text-[#FC4512] mb-8">
+          Who we are
         </h1>
+        <p className="mb-4 text-lg font-bold max-w-[400px] mx-auto">
+          Our mission is to generate breakthrough problems to the world&apos;s
+          hardest problems.
+        </p>
         <p className="mb-4 text-lg max-w-[400px] mx-auto">
           The Center for RISC is the brainchild of Steven Levitt, professor of
           economics at the University of Chicago and co-author of Freakonomics.

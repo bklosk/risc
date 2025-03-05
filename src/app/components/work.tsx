@@ -1,205 +1,248 @@
 "use client";
 
-import { useState, useEffect } from "react"; // added useEffect
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useRef, useState } from "react";
+import {
+  motion,
+  useInView,
+  useAnimation,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Image from "next/image";
-import TextTransition from "react-text-transition";
 
-export default function Work() {
+// Sample data structure for the carousel items
+const carouselItems = [
+  {
+    id: 1,
+    title: "Foster Insights",
+    description: "Improving child welfare with data science",
+    image: "/images/work/fi.png",
+    color: "#1f3e51", // Light blue
+  },
+  {
+    id: 2,
+    title: "The Levitt Lab",
+    description: "Daring to reimagine high school",
+    image: "/images/work/TLL.png",
+    color: "#071535", // Light green
+  },
+  {
+    id: 3,
+    title: "Project Donor",
+    description: "Helping kidney donors reach eligibility",
+    image: "/images/work/pd_cream.png",
+    color: "#cd7029", // Light orange
+  },
+  {
+    id: 4,
+    title: "Decision Aid",
+    description: "Minimizing unnecessary law enforcement encounters",
+    image: "/images/work/da.png",
+    color: "#000000", // Light purple
+  },
+  {
+    id: 5,
+    title: "Data Science 4 Everyone",
+    description: "Modernizing our outdated math curriculum",
+    image: "/images/work/ds4e.png",
+    color: "#fffff0", // Light teal
+  },
+  {
+    id: 6,
+    title: "Community Notes",
+    description: "Fighting misinformation on social media",
+    image: "/images/work/cn.png",
+    color: "#075985", // Light red
+  },
+];
+
+const WorkCarousel = () => {
+  // Track the currently hovered card at the parent level
+  const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
+
+  // Reference for the carousel container
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: false, amount: 0.2 });
+  const mainControls = useAnimation();
+
+  // Add scroll-based animation
   const { scrollY } = useScroll();
-  const fadeOpacity = useTransform(
-    scrollY,
-    [250, 340, 860, 1280],
-    [0, 1, 1, 0]
+  const y = useTransform(scrollY, [0, 275], [0, -100], { clamp: true });
+
+  // Start animation when component is in view
+  React.useEffect(() => {
+    if (isInView) {
+      mainControls.start("visible");
+    }
+  }, [isInView, mainControls]);
+
+  return (
+    <div className="py-16 mt-20 px-4 overflow-visible">
+      <motion.div
+        ref={containerRef}
+        initial="hidden"
+        animate={mainControls}
+        style={{ y }}
+        variants={{
+          hidden: { opacity: 0, y: 75 },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: 0.5,
+              delay: 0.25,
+              ease: "easeOut",
+            },
+          },
+        }}
+        className="max-w-7xl mx-auto"
+      >
+        {/* Background rounded box */}
+        <motion.div className="bg-gray-100 rounded-3xl p-8 md:p-12 relative z-0">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-[#ec4d14] mb-8 text-center">
+            What we do
+          </h2>
+
+          {/* Carousel container with hidden scrollbar */}
+          <div
+            className="flex overflow-x-auto overflow-y-visible pb-8 pt-12 px-4 space-x-6"
+            style={{
+              scrollbarWidth: "none" /* Firefox */,
+              msOverflowStyle: "none" /* IE and Edge */,
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+            {/* Hide webkit scrollbar */}
+            <style jsx>{`
+              div::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
+            {carouselItems.map((item) => (
+              <CarouselCard
+                key={item.id}
+                item={item}
+                isHovered={hoveredCardId === item.id}
+                onHover={(isHovering) => {
+                  setHoveredCardId(isHovering ? item.id : null);
+                }}
+              />
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
+    </div>
   );
-  const textyPosition = useTransform(scrollY, [250, 340], [0, -10]);
-  const closeSection = useTransform(scrollY, [820, 940], [1, 0]);
-  const slideOut = useTransform(scrollY, [860, 1280], [0, -100]);
+};
 
-  // State for header text
-  const defaultHeader = "We generate breakthrough solutions to social problems";
-  const [headerText, setHeaderText] = useState(defaultHeader);
+interface CarouselItemProps {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  color: string;
+}
 
-  // Track if work items should be clickable based on scroll
-  const [clickable, setClickable] = useState(false);
-  useEffect(() => {
-    const unsubscribe = scrollY.onChange((latest: number) => {
-      // Adjust threshold as needed (here using 1000px as an example threshold)
-      setClickable(latest < 1000 && latest > 440);
-    });
-    return () => unsubscribe();
-  }, [scrollY]);
+interface CarouselCardProps {
+  item: CarouselItemProps;
+  isHovered: boolean;
+  onHover: (isHovering: boolean) => void;
+}
 
-  const scroll_start = 300;
-  const scroll_end = 450;
-
-  // Define box animations
-  const fi_box = {
-    x: useTransform(scrollY, [scroll_start, scroll_end], [-100, 0]),
-    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]), // updated range
-  };
-  const pd_box = {
-    y: useTransform(scrollY, [scroll_start, scroll_end], [100, 0]),
-    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
-  };
-  const ds4e_box = {
-    y: useTransform(scrollY, [scroll_start, scroll_end], [-40, 0]),
-    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
-  };
-  const tll_box = {
-    x: useTransform(scrollY, [scroll_start, scroll_end], [180, 0]), // updated range
-    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
-  };
-  const cn_box = {
-    x: useTransform(scrollY, [scroll_start, scroll_end], [-180, 0]), // updated range
-    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
-  };
-  const da_box = {
-    y: useTransform(scrollY, [scroll_start, scroll_end], [180, 0]), // updated range
-    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
-  };
-
-  // Refactored event handlers
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const tiltX = ((rect.height / 2 - y) / (rect.height / 2)) * 2;
-    const tiltY = ((rect.width / 2 - x) / (rect.width / 2)) * -2;
-    e.currentTarget.style.transform = `perspective(500px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-  };
-
-  // Modified to also reset headerText
-  const handleMouseLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.currentTarget.style.transition = "transform ease";
-    e.currentTarget.style.transform =
-      "perspective(500px) rotateX(0deg) rotateY(0deg)";
-  };
-
-  // Consolidate work items into an array
-  const workItems = [
-    {
-      id: "fi",
-      className:
-        "col-span-3 row-span-2 bg-[#1f3e51] text-white flex justify-center items-center hover:drop-shadow-lg z-20 rounded-md",
-      dynamicStyle: fi_box,
-      src: "/images/work/fi.png",
-      alt: "Using data to improve child welfare",
-      width: "w-3/4",
-      height: "h-1/2",
-      link: "https://www.fosterinsights.org",
-    },
-    {
-      id: "ds4e",
-      className:
-        "col-span-2 bg-[#f8b49b] text-white flex justify-center items-center z-20 rounded-md",
-      dynamicStyle: ds4e_box,
-      src: "/images/work/ds4e.png",
-      alt: "Modernizing our outdated math curriculum",
-      width: "w-full",
-      height: "h-[120%]",
-      link: "https://www.datascience4everyone.org",
-    },
-    {
-      id: "tll",
-      className:
-        "col-span-2 row-span-2 bg-[#071535] flex justify-center items-center text-white z-20 rounded-md",
-      dynamicStyle: tll_box,
-      src: "/images/work/TLL.png",
-      alt: "Reimagining school from the ground up",
-      width: "w-3/4",
-      height: "h-1/2",
-      link: "https://www.thelevittlab.org",
-    },
-    {
-      id: "pd",
-      className:
-        "col-span-3 bg-[#cd7029] flex justify-center items-center z-20 rounded-md",
-      dynamicStyle: pd_box,
-      src: "/images/work/PD_cream.png",
-      alt: "Helping kidney donors become eligible to donate",
-      width: "w-3/4",
-      height: "h-1/2",
-      link: "https://www.projectdonor.org",
-    },
-    {
-      id: "cn",
-      className:
-        "col-span-2 bg-blue-900 flex justify-center items-center pb-4 z-20 rounded-md",
-      dynamicStyle: cn_box,
-      src: "/images/work/cn.png",
-      alt: "Flagging misinformation at scale",
-      width: "w-[150%]",
-      height: "h-[150%]",
-      link: "https://asteriskmag.com/issues/08/the-making-of-community-notes",
-    },
-    {
-      id: "da",
-      className:
-        "col-span-3 bg-slate-600 flex justify-center items-center z-20 rounded-md",
-      dynamicStyle: da_box,
-      src: "/images/work/da.png",
-      alt: "Minimizing unnecessary law enforcement encounters",
-      width: "w-[200%]",
-      height: "h-[200%]",
-      link: "https://demo.emdecisionaid.com",
-    },
-  ];
+const CarouselCard = ({ item, isHovered, onHover }: CarouselCardProps) => {
+  // Set a specific expanded height for smooth animation instead of "auto"
+  const expandedHeight = "280px"; // Adjust based on your content
+  const collapsedHeight = "220px";
 
   return (
     <motion.div
+      initial={{ scale: 0.9 }}
+      whileInView={{ scale: 1 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{
+        scale: 1.05,
+        zIndex: 10,
+        transition: { duration: 0.3, ease: "easeOut" },
+      }}
+      onHoverStart={() => onHover(true)}
+      onHoverEnd={() => onHover(false)}
+      className="flex-shrink-0 w-72 bg-white rounded-xl shadow-lg relative z-10 overflow-visible"
+      style={{ marginTop: "20px" }}
+      animate={{
+        height: isHovered ? expandedHeight : collapsedHeight,
+        transition: { duration: 0.35, ease: "easeInOut" },
+      }}
       id="work"
-      className="w-full min-h-[1000px]"
-      style={{ y: slideOut }}
     >
+      {/* Offset image with drop shadow - now with visible top overflow */}
+      <div className="relative left-1/2 transform -translate-x-1/2 w-[85%] h-48 -mt-10">
+        <motion.div
+          className="w-full h-full relative rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.3)] flex items-center justify-center overflow-hidden"
+          animate={{
+            y: isHovered ? -8 : 0,
+          }}
+          transition={{
+            duration: 0.35,
+            ease: "easeOut",
+            delay: isHovered ? 0 : 0.1,
+          }}
+          style={{ backgroundColor: item.color || "#ffffff" }}
+        >
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            className="object-contain p-2 rounded-lg"
+            sizes="(max-width: 768px) 100vw, 300px"
+          />
+        </motion.div>
+      </div>
+
+      {/* Title always visible below image */}
+      <div className="px-5 pt-6">
+        <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+      </div>
+
+      {/* Description that appears only when this specific card is hovered */}
       <motion.div
-        className="text-3xl fixed top-32 w-full font-bold text-[#FC4512] text-center"
-        style={{ opacity: fadeOpacity, y: textyPosition }}
-      >
-        <TextTransition className="w-full flex justify-center items-center">
-          {headerText}
-        </TextTransition>
-      </motion.div>
-      <motion.div
-        className="fixed top-52 left-1/2 transform -translate-x-1/2 grid lg:w-1/2 md:w-3/4 lg:min-w-[800px] w-[90%] h-[70%] grid-rows-4 grid-cols-5 gap-2"
-        // Disable pointer events when scrolled past threshold
-        style={{
-          opacity: closeSection,
-          pointerEvents: clickable ? "auto" : "none",
+        className="px-5 pb-5"
+        variants={{
+          hidden: {
+            height: 0,
+            opacity: 0,
+            marginTop: -8,
+          },
+          visible: {
+            height: "auto",
+            opacity: 1,
+            marginTop: -4,
+          },
+        }}
+        initial="hidden"
+        animate={isHovered ? "visible" : "hidden"}
+        transition={{
+          height: { duration: 0.35, ease: "easeOut" },
+          opacity: { duration: 0.25, delay: isHovered ? 0.1 : 0 },
         }}
       >
-        {workItems.map(
-          ({ id, className, dynamicStyle, src, alt, width, height, link }) => (
-            <motion.a
-              key={id}
-              href={link}
-              target="_blank"
-              rel="noreferrer"
-              className={className}
-              style={{ ...dynamicStyle, perspective: 500 }}
-              onMouseMove={handleMouseMove}
-              onMouseEnter={() => setHeaderText(alt)}
-              onMouseLeave={handleMouseLeave}
-              animate={{}}
-            >
-              {src && (
-                <div
-                  className={`relative ${width} ${height} flex items-center`}
-                >
-                  <Image
-                    src={src}
-                    alt={alt}
-                    sizes={"auto"}
-                    fill
-                    style={{ objectFit: "contain" }}
-                    className="select-none"
-                  />
-                </div>
-              )}
-            </motion.a>
-          )
-        )}
+        <p className="text-gray-600">{item.description}</p>
+
+        <motion.div
+          className="mt-4"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+            y: isHovered ? 0 : 10,
+          }}
+          transition={{
+            duration: 0.25,
+            delay: isHovered ? 0.15 : 0,
+            ease: "easeOut",
+          }}
+        ></motion.div>
       </motion.div>
     </motion.div>
   );
-}
+};
+
+export default WorkCarousel;

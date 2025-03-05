@@ -7,10 +7,11 @@ export default function Landing() {
   const { scrollY } = useScroll();
   // Create an opacity value that fades from fully opaque to transparent between 100 and 300 scroll positions
   const fadeOpacity = useTransform(scrollY, [100, 275], [1, 0]);
+  const fadeY = useTransform(scrollY, [100, 275], [0, -100]);
 
   return (
     <motion.div
-      style={{ opacity: fadeOpacity }} // fade out as it moves out of view
+      style={{ opacity: fadeOpacity, y: fadeY }} // fade out as it moves out of view
       className="w-full grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 "
     >
       <motion.video
@@ -39,7 +40,7 @@ export default function Landing() {
             2000,
             "We are an innovation lab for a sustainable future",
             2000,
-            "We are an innovation lab for distruptive ideas",
+            "We are an innovation lab for disruptive ideas",
             2000,
             "We are an innovation lab for system-level change",
             2000,

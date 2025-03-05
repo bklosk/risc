@@ -20,20 +20,26 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           {/* Logo Section */}
           <div className="flex items-center space-x-8">
-            <div className="relative h-10 w-24">
-              {/* Replace with your first logo */}
-              <div className="bg-gray-200 h-10 w-24 flex items-center justify-center text-sm text-gray-500">
-                Logo 1
-              </div>
-              {/* Uncomment when you have your logo */}
+            <div className="relative h-24 w-24">
+              <Image
+                src="/images/footer_logo.svg"
+                alt="Footer Logo"
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 24vw, 10vw"
+                priority
+              />
             </div>
 
-            <div className="relative h-10 w-24">
-              {/* Replace with your second logo */}
-              <div className="bg-gray-200 h-10 w-24 flex items-center justify-center text-sm text-gray-500">
-                Logo 2
-              </div>
-              {/* Uncomment when you have your logo */}
+            <div className="relative h-24 w-48">
+              <Image
+                src="/images/uchicago.png"
+                alt="Footer Logo"
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 24vw, 10vw"
+                priority
+              />
             </div>
           </div>
 
@@ -65,7 +71,7 @@ const Footer = () => {
               </button>
             </form>
             <p className="mt-2 text-xs text-gray-500">
-              We'll never share your email with anyone else.
+              We&apos;ll never share your email with anyone else.
             </p>
           </div>
         </div>
