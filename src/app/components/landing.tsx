@@ -24,7 +24,7 @@ export default function Landing() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.5, delay: 0.5 }}
       >
-        <source src="/images/chicago.mp4" type="video/mp4" />
+        <source src={"/images/chicago.mp4"} type="video/mp4" />
       </motion.video>
       <motion.div className="lg:pr-20 lg:mt-[50%] md:mt-[35%] w-5/6  mt-12 pl-8 pr-6">
         <TypeAnimation

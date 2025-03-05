@@ -3,6 +3,7 @@ import Work from "./components/work";
 import Team from "./components/team/team";
 import Tracker from "./components/tracker";
 import Footer from "./components/footer";
+import Contact from "./components/contact";
 
 export default function Page() {
   // risc paths! storing here for funsies
@@ -21,6 +22,12 @@ export default function Page() {
       <Landing />
       <Work />
       <Team />
+      <div className="container mx-auto py-12 px-4">
+        <Contact
+          // Optional: provide a custom image
+          imageSrc="/images/risc_desk.jpeg"
+        />
+      </div>
       <Footer />
     </main>
   );

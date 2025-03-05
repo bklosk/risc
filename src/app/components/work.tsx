@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   motion,
   useInView,
@@ -67,14 +67,16 @@ const WorkCarousel = () => {
 
   // Add scroll-based animation
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 275], [0, -100], { clamp: true });
+  const y = useTransform(scrollY, [240, 275], [0, -100], { clamp: true });
 
-  // Start animation when component is in view
-  React.useEffect(() => {
-    if (isInView) {
+  // Start animation after a 4-second delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
       mainControls.start("visible");
-    }
-  }, [isInView, mainControls]);
+    }, 4500);
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, [mainControls]);
 
   return (
     <div className="py-16 mt-20 px-4 overflow-visible">
@@ -90,7 +92,6 @@ const WorkCarousel = () => {
             y: 0,
             transition: {
               duration: 0.5,
-              delay: 0.25,
               ease: "easeOut",
             },
           },
