@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import {
-  motion,
-  useInView,
-  useAnimation,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, useAnimation, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 
 // Sample data structure for the carousel items
@@ -62,7 +56,6 @@ const WorkCarousel = () => {
 
   // Reference for the carousel container
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: false, amount: 0.2 });
   const mainControls = useAnimation();
 
   // Add scroll-based animation
