@@ -94,7 +94,7 @@ const WorkCarousel = () => {
         {/* Background rounded box */}
         <motion.div className="bg-gray-100 rounded-3xl p-8 md:p-12 relative z-0">
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#ec4d14] mb-8 text-center">
-            What we do
+            Some of our projects
           </h2>
 
           {/* Carousel container with hidden scrollbar */}

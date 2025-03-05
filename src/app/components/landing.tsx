@@ -2,12 +2,27 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
+import { useState, useEffect, useMemo } from "react";
 
 export default function Landing() {
   const { scrollY } = useScroll();
   // Create an opacity value that fades from fully opaque to transparent between 100 and 300 scroll positions
   const fadeOpacity = useTransform(scrollY, [100, 275], [1, 0]);
   const fadeY = useTransform(scrollY, [100, 275], [0, -100]);
+
+  const videoFiles = useMemo(
+    () => ["/images/chicago.mp4", "/images/boats.mp4", "/images/riverwalk.mp4"],
+    []
+  );
+
+  const [randomVideo, setRandomVideo] = useState("");
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * videoFiles.length);
+    setRandomVideo(videoFiles[randomIndex]);
+  }, [videoFiles]);
+
+  if (!randomVideo) return <p> </p>;
 
   return (
     <motion.div
@@ -24,28 +39,28 @@ export default function Landing() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.5, delay: 0.5 }}
       >
-        <source src={"/images/chicago.mp4"} type="video/mp4" />
+        <source src={randomVideo} type="video/mp4" />
       </motion.video>
       <motion.div className="lg:pr-20 lg:mt-[50%] md:mt-[35%] w-5/6  mt-12 pl-8 pr-6">
         <TypeAnimation
           sequence={[
             1600,
             "We are an innovation lab for social change",
-            2000, // Waits 1s
-            "We are an innovation lab for risky ideas",
-            2000, // Waits 2s
-            "We are an innovation lab for a better world",
-            2000,
-            "We are an innovation lab for radical solutions",
-            2000,
-            "We are an innovation lab for a sustainable future",
-            2000,
-            "We are an innovation lab for disruptive ideas",
-            2000,
-            "We are an innovation lab for system-level change",
-            2000,
-            "We are an innovation lab for unorthodox approaches",
-            2000,
+            // 2000, // Waits 1s
+            // "We are an innovation lab for risky ideas",
+            // 2000, // Waits 2s
+            // "We are an innovation lab for a better world",
+            // 2000,
+            // "We are an innovation lab for radical solutions",
+            // 2000,
+            // "We are an innovation lab for a sustainable future",
+            // 2000,
+            // "We are an innovation lab for disruptive ideas",
+            // 2000,
+            // "We are an innovation lab for system-level change",
+            // 2000,
+            // "We are an innovation lab for unorthodox approaches",
+            // 2000,
           ]}
           wrapper="span"
           speed={55}

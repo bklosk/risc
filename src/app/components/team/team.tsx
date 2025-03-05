@@ -8,20 +8,20 @@ import TeamMember from "./team_member";
 export default function Team() {
   const founders = [
     {
-      name: "Jeffrey Severts",
-      position: "Co-Founder, Executive Director",
-      image: "/images/team/Jeff.png",
-      bio: "Like Professor X, but for regular people (who just happen to be like mutants).",
-      linkedinUrl: "https://linkedin.com/in/ben-thevathasan",
-      githubUrl: "https://github.com/benthevathasan",
-    },
-    {
       name: "Steve Levitt",
       position: "Co-Founder, Faculty Director",
       image: "/images/team/Steve.jpeg",
       bio: "Does not take his hand off of a hot stove, has never known pain in his life.",
       linkedinUrl: "https://linkedin.com/in/noah-duncan",
       githubUrl: "https://github.com/noahduncan",
+    },
+    {
+      name: "Jeffrey Severts",
+      position: "Co-Founder, Executive Director",
+      image: "/images/team/Jeff.png",
+      bio: "Like Professor X, but for regular people (who just happen to be like mutants).",
+      linkedinUrl: "https://linkedin.com/in/ben-thevathasan",
+      githubUrl: "https://github.com/benthevathasan",
     },
   ];
 
