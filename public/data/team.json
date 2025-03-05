@@ -2,76 +2,121 @@
   {
     "name": "Ben Thevathasan",
     "position": "Lead Data Scientist",
-    "image": "/images/team/BenT.jpeg"
+    "image": "/images/team/BenT.jpeg",
+    "bio": "Headmaster of the most prestigious quantum mathematics academy.",
+    "linkedinUrl": "https://linkedin.com/in/ben-thevathasan",
+    "githubUrl": "https://github.com/benthevathasan"
   },
   {
     "name": "Noah Duncan",
     "position": "Senior Analyst",
-    "image": "/images/team/Noah.png"
+    "image": "/images/team/Noah.png",
+    "bio": "Discovered a time travel loophole but only uses it to avoid Monday morning meetings.",
+    "linkedinUrl": "https://linkedin.com/in/noah-duncan",
+    "githubUrl": "https://github.com/noahduncan"
   },
   {
     "name": "Jack Tait",
     "position": "Senior Analyst",
-    "image": "/images/team/Jack.png"
+    "image": "/images/team/Jack.png",
+    "bio": "Can communicate telepathically with artificial intelligence, but only when Mercury is in retrograde.",
+    "linkedinUrl": "https://linkedin.com/in/jack-tait",
+    "githubUrl": "https://github.com/jacktait"
   },
   {
     "name": "Claire Sukumar",
     "position": "Senior Analyst",
-    "image": "/images/team/Claire.png"
+    "image": "/images/team/Claire.png",
+    "bio": "Secretly part of an intergalactic council that regulates the use of puns across the known universe.",
+    "linkedinUrl": "https://linkedin.com/in/claire-sukumar",
+    "githubUrl": "https://github.com/clairesukumar"
   },
   {
     "name": "Ruby Rorty",
     "position": "Analyst",
-    "image": "/images/team/Ruby.png"
+    "image": "/images/team/Ruby.png",
+    "bio": "Engineered a microscopic black hole to store unlimited data and their coffee preference settings.",
+    "linkedinUrl": "https://linkedin.com/in/ruby-rorty",
+    "githubUrl": "https://github.com/rubyrorty"
   },
   {
-    "name": "David Johnstone",
+    "name": "Davis Johnstone",
     "position": "Analyst",
-    "image": "/images/team/Davis.png"
+    "image": "/images/team/Davis.png",
+    "bio": "Holds the universal record for fastest FTL calculation using only mental arithmetic.",
+    "linkedinUrl": "https://linkedin.com/in/davis-johnstone",
+    "githubUrl": "https://github.com/davisjohnstone"
   },
   {
     "name": "Katherine Leahy",
     "position": "Analyst",
-    "image": "/images/team/Katherine.png"
+    "image": "/images/team/Katherine.png",
+    "bio": "Has a collection of space rocks that occasionally glow and play 80s synth music.",
+    "linkedinUrl": "https://linkedin.com/in/katherine-leahy",
+    "githubUrl": "https://github.com/katherineleahy"
   },
   {
     "name": "Cami Brix",
     "position": "Analyst",
-    "image": "/images/team/Cami.png"
+    "image": "/images/team/Cami.png",
+    "bio": "Developed a translator for understanding the complex language of quantum particles during their lunch breaks.",
+    "linkedinUrl": "https://linkedin.com/in/cami-brix",
+    "githubUrl": "https://github.com/camibrix"
   },
   {
     "name": "Devin Haas",
     "position": "Analyst",
-    "image": "/images/team/Devin.jpeg"
+    "image": "/images/team/Devin.jpeg",
+    "bio": "Lost their original body in a teleportation accident and is now a highly advanced hologram.",
+    "linkedinUrl": "https://linkedin.com/in/devin-haas",
+    "githubUrl": "https://github.com/devinhaas"
   },
   {
     "name": "Hana Horiuchi",
     "position": "Analyst",
-    "image": "/images/team/Hana.png"
+    "image": "/images/team/Hana.png",
+    "bio": "Solved the unified field theory but keeps it in a folder labeled 'cat memes'.",
+    "linkedinUrl": "https://linkedin.com/in/hana-horiuchi",
+    "githubUrl": "https://github.com/hanahoriuchi"
   },
   {
     "name": "Daniela Shuman",
     "position": "Analyst",
-    "image": "/images/team/Daniela.png"
+    "image": "/images/team/Daniela.png",
+    "bio": "Once accidentally created a sentient spreadsheet that now manages their personal finances.",
+    "linkedinUrl": "https://linkedin.com/in/daniela-shuman",
+    "githubUrl": "https://github.com/danielashuman"
   },
   {
     "name": "Kali Enkhbayar",
     "position": "Analyst",
-    "image": "/images/team/Khali.png"
+    "image": "/images/team/Khali.png",
+    "bio": "Can see probability streams when extremely caffeinated.",
+    "linkedinUrl": "https://linkedin.com/in/kali-enkhbayar",
+    "githubUrl": "https://github.com/kalienkhbayar"
   },
   {
     "name": "Micah Ross",
     "position": "Analyst",
-    "image": "/images/team/Micah.png"
+    "image": "/images/team/Micah.png",
+    "bio": "Maintains a garden of plants from exoplanets in their basement laboratory.",
+    "linkedinUrl": "https://linkedin.com/in/micah-ross",
+    "githubUrl": "https://github.com/micahross"
   },
   {
     "name": "Josie Maier",
     "position": "Analyst",
-    "image": "/images/team/Josie.png"
+    "image": "/images/team/Josie.png",
+    "bio": "Invented a device that translates dreams into programming code with varying success.",
+    "linkedinUrl": "https://linkedin.com/in/josie-maier",
+    "githubUrl": "https://github.com/josiemaier"
   },
   {
     "name": "Ben Klosky",
     "position": "Analyst",
-    "image": "/images/team/BenK.png"
+    "image": "/images/team/BenK.png",
+    "bio": "Spends weekends exploring the multiverse for the perfect pizza recipe.",
+    "linkedinUrl": "https://linkedin.com/in/ben-klosky",
+    "githubUrl": "https://github.com/benklosky"
   }
 ]

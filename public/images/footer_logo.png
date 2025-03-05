@@ -1,0 +1,1020 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+    <head>
+        <meta charset="utf-8">
+        <title>RISC</title>
+        <meta content="" name="description">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+
+        <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6546018/7014012/css/fonts.css" />
+		<link rel="stylesheet" href="/assets/dist/css/main.css?id=46c1b026e308c315c2eb">
+
+                <link rel="apple-touch-icon" sizes="57x57" href="/assets/dist/images/apple-icon-57x57.png?id=a9903e25a54e63e02b85">
+        <link rel="apple-touch-icon" sizes="60x60" href="/assets/dist/images/apple-icon-60x60.png?id=643f40d8ced46e623b4b">
+        <link rel="apple-touch-icon" sizes="72x72" href="/assets/dist/images/apple-icon-72x72.png?id=5330dda0a016ab89febc">
+        <link rel="apple-touch-icon" sizes="76x76" href="/assets/dist/images/apple-icon-76x76.png?id=2ad64479d4ff5fc81ecf">
+        <link rel="apple-touch-icon" sizes="114x114" href="/assets/dist/images/apple-icon-114x114.png?id=fccd5e9d5d91236dcc0c">
+        <link rel="apple-touch-icon" sizes="120x120" href="/assets/dist/images/apple-icon-120x120.png?id=77889dda55e95cedb256">
+        <link rel="apple-touch-icon" sizes="144x144" href="/assets/dist/images/apple-icon-144x144.png?id=7dd363db258c9329c8f0">
+        <link rel="apple-touch-icon" sizes="152x152" href="/assets/dist/images/apple-icon-152x152.png?id=6b16b590badad48b162c">
+        <link rel="apple-touch-icon" sizes="180x180" href="/assets/dist/images/apple-icon-180x180.png?id=365bf01e6734b5718b7a">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/assets/dist/images/android-icon-192x192.png?id=39c413dabb6e1bca8c75">
+        <link rel="icon" type="image/png" sizes="32x32" href="/assets/dist/images/favicon-32x32.png?id=ef4437f5e0ff027a74fd">
+        <link rel="icon" type="image/png" sizes="96x96" href="/assets/dist/images/favicon-96x96.png?id=426988a6b2667c51c1af">
+        <link rel="icon" type="image/png" sizes="16x16" href="/assets/dist/images/favicon-16x16.png?id=2e97c111d4ee2a934cc2">
+        
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    </head>
+
+    <body>
+        <!--[if IE]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+        	
+	
+        <header class="flex flex-wrap HomeHeader">
+            
+            <div id="SiteHeader" class="container relative flex md:hidden  justify-between py-8 md:py-12">
+                <div class="SiteHeader-logo">
+                    <a href="https://risc.uchicago.edu/"><img src="/assets/dist/images/header-logo.svg?id=aa1e576dd5da17b56d60" alt="Radical Innovation for Social Change Logo"></a>
+                </div>
+
+                <div class="SiteHeader-nav relative">
+                    <div :class="isOpen ? 'block' : 'hidden md:block'">
+                        <div class="SubpageNav">
+                            <nav class="Nav ">
+    <a href="/#work" @click="toggle">WORK</a>
+    <a href="/#about" @click="toggle">ABOUT</a>
+    <a href="/#contact" @click="toggle">CONTACT</a>
+    <a href="https://risc.uchicago.edu/news" class="Nav-external">NEWS</a>
+
+           
+
+    <a href="https://risc.uchicago.edu/seminar" class="Nav-external">SEMINAR</a>
+
+</nav>
+</nav>
+                        </div>
+                        
+                    </div>
+                    <button @click="toggle" class="flex md:hidden" :class="isOpen ? 'open' : 'closed'" id="MobileNav-trigger"><span></span></button>
+                </div>
+            </div>
+                            <div class="HomeHeader-logo">
+                    <a href="https://risc.uchicago.edu/"><img src="/assets/dist/images/home-logo.png?id=33c0dab173dc0e52aef9" alt="Radical Innovation for Social Change Logo" srcset="/assets/dist/images/home-logo@2x.png?id=44dd6c835de7b1d44246 2x"></a>
+                </div>
+                <div class="HomeHeader-container">
+                    <nav class="Nav HomeNav">
+    <a href="/#work" @click="toggle">WORK</a>
+    <a href="/#about" @click="toggle">ABOUT</a>
+    <a href="/#contact" @click="toggle">CONTACT</a>
+    <a href="https://risc.uchicago.edu/news" class="Nav-external">NEWS</a>
+
+           
+
+    <a href="https://risc.uchicago.edu/seminar" class="Nav-external">SEMINAR</a>
+
+</nav>
+</nav>
+                    <div class="mt-8 sm:mt-20 w-full flex flex-col ">
+                        <h3 class="mb-4 sm:mb-0">We are an innovation lab for social change.</h3>
+                        <strong class="text-lg font-medium sm:mb-4 block">Driven by curiosity, unfettered by orthodoxy, and grounded in the sciences of human behavior, we’re investigating bold new ways to tackle the world’s biggest problems.</strong>
+                    </div>
+                </div>
+                <div class="container w-full mt-8 sm:mt-32 mb-2">
+                    <hr class="border-gray-lighter">
+                </div>
+                    </header>
+
+
+        <main>
+            
+        
+    <nav class="Nav HomeNav--sticky hidden sm:block">
+    <a href="/#work" @click="toggle">WORK</a>
+    <a href="/#about" @click="toggle">ABOUT</a>
+    <a href="/#contact" @click="toggle">CONTACT</a>
+    <a href="https://risc.uchicago.edu/news" class="Nav-external">NEWS</a>
+
+           
+
+    <a href="https://risc.uchicago.edu/seminar" class="Nav-external">SEMINAR</a>
+
+</nav>
+</nav>
+
+    <section id="work" class="container flex flex-col-reverse md:flex-row mt-8">
+        
+        <div class="w-full md:w-1/2 lg:w-1/3 pr-8 text-lg">
+                        <div class="hidden md:block">
+                <h2>What we do</h2>
+                            </div>
+                                        <div class="Area is-active mt-10" id="criminalJusticeReform">
+                    <strong class="uppercase">Criminal justice reform</strong>
+                    <p>The US criminal justice system suffers from over-incarceration, hurting individuals and communities. While a growing number of jurisdictions are turning to electronic monitoring to reduce overcrowding in prisons, this new system often burdens participants financially and restricts their movement, preventing their full participation in the economy and community.</p><p>We believe the smart use of monitoring technology can be the most transformative innovation in criminal justice within our lifetimes. We are working with large municipalities to revolutionize their electronic monitoring programs, using state-of-the-art data science techniques to enhance public safety while minimizing the program’s impact on participants. Our long-term goal is for electronic monitoring programs to allow participants to remain integrated and productive members of society.</p><p>See more of our work <a href="https://demo.emdecisionaid.com/"><u>here</u></a>!</p><p><strong>Other work in this area includes:</strong></p><ul><li>Developing a co-responder model for municipalities, which would pair law enforcement and social service responses to emergency calls</li><li>Contributing to a <a href="https://freakonomics.com/podcast/nap-time-for-everyone-ep-468/"><u><em>Freakonomics </em>episode</u></a> highlighting how sleep deprivation may affect police officers’ responses to high-pressure situations </li></ul>
+                </div>
+                            <div class="Area  mt-10" id="k12Education">
+                    <strong class="uppercase">K-12 education</strong>
+                    <p>Today, we force our students through a factory education model that has not kept pace with technological change. RISC has piloted several interventions to modernize K-12 classrooms.</p><p>Starting in 2019, RISC has helped incubate the <a href="https://www.datascience4everyone.org/" target="_blank" rel="noreferrer noopener"><u>Data Science 4 Everyone</u></a> initiative, now a national effort to incorporate data science and data literacy into K-12 math and other subjects. After catalyzing early efforts in 15 states, unlocking both state and federal funding, and generating market demand for additional classroom resources, DS4E may soon be bringing data science opportunities to a school near you.</p><p>We're also rethinking pedagogical approaches. In partnership with the <a href="https://asuprep.asu.edu/khan-world-school/" target="_blank" rel="noreferrer noopener"><u>Khan World School</u></a>, we're designing a discussion-based curriculum that teaches students to think critically about the world's biggest challenges. Check out our <a href="https://risc.uchicago.edu/seminar/" target="_blank" rel="noreferrer noopener"><u>Seminars</u></a> and listen to this <a href="https://open.spotify.com/episode/5XOO2erq0aSrXLxMKiBO1K?si=864ffc0aa4f04a48" target="_blank" rel="noreferrer noopener"><u><em>People I (Mostly) Admire </em>episode</u></a> on how we're helping bring Sal Khan's vision of education to life.</p>
+                </div>
+                            <div class="Area  mt-10" id="humanHealth">
+                    <strong class="uppercase">Human health</strong>
+                    <p>A 21st-century pursuit of health necessitates an integrated approach in research and a commitment to radical thinking.</p><p>We’re working at the intersection of health and behavioral change to address a pressing healthcare issue—live organ donation.</p><p>We partner with some of the largest transplant centers in the country to provide resources and support to those who are disqualified from donating an organ for reversible reasons, such as high BMI or smoking. With the waitlist to receive a kidney at 100,000, we see expanding the pool of available living donors as a critical way to save lives.</p><p><strong>Other work in this area includes:</strong></p><ul><li>Partnering with a nonprofit to re-orient diabetes care away from insulin reliance and toward symptom management through low-carb diets</li><li>Exploring the use of harm reduction to support those affected by the opioid crisis</li></ul>
+                </div>
+                            <div class="Area  mt-10" id="childWelfare">
+                    <strong class="uppercase">Child Welfare</strong>
+                    <p>The US child welfare system faces a shortage of foster families, resulting in deeply inadequate placement outcomes for some of our society’s most vulnerable youth. Foster youth often end up in care far from home, in group home settings, or separated from their siblings. At the same time, effective foster family recruitment is hindered by a lack of data.</p><p>We are working with multiple state child welfare agencies to pilot and scale data-driven foster family recruitment tools. Developed alongside state agency leadership, social workers, and other experts in child welfare, our tools will collect and utilize data to create recruitment plans based on the kinds of foster families that would meet the needs of children in care. Partnering with organizations that specialize in foster family recruitment tactics, we hope to meaningfully reduce the foster family shortage, improving outcomes for children in care.</p><p><strong>Other work in this area includes:</strong></p><ul><li>Exploring upstream interventions to prevent children from ending up in foster care unnecessarily<br /></li><li>Evaluating and streamlining foster family licensing requirements</li></ul>
+                </div>
+                            <div class="Area  mt-10" id="mentalHealth&amp;WellBeing">
+                    <strong class="uppercase">Mental health &amp; well-being</strong>
+                    <p>We are in the midst of a mental health crisis, with steadily climbing rates of suicide, anxiety, and depression, particularly among young people.</p><p>We investigate the most salient issues facing the world today: How do we leverage the wide reach of social media to establish peer-to-peer connection and mentorship? How do we alleviate loneliness among the elderly? How do we integrate mental health services into municipal crisis response services?</p><p>We know that a multi-disciplinary approach is needed to unlock truly new insights to these questions. We have established relationships with cutting-edge technology companies, governments, academics, nonprofits, and even celebrities as our advisors. Together, we ideate on radical solutions, develop experiments and prototypes, and scale up existing efforts.</p>
+                </div>
+                            <div class="Area  mt-10" id="localCommunityDevelopment">
+                    <strong class="uppercase">Local Community Development</strong>
+                    <p>Local issues are central to our work. In partnership with the City of Chicago, we assessed the impact of work-from-home during COVID-19 on Chicago's downtown area. Our team provided recommendations for restoring economic activity to pre-pandemic levels, including ways of encouraging workers to return to the office.<br /></p><p>We have also partnered with the City’s Economic and Neighborhood Development Team to map retail vacancies across the city, and we work with local nonprofits on efforts to clean and green vacant lots, with the goal of making neighborhoods safer and more livable.</p>
+                </div>
+                            <div class="Area  mt-10" id="socialMedia&amp;EmergingTechnology">
+                    <strong class="uppercase">Social media &amp; Emerging Technology</strong>
+                    <p>Social media has made headlines for a slew of societal ills — exacerbating depression and loneliness among young people, polarizing nations through its echo chambers, allowing dangerous misinformation to reach new audiences… and yet, it has also facilitated connections among strangers, allowed new communities to have a powerful digital voice, and fueled social movements across the globe. Social media in one form or another is here to stay — how can we mitigate its harms while helping it bring out the best in humanity?</p><p>We have worked with leading social media platforms and academic experts to examine these challenges. We have leveraged existing platform features and designed new ones to nudge users to engage productively and healthily online.</p><p>Beyond social media, we are also interested in the potential of emerging innovations, from virtual reality to brain-computer interfaces to drones, to further disrupt society’s relationship with technology, for good or for ill.</p>
+                </div>
+                            <div class="Area  mt-10" id="&amp;More...">
+                    <strong class="uppercase">&amp; more...</strong>
+                    <p>Our work is not limited to areas listed here—our analysts have built an <u><a href="https://communityutility.org/">online platform</a></u> that provides peer-donated utility assistance to Chicagoans, <u><a href="https://drive.google.com/file/d/12QtH5MsP83EqSVKMY3zZhErCrXkiLIx_/view?usp=sharing">analyzed</a></u> methane mitigation strategies for a global agriculture company, authored a brief on economic mobility for a large philanthropist, and more. Our portfolio is constantly changing, and <strong>we welcome any and all big ideas and seek opportunities to collaborate. </strong>Feel free to reach out to us through our <a href="#contact"><u>contact form</u></a>.</p>
+                </div>
+                    </div>
+        <div class="Area-carouselWrap w-full md:w-1/2 lg:w-2/3">
+            <div class="Area-carousel">
+                                                                        <a href="#criminalJusticeReform" class="is-active Area-link md:w-1/2 px-2 mb-2">
+                        <img 
+                            src="/imager/images/723/Projects_Criminal-Justice-Reform_b9f49d94a4be7faeab78414496e8b451.jpg" 
+                            sizes="33vw" 
+                            srcset="/imager/images/723/Projects_Criminal-Justice-Reform_b9f49d94a4be7faeab78414496e8b451.jpg 400w, /imager/images/723/Projects_Criminal-Justice-Reform_b9380332e0cacf2020b96755c2322288.jpg 800w"
+                            alt="Projects Criminal Justice Reform"
+                        />
+                        <span class="Area-linkTitle">Criminal justice reform</span>
+                    </a>
+                                                        <a href="#k12Education" class=" Area-link md:w-1/2 px-2 mb-2">
+                        <img 
+                            src="/imager/images/727/Projects_K12-Education-Reform_b9f49d94a4be7faeab78414496e8b451.jpg" 
+                            sizes="33vw" 
+                            srcset="/imager/images/727/Projects_K12-Education-Reform_b9f49d94a4be7faeab78414496e8b451.jpg 400w, /imager/images/727/Projects_K12-Education-Reform_b9380332e0cacf2020b96755c2322288.jpg 800w"
+                            alt="Projects K12 Education Reform"
+                        />
+                        <span class="Area-linkTitle">K-12 education</span>
+                    </a>
+                                                        <a href="#humanHealth" class=" Area-link md:w-1/2 px-2 mb-2">
+                        <img 
+                            src="/imager/images/8187/marcelo-leal-k7ll1hpdhFA-unsplash_b9f49d94a4be7faeab78414496e8b451.jpg" 
+                            sizes="33vw" 
+                            srcset="/imager/images/8187/marcelo-leal-k7ll1hpdhFA-unsplash_b9f49d94a4be7faeab78414496e8b451.jpg 400w, /imager/images/8187/marcelo-leal-k7ll1hpdhFA-unsplash_b9380332e0cacf2020b96755c2322288.jpg 800w"
+                            alt="Marcelo leal k7ll1hpdh FA unsplash"
+                        />
+                        <span class="Area-linkTitle">Human health</span>
+                    </a>
+                                                        <a href="#childWelfare" class=" Area-link md:w-1/2 px-2 mb-2">
+                        <img 
+                            src="/imager/images/8380/charlein-gracia-Ux5mdMJNEA-unsplash_b9f49d94a4be7faeab78414496e8b451.jpg" 
+                            sizes="33vw" 
+                            srcset="/imager/images/8380/charlein-gracia-Ux5mdMJNEA-unsplash_b9f49d94a4be7faeab78414496e8b451.jpg 400w, /imager/images/8380/charlein-gracia-Ux5mdMJNEA-unsplash_b9380332e0cacf2020b96755c2322288.jpg 800w"
+                            alt="Charlein gracia Ux5md MJNEA unsplash"
+                        />
+                        <span class="Area-linkTitle">Child Welfare</span>
+                    </a>
+                                                        <a href="#mentalHealth&amp;WellBeing" class=" Area-link md:w-1/2 px-2 mb-2">
+                        <img 
+                            src="/imager/images/726/Projects_Adolescent-Mental-Health_b9f49d94a4be7faeab78414496e8b451.jpg" 
+                            sizes="33vw" 
+                            srcset="/imager/images/726/Projects_Adolescent-Mental-Health_b9f49d94a4be7faeab78414496e8b451.jpg 400w, /imager/images/726/Projects_Adolescent-Mental-Health_b9380332e0cacf2020b96755c2322288.jpg 800w"
+                            alt="Projects Adolescent Mental Health"
+                        />
+                        <span class="Area-linkTitle">Mental health &amp; well-being</span>
+                    </a>
+                                                        <a href="#localCommunityDevelopment" class=" Area-link md:w-1/2 px-2 mb-2">
+                        <img 
+                            src="/imager/images/8268/benjamin-suter-mlOvsx4xdaA-unsplash-min_b9f49d94a4be7faeab78414496e8b451.jpg" 
+                            sizes="33vw" 
+                            srcset="/imager/images/8268/benjamin-suter-mlOvsx4xdaA-unsplash-min_b9f49d94a4be7faeab78414496e8b451.jpg 400w, /imager/images/8268/benjamin-suter-mlOvsx4xdaA-unsplash-min_b9380332e0cacf2020b96755c2322288.jpg 800w"
+                            alt="Benjamin suter ml Ovsx4xda A unsplash min"
+                        />
+                        <span class="Area-linkTitle">Local Community Development</span>
+                    </a>
+                                                        <a href="#socialMedia&amp;EmergingTechnology" class=" Area-link md:w-1/2 px-2 mb-2">
+                        <img 
+                            src="/imager/images/1674/socialmedia_b9f49d94a4be7faeab78414496e8b451.jpeg" 
+                            sizes="33vw" 
+                            srcset="/imager/images/1674/socialmedia_b9f49d94a4be7faeab78414496e8b451.jpeg 400w, /imager/images/1674/socialmedia_b9380332e0cacf2020b96755c2322288.jpeg 800w"
+                            alt="Socialmedia"
+                        />
+                        <span class="Area-linkTitle">Social media &amp; Emerging Technology</span>
+                    </a>
+                                                        <a href="#&amp;More..." class=" Area-link md:w-1/2 px-2 mb-2">
+                        <img 
+                            src="/imager/images/728/Project-more_b9f49d94a4be7faeab78414496e8b451.jpg" 
+                            sizes="33vw" 
+                            srcset="/imager/images/728/Project-more_b9f49d94a4be7faeab78414496e8b451.jpg 400w, /imager/images/728/Project-more_b9380332e0cacf2020b96755c2322288.jpg 800w"
+                            alt="Project more"
+                        />
+                        <span class="Area-linkTitle">&amp; more...</span>
+                    </a>
+                            </div>
+        </div>
+                <div class="block md:hidden w-full">
+            <h2>What we do</h2>
+                    </div>
+    </section>
+
+    <section class="bg-gray-darker text-white mt-32">
+        
+        <div class="flex flex-wrap justify-end">
+            <div class="HomeIdea-images w-full md:w-1/3 sm:relative">
+                                                        <img 
+                        src="/imager/images/774/How-do-you_64f00f176564273aed493106756b7bf5.jpg" 
+                        sizes="(min-width:768px) 33vw, 100vw" 
+                        srcset="/imager/images/774/How-do-you_64f00f176564273aed493106756b7bf5.jpg 500w, /imager/images/774/How-do-you_10a02fda2b96bc6109db0b9257817938.jpg 1000w"
+                        alt="How do you"
+                    />
+                                                        <img 
+                        src="/imager/images/775/How-do-you-2_64f00f176564273aed493106756b7bf5.jpg" 
+                        sizes="(min-width:768px) 33vw, 100vw" 
+                        srcset="/imager/images/775/How-do-you-2_64f00f176564273aed493106756b7bf5.jpg 500w, /imager/images/775/How-do-you-2_10a02fda2b96bc6109db0b9257817938.jpg 1000w"
+                        alt="How do you 2"
+                    />
+                                <span class="HomeIdea-imagesMobileCopy md:hidden">How do you want to change the world?</span>
+            </div>
+            <div class="HomeIdea-copy hidden md:block">
+                <h2>How do you want to change the world?</h2>
+                <p>Great ideas can come from anywhere and anyone—including you. Send us anything from a half-baked concept to a full-blown plan for addressing a big social issue. You might inspire someone from our forum or our team to join you in making it a reality.</p>
+            </div>
+            <div class="w-full md:w-1/3 flex lg:flex-col justify-end">
+                <a href="/ideas/submit" class="HomeIdea-button">
+
+                    <p class="HomeIdea-buttonCopy md:hidden">Great ideas can come from anywhere and anyone—including you. Send us anything from a half-baked concept to a full-blown plan for addressing a big social issue. You might inspire someone from our forum or our team to join you in making it a reality.</p>
+                    <span>
+                        <span>
+                            Send Us Your <br/>
+                            Idea <img src="/assets/dist/images/big-horz-arrow.svg?id=4000c496e7c8703219b6" alt="Arrow" />
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="container mt-8 md:mt-16">
+            <h3 class="text-white">Vote on other ideas:</h3>
+            <div class="IdeasCarousel">
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/cultivating-greener-grass-outside-the-overton-window">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/cultivating-greener-grass-outside-the-overton-window" class="block">
+			<img class="w-full" src="/imager/ideas/6263/Overton-Window_16e19f44d3a7d10cad1c3d0c6e071d1e.png" alt="Cultivating greener grass outside the overton window"/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote6267" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:1,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;6267&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/cultivating-greener-grass-outside-the-overton-window">
+					<p>Cultivating greener grass outside the overton window</p>
+				</a>
+				
+
+								<div class="Card-author">
+					Center for Risc
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/an-app-based-environmental-club-that-generates-status-races-for-environmentally-friendly-behavior-through-third-party-estimation-ranking-of-individual-or-household-carbon-footprints">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/an-app-based-environmental-club-that-generates-status-races-for-environmentally-friendly-behavior-through-third-party-estimation-ranking-of-individual-or-household-carbon-footprints" class="block">
+			<img class="w-full" src="/imager/ideas/6074/1F7C42F6-B2F4-4A6C-90D6-0685ADBD2209_16e19f44d3a7d10cad1c3d0c6e071d1e.jpeg" alt="An App-based Environmental Club that Generates Status Races for Environmentally Friendly Behavior through Third-Party Estimation/Ranking of Individual or Household Carbon Footprints"/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote6079" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:5,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;6079&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/an-app-based-environmental-club-that-generates-status-races-for-environmentally-friendly-behavior-through-third-party-estimation-ranking-of-individual-or-household-carbon-footprints">
+					<p>An App-based Environmental Club that Generates Status Races for Environmentally Friendly Behavior through Third-Party Estimation/Ranking of Individual or Household Carbon Footprints</p>
+				</a>
+				
+
+								<div class="Card-author">
+					sdsander@g.syr.edu
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/convert-unused-office-space-into-apartments-and-condos">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/convert-unused-office-space-into-apartments-and-condos" class="block">
+			<img class="w-full" src="/imager/images/5956/440px-Kirkland_Vertical_mixed_use_4575235975_16e19f44d3a7d10cad1c3d0c6e071d1e.jpeg" alt="Convert Unused Office Space Into Apartments and Condos"/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote5884" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:13,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;5884&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/convert-unused-office-space-into-apartments-and-condos">
+					<p>Convert Unused Office Space Into Apartments and Condos</p>
+				</a>
+				
+
+								<div class="Card-author">
+					greg20112014@gmail.com
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/turn-abandoned-malls-into-indoor-parks-and-gardens">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/turn-abandoned-malls-into-indoor-parks-and-gardens" class="block">
+			<img class="w-full" src="/imager/images/5953/ad4wb3_16e19f44d3a7d10cad1c3d0c6e071d1e.jpeg" alt="Turn Abandoned Malls into Indoor Parks and Gardens"/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote5881" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:17,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;5881&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/turn-abandoned-malls-into-indoor-parks-and-gardens">
+					<p>Turn Abandoned Malls into Indoor Parks and Gardens</p>
+				</a>
+				
+
+								<div class="Card-author">
+					greg20112014@gmail.com
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/create-pro-social-competitions-between-us-states">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/create-pro-social-competitions-between-us-states" class="block">
+			<img class="w-full" src="/imager/images/5875/john-mark-smith-gtCWBwbZNpM-unsplash_16e19f44d3a7d10cad1c3d0c6e071d1e.jpg" alt="Create Pro-Social Competitions Between US States"/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote5848" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:8,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;5848&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/create-pro-social-competitions-between-us-states">
+					<p>Create Pro-Social Competitions Between US States</p>
+				</a>
+				
+
+								<div class="Card-author">
+					greg20112014@gmail.com
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/a-phone-app-by-the-us-government-where-people-earn-points-likes-and-people-can-trade-those-points-in-for-rewards.-a-similar-system-exists-now-between-grocery-stores-and-gas-stations.">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/a-phone-app-by-the-us-government-where-people-earn-points-likes-and-people-can-trade-those-points-in-for-rewards.-a-similar-system-exists-now-between-grocery-stores-and-gas-stations." class="block">
+			<img class="w-full" src="/imager/images/5873/rami-al-zayat-w33-zg-dNL4-unsplash_16e19f44d3a7d10cad1c3d0c6e071d1e.jpg" alt="A phone app by the US government where people earn points/likes and people can trade those points in for rewards. A similar system exists now between grocery stores and gas stations."/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote5836" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:3,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;5836&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/a-phone-app-by-the-us-government-where-people-earn-points-likes-and-people-can-trade-those-points-in-for-rewards.-a-similar-system-exists-now-between-grocery-stores-and-gas-stations.">
+					<p>A phone app by the US government where people earn points/likes and people can trade those points in for rewards. A similar system exists now between grocery stores and gas stations.</p>
+				</a>
+				
+
+								<div class="Card-author">
+					Center for Risc
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/recognize-adus-as-a-legitimate-form-of-housing">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/recognize-adus-as-a-legitimate-form-of-housing" class="block">
+			<img class="w-full" src="/imager/images/5871/phil-hearing-IYfp2Ixe9nM-unsplash-min_16e19f44d3a7d10cad1c3d0c6e071d1e.jpg" alt="Recognize ADU’s as a Legitimate Form of Housing"/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote5839" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:3,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;5839&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/recognize-adus-as-a-legitimate-form-of-housing">
+					<p>Recognize ADU’s as a Legitimate Form of Housing</p>
+				</a>
+				
+
+								<div class="Card-author">
+					greg20112014@gmail.com
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/create-virtual-reality-schools-and-universities-to-compete-with-real-world-ones">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/create-virtual-reality-schools-and-universities-to-compete-with-real-world-ones" class="block">
+			<img class="w-full" src="/imager/images/5830/xr-expo-ipDhOQ5gtEk-unsplash_16e19f44d3a7d10cad1c3d0c6e071d1e.jpg" alt="Create Virtual Reality Schools and Universities to Compete with Real-World Ones"/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote5820" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:3,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;5820&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/create-virtual-reality-schools-and-universities-to-compete-with-real-world-ones">
+					<p>Create Virtual Reality Schools and Universities to Compete with Real-World Ones</p>
+				</a>
+				
+
+								<div class="Card-author">
+					greg20112014@gmail.com
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/create-the-american-citizens-app-for-android-and-ios">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/create-the-american-citizens-app-for-android-and-ios" class="block">
+			<img class="w-full" src="/imager/images/5812/rahul-chakraborty-xsGxhtAsfSA-unsplash_16e19f44d3a7d10cad1c3d0c6e071d1e.jpg" alt="Create the America App for android and iOS"/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote5802" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:3,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;5802&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/create-the-american-citizens-app-for-android-and-ios">
+					<p>Create the America App for android and iOS</p>
+				</a>
+				
+
+								<div class="Card-author">
+					greg20112014@gmail.com
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                                            
+                                                                                                                                                                                
+
+                                        
+                                            
+                    
+                    <div class="Card" href="https://risc.uchicago.edu/ideas/predetermined-breaking-points---or-sollbruchstellen-german-using-defaults-for-better-life-decisions-creating-predetermined-breaking-points-sollbruchstellen-in-german-on-a-regular-bassi-for-life-and-work-decisions.">
+	<div class="Card-flex">
+		<a href="https://risc.uchicago.edu/ideas/predetermined-breaking-points---or-sollbruchstellen-german-using-defaults-for-better-life-decisions-creating-predetermined-breaking-points-sollbruchstellen-in-german-on-a-regular-bassi-for-life-and-work-decisions." class="block">
+			<img class="w-full" src="/imager/images/5814/mark-konig-ECGv8s2IPG0-unsplash_16e19f44d3a7d10cad1c3d0c6e071d1e.jpg" alt="Predetermined breaking points - or &quot;Sollbruchstellen&quot; (German)Using &quot;defaults&quot; for better life decisions: Creating predetermined breaking points (“Sollbruchstellen” in German) on a regular bassi for life and work decisions."/>
+		</a>
+		<div class="Card-body">
+			<div class="Card-actions">
+
+						<div id="CardVote5809" class="HomeCardVoting">
+				<ideasdetailvoting v-bind:idea-prop="{&quot;votes&quot;:0,&quot;voteMatch&quot;:false,&quot;id&quot;:&quot;5809&quot;}" idea-page="HomeCardVote" />
+			</div>
+							
+			</div>
+			<div class="Card-copy">
+				<a href="https://risc.uchicago.edu/ideas/predetermined-breaking-points---or-sollbruchstellen-german-using-defaults-for-better-life-decisions-creating-predetermined-breaking-points-sollbruchstellen-in-german-on-a-regular-bassi-for-life-and-work-decisions.">
+					<p>Predetermined breaking points - or &quot;Sollbruchstellen&quot; (German)Using &quot;defaults&quot; for better life decisions: Creating predetermined breaking points (“Sollbruchstellen” in German) on a regular bassi for life and work decisions.</p>
+				</a>
+				
+
+								<div class="Card-author">
+					Center for Risc
+				</div>
+							</div>
+		</div>
+	</div>
+</div>
+
+                                </div>
+        </div>
+    </section>
+
+        <section id="about" class="container md:flex flex-wrap pt-32">
+        <div class="w-full md:w-1/2 lg:w-1/3">
+            <h2>About Us</h2>
+            <div class="text-lg"><p><strong>At the Center for RISC, our mission is to generate breakthrough solutions to the world’s most difficult social problems.</strong></p><p>The Center for RISC is the brainchild of <a href="https://voices.uchicago.edu/levitt/">Steven Levitt</a>, professor of economics at the University of Chicago and co-author of <a href="http://freakonomics.com"><em>Freakonomics</em></a>. We are not an academic group or research lab. Instead, we investigate today’s social issues by combining unconventional perspectives with empirical data, generating radical solutions with real-world relevance. We then test and scale those solutions through a mix of partnerships with academics, nonprofits, government agencies, international organizations, and private corporations. </p><p>Our team holds degrees from the world’s leading universities, and our Analysts have trained in the fields of data science, economics, political science, applied mathematics, and more.</p><p>After their time at RISC, our alumni have continued their distinguished paths, pursuing further education, embarking on projects abroad, and taking on roles in tech, academia, philanthropy, and beyond.</p></div>
+        </div>
+        <div class="TeamGrid-carousel md:w-1/2 lg:w-2/3">
+            <div class="TeamGrid">
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://voices.uchicago.edu/levitt/" target="_blank">                    <img 
+                        src="/imager/images/team/619/Co-Founder_Steve_80d7fc0234d05fba775157a07ba38b48.jpeg" 
+                        srcset="/imager/images/team/619/Co-Founder_Steve_80d7fc0234d05fba775157a07ba38b48.jpeg 150w, /imager/images/team/619/Co-Founder_Steve_e7e08c266d4b98c06acb6f96a0feeef3.jpeg 300w"
+                        alt="Co Founder Steve"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Steven Levitt</strong>
+                    <p class="text-gray text-sm">Co-founder &amp; Faculty Director</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/jeffrey-severts-27b433/" target="_blank">                    <img 
+                        src="/imager/images/team/14570/Jeff_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14570/Jeff_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14570/Jeff_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Jeff"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Jeffrey Severts</strong>
+                    <p class="text-gray text-sm">Co-Founder &amp; Executive Director</p>
+                </div>
+                                                <div class="w-1/2 p-4 hidden lg:block"><img src="/assets/dist/images/home-team-static.jpg?id=ef1f592aa437ae9db295" alt="Desks" sizes="33vw" srcset="/assets/dist/images/home-team-static@2x.jpg?id=83149987d3218293272f 2x" /></div>
+                                
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/-noahduncan-/" target="_blank">                    <img 
+                        src="/imager/images/team/1324/ND_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/1324/ND_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/1324/ND_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="ND"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Noah Duncan</strong>
+                    <p class="text-gray text-sm">Senior Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/jack-tait-13229b10a/" target="_blank">                    <img 
+                        src="/imager/images/team/14569/Jack_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14569/Jack_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14569/Jack_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Jack"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Jack Tait</strong>
+                    <p class="text-gray text-sm">Senior Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/claire-sukumar/" target="_blank">                    <img 
+                        src="/imager/images/team/10964/Claire_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/10964/Claire_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/10964/Claire_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Claire"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Claire Sukumar</strong>
+                    <p class="text-gray text-sm">Senior Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/cami-brix-7ba68b1a2/" target="_blank">                    <img 
+                        src="/imager/images/team/10926/Cami_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/10926/Cami_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/10926/Cami_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Cami"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Cami Brix</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/khaliun-enkhbayar-9918281b2/" target="_blank">                    <img 
+                        src="/imager/images/team/14525/Khali_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14525/Khali_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14525/Khali_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Khali"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Kali Enkhbayar</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/devin-haas-930341248/" target="_blank">                    <img 
+                        src="/imager/images/team/12789/Untitled-Artwork-1-2_80d7fc0234d05fba775157a07ba38b48.jpeg" 
+                        srcset="/imager/images/team/12789/Untitled-Artwork-1-2_80d7fc0234d05fba775157a07ba38b48.jpeg 150w, /imager/images/team/12789/Untitled-Artwork-1-2_e7e08c266d4b98c06acb6f96a0feeef3.jpeg 300w"
+                        alt="Untitled Artwork 1 2"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Devin Haas</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/hana-horiuchi-072a611a2/" target="_blank">                    <img 
+                        src="/imager/images/team/14479/Hana_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14479/Hana_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14479/Hana_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Hana"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Hana Horiuchi</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/davis-johnstone-941a7921a/" target="_blank">                    <img 
+                        src="/imager/images/team/10856/Davis_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/10856/Davis_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/10856/Davis_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Davis"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Davis Johnstone</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/ben-klosky/" target="_blank">                    <img 
+                        src="/imager/images/team/14526/Ben_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14526/Ben_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14526/Ben_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Ben"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Ben Klosky</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/katherine-leahy-4b223317a/" target="_blank">                    <img 
+                        src="/imager/images/team/10963/Katherine_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/10963/Katherine_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/10963/Katherine_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Katherine"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Katherine Leahy</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/josie-maier-4b46201ab/" target="_blank">                    <img 
+                        src="/imager/images/team/14480/Josie_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14480/Josie_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14480/Josie_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Josie"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Josie Maier</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/ruby-rorty-692472195/" target="_blank">                    <img 
+                        src="/imager/images/team/14571/Ruby_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14571/Ruby_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14571/Ruby_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Ruby"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Ruby Rorty</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/micah-ross-558670233/" target="_blank">                    <img 
+                        src="/imager/images/team/14523/Micah_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14523/Micah_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14523/Micah_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Micah"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Micah Ross</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/daniela-shuman/" target="_blank">                    <img 
+                        src="/imager/images/team/14524/Daniela_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14524/Daniela_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14524/Daniela_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Daniela"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Daniela Shuman</strong>
+                    <p class="text-gray text-sm">Analyst</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/ben-thevathasan-22a6443a/" target="_blank">                    <img 
+                        src="/imager/images/team/627/Data-Scientist_Ben_80d7fc0234d05fba775157a07ba38b48.jpeg" 
+                        srcset="/imager/images/team/627/Data-Scientist_Ben_80d7fc0234d05fba775157a07ba38b48.jpeg 150w, /imager/images/team/627/Data-Scientist_Ben_e7e08c266d4b98c06acb6f96a0feeef3.jpeg 300w"
+                        alt="Data Scientist Ben"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Ben Thevathasan</strong>
+                    <p class="text-gray text-sm">Lead Data Scientist</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/zarek-drozda-08021011a/" target="_blank">                    <img 
+                        src="/imager/images/team/14572/Zarek_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/14572/Zarek_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/14572/Zarek_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Zarek"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Zarek Drozda</strong>
+                    <p class="text-gray text-sm">Director, Data Science for Everyone</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/dave-bryla-4076b6268/" target="_blank">                    <img 
+                        src="/imager/images/team/11853/Dave-jpg_80d7fc0234d05fba775157a07ba38b48.jpg" 
+                        srcset="/imager/images/team/11853/Dave-jpg_80d7fc0234d05fba775157a07ba38b48.jpg 150w, /imager/images/team/11853/Dave-jpg_e7e08c266d4b98c06acb6f96a0feeef3.jpg 300w"
+                        alt="Dave jpg"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Dave Bryla</strong>
+                    <p class="text-gray text-sm">Entrepreneur in Residence</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/scottbenjaminmoore/" target="_blank">                    <img 
+                        src="/imager/images/team/11898/Scott-Real_80d7fc0234d05fba775157a07ba38b48.jpg" 
+                        srcset="/imager/images/team/11898/Scott-Real_80d7fc0234d05fba775157a07ba38b48.jpg 150w, /imager/images/team/11898/Scott-Real_e7e08c266d4b98c06acb6f96a0feeef3.jpg 300w"
+                        alt="Scott Real"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Scott Moore</strong>
+                    <p class="text-gray text-sm">Entrepreneur in Residence</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/janet-moehring-240140b/" target="_blank">                    <img 
+                        src="/imager/images/team/12842/Untitled-Artwork_80d7fc0234d05fba775157a07ba38b48.jpeg" 
+                        srcset="/imager/images/team/12842/Untitled-Artwork_80d7fc0234d05fba775157a07ba38b48.jpeg 150w, /imager/images/team/12842/Untitled-Artwork_e7e08c266d4b98c06acb6f96a0feeef3.jpeg 300w"
+                        alt="Untitled Artwork"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Janet Trieselmann</strong>
+                    <p class="text-gray text-sm">Entrepreneur in Residence</p>
+                </div>
+                                            
+                <div class="TeamGrid-item">
+                                        <a href="https://www.linkedin.com/in/smithdane/" target="_blank">                    <img 
+                        src="/imager/images/team/13382/Portrait-New-3_80d7fc0234d05fba775157a07ba38b48.png" 
+                        srcset="/imager/images/team/13382/Portrait-New-3_80d7fc0234d05fba775157a07ba38b48.png 150w, /imager/images/team/13382/Portrait-New-3_e7e08c266d4b98c06acb6f96a0feeef3.png 300w"
+                        alt="Portrait New 3"
+                        class="mb-4"
+                    />
+                    </a>                    <strong class="block mb-2">Dane Smith</strong>
+                    <p class="text-gray text-sm">Entrepreneur in Residence</p>
+                </div>
+                        </div>
+        </div>
+    </section>
+    
+        </main>
+        <footer class="SiteFooter">
+                    <div class="container">
+                <hr class="border-gray-lighter mt-16 mb-20">
+
+                <div id="contact" class="SiteFooter-contact">
+                    <h2 class="mb-6 font-light">Contact Us</h2>
+
+                    <div class="flex flex-wrap -mx-4">
+                        <div class="w-full sm:w-2/3 p-4">
+                                                        <form  class="mt-0 lg:mt-2" id="SiteFooter-contactForm" method="post" data-id="0b4649-form-la0AyMALZ_QnPB2JBka_568f0e6ecf3b9800d6904f7250aa06da2455e39367c871721fab7" data-handle="contactForm" data-ajax data-success-message="Form has been submitted successfully!" data-error-message="Sorry, there was an error submitting the form. Please try again." data-freeform novalidate >
+<input type="hidden" name="action" value="freeform/api/form" /><input type="hidden" name="formHash" value="la0AyMALZ_QnPB2JBka_568f0e6ecf3b9800d6904f7250aa06da2455e39367c871721fab7" /><input type="hidden" name="CRAFT_CSRF_TOKEN" value="A0eN2vlFquXCHUSNBDvkGIBLLW0QO85moYgs-yiInsfypJm7qDhxO0YU-eiXB-ixkFwy3m5IhXPyJUNAXVaFOeS4W49j66aei4npwtpCO0k=" /><div id="0b4649-form-la0AyMALZ_QnPB2JBka_568f0e6ecf3b9800d6904f7250aa06da2455e39367c871721fab7" data-scroll-anchor></div><div class="freeform_form_handle" style="position: absolute !important; width: 0 !important; height: 0 !important; overflow: hidden !important;" aria-hidden="true" tabindex="-1"><label aria-hidden="true" tabindex="-1" for="freeform_form_handle">Leave this field blank</label><input type="text" value="" name="freeform_form_handle" id="freeform_form_handle" aria-hidden="true" tabindex="-1" /></div>
+                                <p class="SiteFooter-contactErrors is-error hidden"></p>
+                                <div class="formRow">
+    <label for="email">Email</label>
+    <input type="email" name="contactEmail" id="email" class="" value="" required    />
+</div>
+                                <div class="formRow">
+    <label for="name">Name</label>
+    <input type="text" name="contactName" id="name" class="" value=""     />
+</div>
+                                <div class="formRow">
+    <label for="message">Message</label>
+    <textarea name="contactMessage" id="message" class="" required></textarea>
+</div>
+                                <div class="form-row mt-12">
+                                <button type="submit" class="btn ladda-button" data-style="expand-right"><span class="ladda-label">Send</span></button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="SiteFooter-social w-full sm:w-1/3 p-4">
+                            <div class="flex flex-wrap -mx-2 lg:-mx-4">
+                                <div class="twitter SiteFooter-socialBox w-1/2 p-2 lg:p-4">
+                                    <a href="https://twitter.com/center4risc" target="_blank"><img src="/assets/dist/images/icon-twitter.svg?id=a06f7d08355c8454e251" class="absolute"></a>
+                                </div>
+                                <div class="facebook SiteFooter-socialBox w-1/2 p-2 lg:p-4">
+                                    <a href="https://www.facebook.com/center4risc" target="_blank"><img src="/assets/dist/images/icon-facebook.svg?id=6fcbd85b0efbf6a1c92c" class="absolute"></a>
+                                </div>
+                                <div class="linkedin SiteFooter-socialBox w-1/2 p-2 lg:p-4">
+                                    <a href="https://www.linkedin.com/company/center4risc/" target="_blank"><img src="/assets/dist/images/icon-linkedin.svg?id=7dea9a28e04a15b4ee75" class="absolute"></a>
+                                </div>
+                                <div class="instagram SiteFooter-socialBox w-1/2 p-2 lg:p-4">
+                                    <a href="https://www.instagram.com/center4risc/" target="_blank"><img src="/assets/dist/images/icon-instagram.svg?id=256fadbc216949ff4e11" class="absolute"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    <div class="container">
+                <hr class="border-gray-lighter mt-12">
+                <div class="flex flex-wrap justify-between -mx-4 py-12">
+                    <div class="SiteFooter-logo px-4 w-full text-center flex flex-col justify-center md:flex-row md:w-1/3 lg:w-1/4 md:justify-between xl:w-auto lg:mb-10">
+                        <div class="text-center">
+                            <a href="https://risc.uchicago.edu/" class="inline-block">
+                                                                <img src="https://risc.uchicago.edu/uploads/images/risc-footer-logo.svg" alt="Radical Innovation for Social Change Logo">
+                            </a>
+                        </div>
+
+                        <div class="text-center mt-8 md:mt-0">
+                            <a href="https://www.uchicago.edu/" target="_blank" class="md:ml-8 inline-block">
+
+                                <img 
+                                    src="/assets/dist/images/logo-uoc.png?id=992df6c1c5a9a7204bf0" 
+                                    srcset="/assets/dist/images/logo-uoc.png?id=992df6c1c5a9a7204bf0 1x, /assets/dist/images/logo-uoc@2x.png?id=eb77560853840627d373 2x" 
+                                    alt="University of Chicago">
+                                                            </a>
+                        </div>
+                    </div>
+
+                    <nav class="Nav SiteFooter-nav w-full text-center md:flex md:flex-no-wrap lg:px-4 my-6 md:mt-0  md:w-1/2 lg:w-auto lg:my-0">
+                        <a href="https://risc.uchicago.edu/news">NEWS</a>
+                        <a href="https://risc.uchicago.edu/ideas">IDEAS</a>
+                        <a href="https://risc.uchicago.edu/ideas/submit">SUBMIT YOUR IDEA</a>
+                    </nav>
+
+                                        <div class="SiteFooter-newsletter w-full px-4 mt-4 lg:mt-0 lg:w-1/3">
+                        <form class="relative mt-4 md:mt-0" action="" method="post" id="MailchimpSub" novalidate>
+                            <input type="hidden" name="CRAFT_CSRF_TOKEN" value="A0eN2vlFquXCHUSNBDvkGIBLLW0QO85moYgs-yiInsfypJm7qDhxO0YU-eiXB-ixkFwy3m5IhXPyJUNAXVaFOeS4W49j66aei4npwtpCO0k=">
+                            <input type="hidden" name="action" value="mailchimp-subscribe/audience/subscribe">
+
+                            
+                                <p class="SiteFooter-newsletterSuccess is-success hidden font-medium uppercase mb-2">Subscribed successfully!</p>
+                                <p class="SiteFooter-newsletterError is-error text-sm hidden">An error occured: </p>
+                            <div class="relative">
+                                <input 
+                                    type="email" 
+                                    placeholder="Enter your email address" 
+                                    name="email"
+                                    required
+                                                                    />
+                                <button type="submit"><img src="/assets/dist/images/icon-plane.svg?id=399121228472d632f84a" class="SiteFooter-newsletterPlane"></button>
+                            </div>
+                        </form>
+                        <p class="text-sm text-gray mb-0">Join our newsletter to receive updates on our work.</p>
+                    </div>
+                </div>
+                <hr class="border-gray-lighter">
+                <div class="SiteFooter-sub flex flex-wrap justify-between py-12 text-sm">
+                    <p class="text-gray">&copy;2025 Center for RISC. All rights reserved.</p>
+
+                    <nav>
+                        <a href="https://risc.uchicago.edu/privacy" class="text-orange">Privacy Policy</a>
+                        <a href="https://risc.uchicago.edu/terms" class="text-orange ml-2">Terms of Service</a>
+                    </nav>
+                </div>
+            </div>
+
+        </footer>
+
+                                                        
+        <div id="SocialLoginModal">
+            <loginmodal />
+        </div>
+
+
+				<script>
+			window.csrfToken = "A0eN2vlFquXCHUSNBDvkGIBLLW0QO85moYgs\u002DyiInsfypJm7qDhxO0YU\u002DeiXB\u002DixkFwy3m5IhXPyJUNAXVaFOeS4W49j66aei4npwtpCO0k\u003D";
+			window.csrfTokenName = "CRAFT_CSRF_TOKEN";
+		</script>
+
+        <script>
+            window.socialLogins = [
+                                {
+                    'url': 'https\u003A\/\/risc.uchicago.edu\/index.php\/actions\/social\/login\u002Daccounts\/login\u003Fredirect\u003Dhttps\u00253A\/\/risc.uchicago.edu\/\u0026provider\u003Dfacebook',
+                    'name': 'facebook',
+                    'displayName': 'Facebook',
+                    'return': 'https://risc.uchicago.edu/'
+                },
+                                {
+                    'url': 'https\u003A\/\/risc.uchicago.edu\/index.php\/actions\/social\/login\u002Daccounts\/login\u003Fredirect\u003Dhttps\u00253A\/\/risc.uchicago.edu\/\u0026provider\u003Dgoogle',
+                    'name': 'google',
+                    'displayName': 'Google',
+                    'return': 'https://risc.uchicago.edu/'
+                },
+                                {
+                    'url': 'https\u003A\/\/risc.uchicago.edu\/index.php\/actions\/social\/login\u002Daccounts\/login\u003Fredirect\u003Dhttps\u00253A\/\/risc.uchicago.edu\/\u0026provider\u003Dtwitter',
+                    'name': 'twitter',
+                    'displayName': 'Twitter',
+                    'return': 'https://risc.uchicago.edu/'
+                },
+                            ];
+        </script>
+
+				
+				<script src="/assets/dist/js/main.js?id=e68a36286e4c83368f17"></script>
+
+				
+											<script src="/assets/dist/js/home.js?id=063f58a155e0079662d1"></script>
+					
+                <script>
+            window.ga = function () {
+                ga.q.push(arguments)
+            };
+            ga.q = [];
+            ga.l = + new Date;
+            ga('create', 'UA-XXXXX-Y', 'auto');
+            ga('set', 'transport', 'beacon');
+            ga('send', 'pageview')
+        </script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+    </body>
+
+</html>

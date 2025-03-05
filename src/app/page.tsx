@@ -1,6 +1,8 @@
 import Landing from "./components/landing";
 import Work from "./components/work";
-import Team from "./components/team";
+import Team from "./components/team/team";
+import Tracker from "./components/tracker";
+import Footer from "./components/footer";
 
 export default function Page() {
   // risc paths! storing here for funsies
@@ -15,9 +17,11 @@ export default function Page() {
 
   return (
     <main>
+      <Tracker />
       <Landing />
       <Work />
       <Team />
+      <Footer />
     </main>
   );
 }

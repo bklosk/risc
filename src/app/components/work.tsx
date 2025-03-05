@@ -7,9 +7,14 @@ import TextTransition from "react-text-transition";
 
 export default function Work() {
   const { scrollY } = useScroll();
-  const fadeOpacity = useTransform(scrollY, [250, 340, 820, 940], [0, 1, 1, 0]);
+  const fadeOpacity = useTransform(
+    scrollY,
+    [250, 340, 860, 1280],
+    [0, 1, 1, 0]
+  );
   const textyPosition = useTransform(scrollY, [250, 340], [0, -10]);
   const closeSection = useTransform(scrollY, [820, 940], [1, 0]);
+  const slideOut = useTransform(scrollY, [860, 1280], [0, -100]);
 
   // State for header text
   const defaultHeader = "We generate breakthrough solutions to social problems";
@@ -25,30 +30,33 @@ export default function Work() {
     return () => unsubscribe();
   }, [scrollY]);
 
+  const scroll_start = 300;
+  const scroll_end = 450;
+
   // Define box animations
   const fi_box = {
-    x: useTransform(scrollY, [340, 440], [-100, 0]),
-    opacity: useTransform(scrollY, [340, 440], [0, 1]),
+    x: useTransform(scrollY, [scroll_start, scroll_end], [-100, 0]),
+    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]), // updated range
   };
   const pd_box = {
-    y: useTransform(scrollY, [340, 440], [100, 0]),
-    opacity: useTransform(scrollY, [340, 440], [0, 1]),
+    y: useTransform(scrollY, [scroll_start, scroll_end], [100, 0]),
+    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
   };
   const ds4e_box = {
-    y: useTransform(scrollY, [340, 440], [-40, 0]),
-    opacity: useTransform(scrollY, [340, 440], [0, 1]),
+    y: useTransform(scrollY, [scroll_start, scroll_end], [-40, 0]),
+    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
   };
   const tll_box = {
-    x: useTransform(scrollY, [340, 440], [180, 0]),
-    opacity: useTransform(scrollY, [340, 440], [0, 1]),
+    x: useTransform(scrollY, [scroll_start, scroll_end], [180, 0]), // updated range
+    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
   };
   const cn_box = {
-    x: useTransform(scrollY, [340, 440], [-180, 0]),
-    opacity: useTransform(scrollY, [340, 440], [0, 1]),
+    x: useTransform(scrollY, [scroll_start, scroll_end], [-180, 0]), // updated range
+    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
   };
   const da_box = {
-    y: useTransform(scrollY, [340, 440], [180, 0]),
-    opacity: useTransform(scrollY, [340, 440], [0, 1]),
+    y: useTransform(scrollY, [scroll_start, scroll_end], [180, 0]), // updated range
+    opacity: useTransform(scrollY, [scroll_start, scroll_end], [0, 1]),
   };
 
   // Refactored event handlers
@@ -139,7 +147,11 @@ export default function Work() {
   ];
 
   return (
-    <div className="w-full min-h-[1000px]">
+    <motion.div
+      id="work"
+      className="w-full min-h-[1000px]"
+      style={{ y: slideOut }}
+    >
       <motion.div
         className="text-3xl fixed top-32 w-full font-bold text-[#FC4512] text-center"
         style={{ opacity: fadeOpacity, y: textyPosition }}
@@ -188,6 +200,6 @@ export default function Work() {
           )
         )}
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
