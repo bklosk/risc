@@ -28,6 +28,7 @@ export default function Landing() {
     <motion.div
       style={{ opacity: fadeOpacity, y: fadeY }} // fade out as it moves out of view
       className="w-full grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 "
+      id="intro"
     >
       <motion.video
         autoPlay
@@ -43,30 +44,12 @@ export default function Landing() {
       </motion.video>
       <motion.div className="lg:pr-20 lg:mt-[50%] md:mt-[35%] w-5/6  mt-12 pl-8 pr-6">
         <TypeAnimation
-          sequence={[
-            1600,
-            "We are an innovation lab for social change",
-            // 2000, // Waits 1s
-            // "We are an innovation lab for risky ideas",
-            // 2000, // Waits 2s
-            // "We are an innovation lab for a better world",
-            // 2000,
-            // "We are an innovation lab for radical solutions",
-            // 2000,
-            // "We are an innovation lab for a sustainable future",
-            // 2000,
-            // "We are an innovation lab for disruptive ideas",
-            // 2000,
-            // "We are an innovation lab for system-level change",
-            // 2000,
-            // "We are an innovation lab for unorthodox approaches",
-            // 2000,
-          ]}
+          sequence={[1600, "We are an innovation lab for social change"]}
           wrapper="span"
           speed={55}
           cursor={false}
           repeat={Infinity}
-          className="text-4xl font-extrabold text-[#FC4512]"
+          className="text-4xl font-albert-sans font-extrabold text-[#FC4512]"
         />
         <motion.p
           className="mt-4 lg:w-3/4 font-medium text-lg"

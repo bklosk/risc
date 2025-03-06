@@ -56,7 +56,7 @@ export default function Team() {
     >
       <motion.div
         ref={introRef}
-        className="prose"
+        className="prose font-albert-sans"
         initial="hidden"
         animate={introInView ? "visible" : "hidden"}
         variants={fadeInUp}
@@ -90,7 +90,7 @@ export default function Team() {
           beyond.
         </p>
       </motion.div>
-      <div className="team">
+      <div className="team font-albert-sans">
         <motion.div
           ref={founderRef}
           className="text-6xl font-extrabold text-[#FC4512] text-left mb-8"
