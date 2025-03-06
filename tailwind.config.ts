@@ -12,6 +12,16 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        sans: [
+          "var(--font-albert-sans)",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
+        ],
+        "albert-sans": ["var(--font-albert-sans)", "sans-serif"],
+        Albert_Sans: ["var(--font-albert-sans)", "sans-serif"],
+      },
     },
   },
   plugins: [],
