@@ -32,6 +32,14 @@ const carouselItems = [
     status: "Active",
   },
   {
+    id: 5,
+    title: "Data Science 4 Everyone",
+    description: "Modernizing our outdated math curriculum",
+    color: "#fffff0", // Light teal
+    status: "Graduated",
+    carousel: "/images/carousel/ds4e.png",
+  },
+  {
     id: 4,
     title: "Decision Aid",
     description: "Minimizing unnecessary law enforcement encounters.",
@@ -39,13 +47,16 @@ const carouselItems = [
     status: "Closed",
     carousel: "/images/carousel/da.png",
   },
+
   {
-    id: 5,
-    title: "Data Science 4 Everyone",
-    description: "Modernizing our outdated math curriculum",
-    color: "#fffff0", // Light teal
-    status: "Graduated",
+    id: 7,
+    title: "Canopy",
+    description: "Peer mentorship at scale.",
+    color: "#d9f99d", // Light blue
+    carousel: "/images/carousel/canopy.svg",
+    status: "Closed",
   },
+
   {
     id: 6,
     title: "Community Notes",
@@ -55,22 +66,6 @@ const carouselItems = [
     status: "Graduated",
   },
   {
-    id: 7,
-    title: "Canopy",
-    description: "Peer mentorship at scale.",
-    color: "#d9f99d", // Light blue
-    carousel: "/images/carousel/canopy.svg",
-    status: "Closed",
-  },
-  {
-    id: 8,
-    title: "Blueprint",
-    description: "Online math tutoring for everyone.",
-    color: "#1f3e51", // Light blue
-    carousel: "/images/carousel/blueprint.png",
-    status: "Closed",
-  },
-  {
     id: 9,
     title: "Community Utility",
     description: "Mutual aid for utility bills.",
@@ -78,6 +73,30 @@ const carouselItems = [
     carousel: "/images/carousel/cu.jpeg",
     status: "Closed",
     link: "https://communityutility.org",
+  },
+  {
+    id: 8,
+    title: "Online Math Tutoring",
+    description: "1:1 instruction, accessible and available for everyone.",
+    color: "#1f3e51", // Light blue
+    carousel: "/images/carousel/blueprint.png",
+    status: "Closed",
+  },
+  {
+    id: 10,
+    title: "Vaccine Lotteries",
+    description: "Using behavioral economics to end outbreaks.",
+    color: "#1f3e51", // Light blue
+    carousel: "/images/carousel/vac.jpg",
+    status: "Closed",
+  },
+  {
+    id: 11,
+    title: "VR for Social Good",
+    description: "1:1 instruction, accessible and available for everyone.",
+    color: "#1f3e51", // Light blue
+    carousel: "/images/carousel/vr.jpg",
+    status: "Closed",
   },
 ];
 
