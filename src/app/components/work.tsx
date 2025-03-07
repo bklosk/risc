@@ -2,8 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-// import Image from "next/image";
+import { ArrowRight, ChevronRight, ChevronLeft } from "lucide-react";
 
 // Sample data structure for the carousel items
 const carouselItems = [
@@ -13,7 +12,7 @@ const carouselItems = [
     description: "Using data to improve child welfare.",
     color: "#1f3e51", // Light blue
     status: "Active",
-    carousel: "/images/carousel/fi.webp",
+    carousel: "/images/carousel/fi.jpg",
   },
   {
     id: 2,
@@ -75,14 +74,6 @@ const carouselItems = [
     link: "https://communityutility.org",
   },
   {
-    id: 8,
-    title: "Online Math Tutoring",
-    description: "1:1 instruction, accessible and available for everyone.",
-    color: "#1f3e51", // Light blue
-    carousel: "/images/carousel/blueprint.png",
-    status: "Closed",
-  },
-  {
     id: 10,
     title: "Vaccine Lotteries",
     description: "Using behavioral economics to end outbreaks.",
@@ -102,42 +93,112 @@ const carouselItems = [
 
 export default function WorkCarousel() {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const innerCarouselRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if we're on a mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const updateWidth = () => {
-      if (carouselRef.current) {
-        const scrollWidth = carouselRef.current.scrollWidth;
-        const offsetWidth = carouselRef.current.offsetWidth;
-        setWidth(scrollWidth - offsetWidth);
+      if (innerCarouselRef.current && carouselRef.current) {
+        const scrollWidth = innerCarouselRef.current.scrollWidth;
+        const clientWidth = carouselRef.current.clientWidth;
+        const calculatedWidth = Math.max(0, scrollWidth - clientWidth);
+        console.log("Carousel width calculated:", {
+          scrollWidth,
+          clientWidth,
+          calculatedWidth,
+        });
+        setWidth(calculatedWidth);
       }
     };
 
-    updateWidth();
+    // Ensure calculations happen after DOM is fully rendered and images are loaded
+    const calculateAfterRender = () => {
+      updateWidth();
+
+      // Images might still be loading, so recalculate after a delay
+      setTimeout(updateWidth, 500);
+      setTimeout(updateWidth, 1500); // Additional check after more time
+    };
+
+    calculateAfterRender();
+
+    // Use MutationObserver to detect changes to the DOM
+    const observer = new MutationObserver(calculateAfterRender);
+    if (carouselRef.current) {
+      observer.observe(carouselRef.current, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+    }
+
+    // Use ResizeObserver for more reliable size detection
+    const resizeObserver = new ResizeObserver(updateWidth);
+    if (carouselRef.current) {
+      resizeObserver.observe(carouselRef.current);
+    }
+
+    // Also listen for window resize and orientation change
     window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
+    window.addEventListener("orientationchange", updateWidth);
+
+    return () => {
+      observer.disconnect();
+      if (carouselRef.current) resizeObserver.unobserve(carouselRef.current);
+      window.removeEventListener("resize", updateWidth);
+      window.removeEventListener("orientationchange", updateWidth);
+    };
   }, []);
 
   return (
-    <div id="work" className="w-full overflow-hidden mt-8 py-8">
-      <h1 className="text-5xl mx-auto font-albert-sans font-extrabold text-[#FC4512] ml-8 mb-8">
-        Some of our projects
-      </h1>
-      <motion.div
-        ref={carouselRef}
-        className="cursor-grab overflow-hidden ml-8 mr-8"
-        whileTap={{ cursor: "grabbing" }}
-      >
+    <motion.div
+      id="work"
+      className="w-full overflow-hidden mt-8 py-8 relative"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0 }}
+    >
+      <div className="flex items-center justify-center mb-4">
+        <h1 className="text-4xl md:text-5xl mx-auto font-albert-sans font-extrabold text-[#FC4512] md:ml-8 mb-4">
+          Some of our projects
+        </h1>
+      </div>
+
+      {/* Carousel container with fallback scrolling */}
+      <div ref={carouselRef} className="overflow-hidden mx-4 md:mx-8 pb-4">
         <motion.div
-          className="grid grid-rows-2 grid-flow-col gap-6 w-max mx-auto"
+          ref={innerCarouselRef}
+          className={`grid grid-rows-1 md:grid-rows-2 grid-flow-col gap-6 w-max mx-auto`}
           drag="x"
-          dragConstraints={{ right: 0, left: -width }}
-          dragElastic={0.1}
+          dragConstraints={{ right: 100, left: -width - 100 }}
+          dragTransition={{
+            bounceStiffness: 300,
+            bounceDamping: 30,
+          }}
+          dragElastic={0.2}
+          dragMomentum={true}
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={() => setIsDragging(false)}
+          style={{
+            cursor: isDragging ? "grabbing" : "grab",
+          }}
         >
           {carouselItems.map((item) => (
             <motion.div
               key={item.id}
-              className="min-w-[320px] h-[320px] relative flex-shrink-0 rounded-lg overflow-hidden group"
+              className="min-w-[280px] md:min-w-[320px] h-[280px] md:h-[320px] relative flex-shrink-0 rounded-lg overflow-hidden group"
               style={{
                 backgroundColor: item.color,
                 backgroundImage: item.carousel
@@ -159,7 +220,7 @@ export default function WorkCarousel() {
               />
 
               {/* Semi-transparent grey overlay that fades in on hover */}
-              <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-[15]">
+              <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-[1]">
                 <div className="flex items-center h-full">
                   <p className="text-white text-xl pl-6 font-albert-sans max-w-[80%]">
                     {item.description}
@@ -184,7 +245,7 @@ export default function WorkCarousel() {
             </motion.div>
           ))}
         </motion.div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }
