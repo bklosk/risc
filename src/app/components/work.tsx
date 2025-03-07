@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronRight, ChevronLeft } from "lucide-react";
+import Link from "next/link";
 
 // Sample data structure for the carousel items
 const carouselItems = [
@@ -13,6 +14,7 @@ const carouselItems = [
     color: "#1f3e51", // Light blue
     status: "Active",
     carousel: "/images/carousel/fi.jpg",
+    link: "https://www.fosterinsights.org",
   },
   {
     id: 2,
@@ -97,6 +99,8 @@ export default function WorkCarousel() {
   const [width, setWidth] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
+  const itemRefs = useRef<Map<number, DOMRect>>(new Map());
 
   // Check if we're on a mobile device
   useEffect(() => {
@@ -162,6 +166,62 @@ export default function WorkCarousel() {
     };
   }, []);
 
+  // Track cursor position to determine which item is being hovered
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) return; // Don't update hover state while dragging
+
+      // Check if cursor is over any carousel item
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      // Find the item the cursor is currently over
+      let foundHoveredItem = false;
+      itemRefs.current.forEach((rect, id) => {
+        if (
+          mouseX >= rect.left &&
+          mouseX <= rect.right &&
+          mouseY >= rect.top &&
+          mouseY <= rect.bottom
+        ) {
+          setHoveredItemId(id);
+          foundHoveredItem = true;
+        }
+      });
+
+      // Clear hover state if not over any item
+      if (!foundHoveredItem) {
+        setHoveredItemId(null);
+      }
+    };
+
+    // Update item positions when scrolling or resizing
+    const updateItemPositions = () => {
+      if (innerCarouselRef.current) {
+        const items =
+          innerCarouselRef.current.querySelectorAll(".carousel-item");
+        items.forEach((item) => {
+          const id = Number(item.getAttribute("data-id"));
+          const rect = item.getBoundingClientRect();
+          itemRefs.current.set(id, rect);
+        });
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("scroll", updateItemPositions);
+    window.addEventListener("resize", updateItemPositions);
+
+    // Initialize positions
+    updateItemPositions();
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", updateItemPositions);
+      window.removeEventListener("resize", updateItemPositions);
+    };
+  }, [isDragging]);
+
   return (
     <motion.div
       id="work"
@@ -190,7 +250,19 @@ export default function WorkCarousel() {
           dragElastic={0.2}
           dragMomentum={true}
           onDragStart={() => setIsDragging(true)}
-          onDragEnd={() => setIsDragging(false)}
+          onDragEnd={() => {
+            setIsDragging(false);
+            // Update item positions after dragging ends
+            setTimeout(() => {
+              const items =
+                innerCarouselRef.current?.querySelectorAll(".carousel-item");
+              items?.forEach((item) => {
+                const id = Number(item.getAttribute("data-id"));
+                const rect = item.getBoundingClientRect();
+                itemRefs.current.set(id, rect);
+              });
+            }, 100);
+          }}
           style={{
             cursor: isDragging ? "grabbing" : "grab",
           }}
@@ -198,7 +270,8 @@ export default function WorkCarousel() {
           {carouselItems.map((item) => (
             <motion.div
               key={item.id}
-              className="min-w-[280px] md:min-w-[320px] h-[280px] md:h-[320px] relative flex-shrink-0 rounded-lg overflow-hidden group"
+              data-id={item.id}
+              className="carousel-item min-w-[280px] md:min-w-[320px] h-[280px] md:h-[320px] relative flex-shrink-0 rounded-lg overflow-hidden group"
               style={{
                 backgroundColor: item.color,
                 backgroundImage: item.carousel
@@ -206,39 +279,55 @@ export default function WorkCarousel() {
                   : "none",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
+                pointerEvents: "none", // Allow drag events to pass through to parent
               }}
               whileHover={{ scale: 1 }}
               transition={{ duration: 0.2 }}
+              ref={(el) => {
+                if (el) {
+                  const rect = el.getBoundingClientRect();
+                  itemRefs.current.set(item.id, rect);
+                }
+              }}
             >
               {/* Linear gradient overlay from top - shortened height */}
               <div
-                className="absolute inset-0 z-[1]"
+                className="absolute inset-0 z-[1] pointer-events-none"
                 style={{
                   background:
                     "linear-gradient(to bottom, rgba(0,0,0,0.53) 0%, rgba(0,0,0,0.53) 0%, transparent 30%)",
                 }}
               />
 
-              {/* Semi-transparent grey overlay that fades in on hover */}
-              <motion.div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-[1]">
+              {/* Semi-transparent grey overlay that shows based on hover state */}
+              <motion.div
+                className="absolute inset-0 bg-black pointer-events-none z-[1]"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: hoveredItemId === item.id ? 1 : 0,
+                }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              >
                 <div className="flex items-center h-full">
                   <p className="text-white text-xl pl-6 font-albert-sans max-w-[80%]">
                     {item.description}
                   </p>
                 </div>
                 <div className="absolute bottom-3 left-3 px-3 py-1 z-20">
-                  <h3 className=" text-lg text-white font-['albert_sans'] font-medium">
+                  <h3 className="text-lg text-white font-['albert_sans'] font-medium">
                     {item.status}
                   </h3>
                 </div>
                 <div className="absolute bottom-3 right-3 px-3 py-1 z-20">
-                  <ArrowRight className="text-white" size={20} />
+                  <Link className="z-50" href={item.link || "#"}>
+                    <ArrowRight className="text-white" size={20} />
+                  </Link>
                 </div>
               </motion.div>
 
               {/* Title box always visible - higher z-index ensures it's above the overlay */}
-              <div className="absolute top-3 left-3 px-3 py-1 z-20">
-                <h3 className=" text-2xl text-white font-['albert_sans'] font-medium">
+              <div className="absolute top-3 left-3 px-3 py-1 z-20 pointer-events-none">
+                <h3 className="text-2xl text-white font-['albert_sans'] font-medium">
                   {item.title}
                 </h3>
               </div>
