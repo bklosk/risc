@@ -7,8 +7,8 @@ import { useState, useEffect, useMemo } from "react";
 export default function Landing() {
   const { scrollY } = useScroll();
   // Create an opacity value that fades from fully opaque to transparent between 100 and 300 scroll positions
-  const fadeOpacity = useTransform(scrollY, [100, 275], [1, 0]);
-  const fadeY = useTransform(scrollY, [100, 275], [0, -100]);
+  const fadeOpacity = useTransform(scrollY, [100, 375], [1, 0]);
+  const fadeY = useTransform(scrollY, [100, 375], [0, -100]);
 
   const videoFiles = useMemo(
     () => ["/images/chicago.mp4", "/images/boats.mp4", "/images/riverwalk.mp4"],

@@ -12,8 +12,8 @@ const carouselItems = [
     title: "Foster Insights",
     description: "Using data to improve child welfare.",
     color: "#1f3e51", // Light blue
-    carousel: "/images/carousel/fi.png",
     status: "Active",
+    carousel: "/images/carousel/fi.webp",
   },
   {
     id: 2,
@@ -36,7 +36,8 @@ const carouselItems = [
     title: "Decision Aid",
     description: "Minimizing unnecessary law enforcement encounters.",
     color: "#000000", // Light purple
-    status: "Failed",
+    status: "Closed",
+    carousel: "/images/carousel/da.png",
   },
   {
     id: 5,
@@ -59,7 +60,7 @@ const carouselItems = [
     description: "Peer mentorship at scale.",
     color: "#d9f99d", // Light blue
     carousel: "/images/carousel/canopy.svg",
-    status: "Failed",
+    status: "Closed",
   },
   {
     id: 8,
@@ -67,7 +68,7 @@ const carouselItems = [
     description: "Online math tutoring for everyone.",
     color: "#1f3e51", // Light blue
     carousel: "/images/carousel/blueprint.png",
-    status: "Failed",
+    status: "Closed",
   },
   {
     id: 9,
