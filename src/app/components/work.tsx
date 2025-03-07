@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, ChevronLeft } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 // Sample data structure for the carousel items
@@ -98,19 +98,8 @@ export default function WorkCarousel() {
   const innerCarouselRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
   const itemRefs = useRef<Map<number, DOMRect>>(new Map());
-
-  // Check if we're on a mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -228,7 +217,7 @@ export default function WorkCarousel() {
       className="w-full overflow-hidden mt-8 py-8 relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0 }}
+      transition={{ duration: 0.5, delay: 3 }}
     >
       <div className="flex items-center justify-center mb-4">
         <h1 className="text-4xl md:text-5xl mx-auto font-albert-sans font-extrabold text-[#FC4512] md:ml-8 mb-4">
@@ -267,7 +256,7 @@ export default function WorkCarousel() {
             cursor: isDragging ? "grabbing" : "grab",
           }}
         >
-          {carouselItems.map((item) => (
+          {carouselItems.map((item, index) => (
             <motion.div
               key={item.id}
               data-id={item.id}
@@ -281,8 +270,13 @@ export default function WorkCarousel() {
                 backgroundPosition: "center",
                 pointerEvents: "none", // Allow drag events to pass through to parent
               }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: 0.5,
+                delay: 3 + 0.15 * index, // Start after parent animation + staggered delay
+              }}
               whileHover={{ scale: 1 }}
-              transition={{ duration: 0.2 }}
               ref={(el) => {
                 if (el) {
                   const rect = el.getBoundingClientRect();
