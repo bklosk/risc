@@ -16,6 +16,7 @@ jobs:
       DOMAIN_NAME: ${{ secrets.DOMAIN_NAME || 'risc.uchicago.edu' }}
       APP_DIR: "/var/www/nextjs-app"
       BACKUP_RETENTION_DAYS: 7
+      NODE_VERSION: "18" # Define Node version as environment variable
 
     steps:
       - name: Checkout repository
@@ -24,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18" # Use the Node.js version your Next.js app requires
+          node-version: ${{ env.NODE_VERSION }} # Use the Node.js version your Next.js app requires
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -186,6 +187,39 @@ jobs:
 
             # Extract deployment package
             tar -xzf /tmp/deployment.tar.gz -C ${{ env.APP_DIR }}
+
+            # Install or update Node.js to v18 if required
+            echo "Checking Node.js version..."
+            current_node_version=$(node --version 2>/dev/null || echo "none")
+            required_node_version="v${{ env.NODE_VERSION }}"
+
+            if [[ "$current_node_version" != v${{ env.NODE_VERSION }}* ]]; then
+              echo "Installing Node.js ${{ env.NODE_VERSION }}..."
+              
+              # Install NVM if not already installed
+              if [ ! -d "$HOME/.nvm" ]; then
+                echo "Installing NVM..."
+                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+                export NVM_DIR="$HOME/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+              else
+                export NVM_DIR="$HOME/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+              fi
+              
+              # Install and use Node.js version
+              nvm install ${{ env.NODE_VERSION }}
+              nvm use ${{ env.NODE_VERSION }}
+              nvm alias default ${{ env.NODE_VERSION }}
+              
+              # Verify Node.js version after installation
+              echo "Node.js version after update: $(node --version)"
+              
+              # Add node to path for this session
+              export PATH="$NVM_DIR/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH"
+            else
+              echo "Node.js version $current_node_version is compatible"
+            fi
 
             # Install pnpm if not already installed
             if ! command -v pnpm &> /dev/null; then
