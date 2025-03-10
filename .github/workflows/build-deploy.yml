@@ -225,6 +225,56 @@ jobs:
           exit 1' > /tmp/deployment-files/healthcheck.sh
           chmod +x /tmp/deployment-files/healthcheck.sh
 
+          # Make sure .next directory is included
+          if [ -d ".next" ]; then
+            echo "Copying .next directory..."
+            mkdir -p /tmp/deployment-files/.next
+            cp -r .next/* /tmp/deployment-files/.next/
+            echo "✓ .next directory copied explicitly"
+          else
+            echo "ERROR: .next directory not found! Build may have failed."
+            exit 1
+          fi
+
+          # Create a startup script for Next.js
+          echo '#!/bin/bash
+          # Custom Next.js startup script
+          export NODE_ENV=production
+          export PORT=${{ env.APP_PORT }}
+          export PATH="$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH"
+
+          # Ensure we are using the correct Node.js version
+          if ! command -v node &> /dev/null || [[ "$(node --version)" != v${{ env.NODE_VERSION }}* ]]; then
+            echo "Activating Node.js ${{ env.NODE_VERSION }}..."
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use ${{ env.NODE_VERSION }} || { echo "Failed to activate Node.js ${{ env.NODE_VERSION }}"; exit 1; }
+          fi
+
+          echo "Starting Next.js with Node $(node --version)..."
+          cd "${{ env.APP_DIR }}"
+          exec node node_modules/next/dist/bin/next start
+          ' > /tmp/deployment-files/start-nextjs.sh
+          chmod +x /tmp/deployment-files/start-nextjs.sh
+
+          # Add process management (PM2) config - use our custom script
+          echo '{
+            "apps": [{
+              "name": "nextjs-app",
+              "script": "${{ env.APP_DIR }}/start-nextjs.sh",
+              "cwd": "'${{ env.APP_DIR }}'",
+              "exec_mode": "fork",
+              "instances": 1,
+              "autorestart": true,
+              "max_restarts": 5,
+              "env": {
+                "NODE_ENV": "production",
+                "PORT": "'${{ env.APP_PORT }}'"
+              },
+              "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
+            }]
+          }' > /tmp/deployment-files/ecosystem.config.json
+
           # Create deployment package from our temporary directory
           echo "Creating tarball from deployment files..."
           cd /tmp/deployment-files
@@ -388,7 +438,7 @@ jobs:
             # Install production dependencies
             cd ${{ env.APP_DIR }}
             echo "Installing dependencies..."
-            if ! pnpm install --prod; then
+            if ! pnpm install; then
               echo "Failed to install dependencies, rolling back"
               LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
               if [ -n "$LATEST_BACKUP" ]; then
@@ -399,6 +449,40 @@ jobs:
                 echo "No backup found for rollback!"
               fi
               exit 1
+            fi
+
+            # Verify the Next.js directory structure
+            echo "Verifying Next.js application structure..."
+            if [ ! -d "${{ env.APP_DIR }}/.next" ]; then
+              echo "ERROR: .next directory not found. Checking if we need to build..."
+              if [ -f "${{ env.APP_DIR }}/package.json" ]; then
+                echo "Attempting to build Next.js application..."
+                if ! pnpm build; then
+                  echo "Build failed, cannot continue deployment"
+                  LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
+                  if [ -n "$LATEST_BACKUP" ]; then
+                    echo "Rolling back to $LATEST_BACKUP"
+                    rm -rf ${{ env.APP_DIR }}
+                    cp -r "$LATEST_BACKUP" ${{ env.APP_DIR }}
+                    cd ${{ env.APP_DIR }}
+                    pm2 start ecosystem.config.json || echo "Failed to restart previous version"
+                  fi
+                  exit 1
+                fi
+              else
+                echo "Cannot build: package.json not found"
+                exit 1
+              fi
+            fi
+
+            echo "Checking Next.js directory contents:"
+            find ${{ env.APP_DIR }}/.next -type d | sort
+
+            # Verify Next.js dependencies
+            echo "Verifying Next.js is installed..."
+            if [ ! -d "${{ env.APP_DIR }}/node_modules/next" ]; then
+              echo "ERROR: next module not found in node_modules! Trying to repair..."
+              pnpm add next@latest
             fi
 
             # Install PM2 if not already installed
@@ -427,13 +511,42 @@ jobs:
             pm2 delete test-node
 
             # Start new app with PM2
-            echo "Starting application with explicit Node.js path..."
-            # Update the ecosystem file to ensure correct interpreter path
-            sed -i "s|\"interpreter\":.*|\"interpreter\": \"$(which node)\",|" ecosystem.config.json
-            cat ecosystem.config.json
+            echo "Starting application with custom script..."
+            # Ensure script is executable
+            chmod +x ${{ env.APP_DIR }}/start-nextjs.sh
 
-            if ! PM2_DISCRETE_MODE=true NODE_PATH="$NVM_DIR/versions/node/v${{ env.NODE_VERSION }}/lib/node_modules" pm2 start ecosystem.config.json; then
-              echo "Failed to start application, rolling back"
+            # Show content of startup script
+            echo "Startup script contents:"
+            cat ${{ env.APP_DIR }}/start-nextjs.sh
+
+            if ! PM2_DISCRETE_MODE=true pm2 start ecosystem.config.json; then
+              echo "Failed to start application, checking for errors..."
+              # Show startup errors
+              cat $HOME/.pm2/logs/nextjs-app-error-0.log || echo "No error log found"
+              
+              echo "Rolling back..."
+              pm2 delete nextjs-app 2>/dev/null || true
+              
+              LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
+              if [ -n "$LATEST_BACKUP" ]; then
+                echo "Rolling back to $LATEST_BACKUP"
+                rm -rf ${{ env.APP_DIR }}
+                cp -r "$LATEST_BACKUP" ${{ env.APP_DIR }}
+                cd ${{ env.APP_DIR }}
+                pm2 start ecosystem.config.json || echo "Failed to restart previous version"
+              fi
+              exit 1
+            fi
+
+            # Check for any immediate startup errors
+            sleep 3
+            if ! pm2 show nextjs-app | grep -q "online"; then
+              echo "Application didn't start properly. PM2 status:"
+              pm2 show nextjs-app
+              echo "Error logs:"
+              cat $HOME/.pm2/logs/nextjs-app-error-0.log || echo "No error log found"
+              
+              echo "Rolling back..."
               pm2 delete nextjs-app 2>/dev/null || true
               
               LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
@@ -450,27 +563,6 @@ jobs:
             # Save PM2 config to start on reboot
             echo "Saving PM2 configuration..."
             pm2 save
-
-            # Run health check
-            if [ -f "healthcheck.sh" ]; then
-              echo "Running health check..."
-              if ! bash healthcheck.sh; then
-                echo "Health check failed, rolling back"
-                pm2 delete nextjs-app 2>/dev/null || true
-                
-                LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
-                if [ -n "$LATEST_BACKUP" ]; then
-                  echo "Rolling back to $LATEST_BACKUP"
-                  rm -rf ${{ env.APP_DIR }}
-                  cp -r "$LATEST_BACKUP" ${{ env.APP_DIR }}
-                  cd ${{ env.APP_DIR }}
-                  pm2 start ecosystem.config.json || echo "Failed to restart previous version"
-                fi
-                exit 1
-              fi
-            else
-              echo "Warning: Health check script not found"
-            fi
 
             # Apache configuration using sudo with proper error handling
             if sudo -n true 2>/dev/null; then
