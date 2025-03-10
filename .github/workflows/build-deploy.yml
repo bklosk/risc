@@ -116,17 +116,19 @@ jobs:
           find /tmp/deployment-files/src -type f | wc -l
 
           # Add server start script with environment variable
-          echo "#!/bin/bash
+          echo '#!/bin/bash
+          # This script is for manual start, PM2 will handle production deployment
           export PORT=${{ env.APP_PORT }}
           cd ${{ env.APP_DIR }}
-          pnpm start" > /tmp/deployment-files/start.sh
+          pnpm start' > /tmp/deployment-files/start.sh
           chmod +x /tmp/deployment-files/start.sh
 
           # Add process management (PM2) config
           echo '{
             "apps": [{
               "name": "nextjs-app",
-              "script": "pnpm",
+              "cwd": "'${{ env.APP_DIR }}'",
+              "script": "node_modules/.bin/next",
               "args": "start",
               "instances": "1",
               "env": {
@@ -173,15 +175,44 @@ jobs:
 
           # Create healthcheck script
           echo '#!/bin/bash
-          MAX_RETRIES=5
-          RETRY_INTERVAL=3
+          MAX_RETRIES=10
+          RETRY_INTERVAL=10
+          PORT=${{ env.APP_PORT }}
+
+          # Give the Next.js app time to initialize before first check
+          echo "Waiting 20 seconds for application to fully initialize..."
+          sleep 20
 
           for i in $(seq 1 ${MAX_RETRIES}); do
             echo "Health check attempt ${i}/${MAX_RETRIES}..."
-            if curl -s --max-time 5 http://localhost:${{ env.APP_PORT }}/api/health || curl -s --max-time 5 http://localhost:${{ env.APP_PORT }}; then
-              echo "Application is healthy!"
+            
+            # Check if the process is running
+            if ! pm2 list | grep -q "nextjs-app"; then
+              echo "PM2 process not found!"
+              pm2 list
+              continue
+            fi
+            
+            echo "Testing connection to localhost:${PORT}..."
+            
+            # Try multiple endpoints with more detailed output
+            if curl -v --max-time 10 http://localhost:${PORT}/api/health 2>&1; then
+              echo "✓ Application is healthy at /api/health!"
               exit 0
             fi
+            
+            if curl -v --max-time 10 http://localhost:${PORT} 2>&1; then
+              echo "✓ Application is healthy at root endpoint!"
+              exit 0
+            fi
+            
+            # Check if Next.js is actually listening
+            echo "Checking if port ${PORT} is open:"
+            netstat -tuln | grep ${PORT} || echo "Port ${PORT} not in use"
+            
+            # Check PM2 logs for any clues
+            echo "Recent PM2 logs:"
+            pm2 logs nextjs-app --lines 5 --nostream
             
             echo "Health check failed, retrying in ${RETRY_INTERVAL} seconds..."
             sleep ${RETRY_INTERVAL}
