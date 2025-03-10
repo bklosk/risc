@@ -66,98 +66,33 @@ jobs:
             exit 1
           fi
 
-          # Copy entire repository except excluded directories
-          # Using dot-slash pattern to ensure complete directory structure is preserved
-          rsync -av --progress . deployment/ \
-            --exclude node_modules \
-            --exclude .git \
-            --exclude .github \
-            --exclude deployment \
-            --exclude deployment.tar.gz
+          # Use a different approach to ensure all files are properly copied
+          # Copy the entire repository content to deployment directory
+          echo "Copying repository files to deployment directory..."
+          cp -r . deployment/
 
-          echo "Files being deployed:"
+          # Remove excluded directories from the deployment directory
+          rm -rf deployment/node_modules
+          rm -rf deployment/.git
+          rm -rf deployment/.github
+
+          echo "Files being deployed (top level):"
           ls -la deployment/
-          echo "Verifying src directory:"
+
+          echo "Checking for critical directories:"
+          echo "- .next directory:" 
+          ls -la deployment/.next || echo ".next directory not found!"
+          echo "- src directory:" 
           ls -la deployment/src || echo "src directory not found!"
 
-          # Add server start script with environment variable
-          echo "#!/bin/bash
-          export PORT=${{ env.APP_PORT }}
-          cd ${{ env.APP_DIR }}
-          pnpm start" > deployment/start.sh
-          chmod +x deployment/start.sh
+          # Compress deployment package differently to ensure all files are included
+          cd deployment
+          echo "Creating tarball from inside deployment directory..."
+          tar -czf ../deployment.tar.gz .
+          cd ..
 
-          # Add process management (PM2) config
-          echo '{
-            "apps": [{
-              "name": "nextjs-app",
-              "script": "pnpm",
-              "args": "start",
-              "instances": "1",
-              "env": {
-                "NODE_ENV": "production",
-                "PORT": "'${{ env.APP_PORT }}'"
-              }
-            }]
-          }' > deployment/ecosystem.config.json
-
-          # Create Apache proxy configuration with legacy settings
-          echo '<VirtualHost *:80>
-              ServerName ${{ env.DOMAIN_NAME }}
-              ServerAdmin benklosky@uchicago.edu
-              
-              ProxyPreserveHost On
-              ProxyPass / http://localhost:${{ env.APP_PORT }}/
-              ProxyPassReverse / http://localhost:${{ env.APP_PORT }}/
-              
-              ErrorLog ${APACHE_LOG_DIR}/error.log
-              CustomLog ${APACHE_LOG_DIR}/access.log combined
-              
-              <Directory "/var/www">
-                  AllowOverride All
-                  Require all granted
-              </Directory>
-              
-              RewriteEngine on
-              RewriteCond %{SERVER_NAME} =${{ env.DOMAIN_NAME }}
-              RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
-          </VirtualHost>' > deployment/apache-nextjs.conf
-
-          # Create backup script
-          echo '#!/bin/bash
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          BACKUP_DIR="/var/www/nextjs-app-backup-${TIMESTAMP}"
-          if [ -d "${{ env.APP_DIR }}" ]; then
-            cp -r ${{ env.APP_DIR }} ${BACKUP_DIR}
-            echo "Backup created at ${BACKUP_DIR}"
-            
-            # Clean up old backups (older than 7 days)
-            find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d -mtime +${{ env.BACKUP_RETENTION_DAYS }} -exec rm -rf {} \;
-          fi' > deployment/backup.sh
-          chmod +x deployment/backup.sh
-
-          # Create healthcheck script
-          echo '#!/bin/bash
-          MAX_RETRIES=5
-          RETRY_INTERVAL=3
-
-          for i in $(seq 1 ${MAX_RETRIES}); do
-            echo "Health check attempt ${i}/${MAX_RETRIES}..."
-            if curl -s --max-time 5 http://localhost:${{ env.APP_PORT }}/api/health || curl -s --max-time 5 http://localhost:${{ env.APP_PORT }}; then
-              echo "Application is healthy!"
-              exit 0
-            fi
-            
-            echo "Health check failed, retrying in ${RETRY_INTERVAL} seconds..."
-            sleep ${RETRY_INTERVAL}
-          done
-
-          echo "Health check failed after ${MAX_RETRIES} attempts!"
-          exit 1' > deployment/healthcheck.sh
-          chmod +x deployment/healthcheck.sh
-
-          # Compress deployment package
-          tar -czf deployment.tar.gz -C deployment .
+          echo "Tarball created. Verifying content:"
+          tar -tf deployment.tar.gz | grep -E "^\.next|^src" || echo "Critical directories not found in tarball!"
 
       - name: Deploy to DigitalOcean
         uses: appleboy/scp-action@master
@@ -192,9 +127,26 @@ jobs:
             # Create app directory if it doesn't exist
             mkdir -p ${{ env.APP_DIR }}
 
+            # Clear the directory to avoid any conflicts
+            echo "Clearing the application directory..."
+            rm -rf ${{ env.APP_DIR }}/*
+
             # Extract deployment package
             echo "Extracting application files to ${{ env.APP_DIR }}"
             tar -xzf /tmp/deployment.tar.gz -C ${{ env.APP_DIR }}
+
+            # List top-level files to debug
+            echo "Contents of ${{ env.APP_DIR }} after extraction:"
+            ls -la ${{ env.APP_DIR }}
+
+            # Check for critical directories
+            echo "Checking for critical directories:"
+            echo "- .next directory:" 
+            ls -la ${{ env.APP_DIR }}/.next || echo ".next directory not found!"
+            echo "- src directory:" 
+            ls -la ${{ env.APP_DIR }}/src || echo "src directory not found!"
+            echo "- package.json:"
+            cat ${{ env.APP_DIR }}/package.json || echo "package.json not found!"
 
             # Verify that critical files were extracted properly
             echo "Verifying application files..."
@@ -204,10 +156,11 @@ jobs:
               ls -la ${{ env.APP_DIR }}
               echo "Deployment failed - missing required files"
               exit 1
-            else
-              echo "Application files verified successfully"
-              echo "Found .next directory with content:"
-              ls -la ${{ env.APP_DIR }}/.next
+            fi
+
+            if [ ! -d "${{ env.APP_DIR }}/src" ]; then
+              echo "WARNING: src directory not found in ${{ env.APP_DIR }}"
+              echo "This might cause application failure"
             fi
 
             # Install or update Node.js to v18 if required
@@ -361,7 +314,22 @@ jobs:
           script: |
             echo "Verifying deployment..."
 
+            # Check directory contents first
+            echo "Application directory contents:"
+            ls -la ${{ env.APP_DIR }}
+
+            # Verify critical directories
+            if [ ! -d "${{ env.APP_DIR }}/.next" ]; then
+              echo "ERROR: .next directory is missing!"
+              exit 1
+            fi
+
+            if [ ! -d "${{ env.APP_DIR }}/src" ]; then
+              echo "WARNING: src directory is missing!"
+            fi
+
             # Check if application is running with timeout
+            echo "Testing application health..."
             if ! curl -s --max-time 10 http://localhost:${{ env.APP_PORT }} > /dev/null; then
               echo "Deployment verification failed - application not responding"
               exit 1
