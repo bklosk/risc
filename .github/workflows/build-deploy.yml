@@ -252,6 +252,7 @@ jobs:
             echo "✅ src directory found in tarball"
             echo "Sample of src files in tarball:"
             tar -tf deployment.tar.gz | grep -E "src/" | head -5
+          fi
 
       - name: Deploy to DigitalOcean
         uses: appleboy/scp-action@master
