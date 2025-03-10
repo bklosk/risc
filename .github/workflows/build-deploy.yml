@@ -14,7 +14,7 @@ jobs:
     env:
       APP_PORT: ${{ secrets.APP_PORT || 3000 }}
       DOMAIN_NAME: ${{ secrets.DOMAIN_NAME || 'risc.uchicago.edu' }}
-      APP_DIR: "/var/www/nextjs-app"
+      APP_DIR: "/var/www/risc"
       BACKUP_RETENTION_DAYS: 7
       NODE_VERSION: "18" # Define Node version as environment variable
 
@@ -65,14 +65,40 @@ jobs:
             exit 1
           fi
 
-          # Copy necessary files to the temporary directory, excluding what we don't want
+          # First check if src directory exists
+          if [ ! -d "src" ]; then
+            echo "ERROR: src directory not found in repository!"
+            echo "Current directory structure:"
+            find . -type d -maxdepth 2 | sort
+            exit 1
+          fi
+
+          # Copy necessary files to the temporary directory with explicit includes
           echo "Copying repository files to deployment directory..."
+          # First copy src directory explicitly to ensure it's included
+          mkdir -p /tmp/deployment-files/src
+          cp -r src/* /tmp/deployment-files/src/
+          echo "✓ src directory copied explicitly"
+
+          # Then copy everything else
           rsync -av --progress . /tmp/deployment-files/ \
             --exclude node_modules \
             --exclude .git \
             --exclude .github \
             --exclude deployment \
             --exclude deployment.tar.gz
+
+          # Ensure critical directories exist
+          if [ ! -d "/tmp/deployment-files/.next" ]; then
+            echo "CRITICAL: .next directory was not copied. Explicitly copying it now."
+            mkdir -p /tmp/deployment-files/.next
+            rsync -av --progress ./.next/ /tmp/deployment-files/.next/
+          fi
+
+          if [ ! -d "/tmp/deployment-files/src" ]; then
+            echo "CRITICAL: src directory was not copied. This will cause deployment failure."
+            exit 1
+          fi
 
           echo "Files being deployed (top level):"
           ls -la /tmp/deployment-files/
@@ -82,6 +108,14 @@ jobs:
           ls -la /tmp/deployment-files/.next || echo ".next directory not found!"
           echo "- src directory:" 
           ls -la /tmp/deployment-files/src || echo "src directory not found!"
+          echo "Files in src directory:"
+          find /tmp/deployment-files/src -type f | head -20
+
+          # Show number of files in critical directories
+          echo "Number of files in .next directory:"
+          find /tmp/deployment-files/.next -type f | wc -l
+          echo "Number of files in src directory:"
+          find /tmp/deployment-files/src -type f | wc -l
 
           # Add server start script with environment variable
           echo "#!/bin/bash
@@ -165,8 +199,30 @@ jobs:
           tar -czf $GITHUB_WORKSPACE/deployment.tar.gz .
           cd $GITHUB_WORKSPACE
 
-          echo "Tarball created. Verifying content:"
-          tar -tf deployment.tar.gz | grep -E "^\.next|^src" || echo "Critical directories not found in tarball!"
+          # More comprehensive verification of tarball contents
+          echo "Tarball created. Verifying content with detailed output:"
+          echo "Total files in tarball:"
+          tar -tf deployment.tar.gz | wc -l
+
+          echo "Checking for .next directory in tarball:"
+          tar -tf deployment.tar.gz | grep -E "^\.next/" | head -10
+
+          echo "Checking for src directory in tarball:"
+          tar -tf deployment.tar.gz | grep -E "^src/" | head -20
+
+          echo "Checking for package.json in tarball:"
+          tar -tf deployment.tar.gz | grep -E "package.json"
+
+          # Explicitly check if critical files exist
+          if ! tar -tf deployment.tar.gz | grep -q "^\.next/"; then
+            echo "ERROR: .next directory not found in tarball!"
+            exit 1
+          fi
+
+          if ! tar -tf deployment.tar.gz | grep -q "^src/"; then
+            echo "ERROR: src directory not found in tarball! Deployment will fail."
+            exit 1
+          fi
 
       - name: Deploy to DigitalOcean
         uses: appleboy/scp-action@master
@@ -209,18 +265,47 @@ jobs:
             echo "Extracting application files to ${{ env.APP_DIR }}"
             tar -xzf /tmp/deployment.tar.gz -C ${{ env.APP_DIR }}
 
-            # List top-level files to debug
+            # List top-level files to debug with more detail
             echo "Contents of ${{ env.APP_DIR }} after extraction:"
             ls -la ${{ env.APP_DIR }}
 
-            # Check for critical directories
+            echo "Total number of files in app directory (including subdirectories):"
+            find ${{ env.APP_DIR }} -type f | wc -l
+
+            echo "Directory structure:"
+            find ${{ env.APP_DIR }} -type d -maxdepth 3 | sort
+
+            # Check for critical directories with more detail
             echo "Checking for critical directories:"
+
             echo "- .next directory:" 
-            ls -la ${{ env.APP_DIR }}/.next || echo ".next directory not found!"
+            if [ -d "${{ env.APP_DIR }}/.next" ]; then
+              echo "FOUND .next directory with content:"
+              ls -la ${{ env.APP_DIR }}/.next
+              echo "Number of files in .next:"
+              find ${{ env.APP_DIR }}/.next -type f | wc -l
+            else
+              echo ".next directory NOT FOUND!"
+            fi
+
             echo "- src directory:" 
-            ls -la ${{ env.APP_DIR }}/src || echo "src directory not found!"
+            if [ -d "${{ env.APP_DIR }}/src" ]; then
+              echo "FOUND src directory with content:"
+              ls -la ${{ env.APP_DIR }}/src
+              echo "Number of files in src:"
+              find ${{ env.APP_DIR }}/src -type f | wc -l
+            else
+              echo "src directory NOT FOUND!"
+            fi
+
             echo "- package.json:"
-            cat ${{ env.APP_DIR }}/package.json || echo "package.json not found!"
+            if [ -f "${{ env.APP_DIR }}/package.json" ]; then
+              echo "FOUND package.json"
+            else
+              echo "package.json NOT FOUND!"
+              echo "List of all JSON files:"
+              find ${{ env.APP_DIR }} -name "*.json" | sort
+            fi
 
             # Verify that critical files were extracted properly
             echo "Verifying application files..."
@@ -233,8 +318,9 @@ jobs:
             fi
 
             if [ ! -d "${{ env.APP_DIR }}/src" ]; then
-              echo "WARNING: src directory not found in ${{ env.APP_DIR }}"
-              echo "This might cause application failure"
+              echo "ERROR: src directory not found in ${{ env.APP_DIR }}"
+              echo "Deployment failed - missing required src directory"
+              exit 1
             fi
 
             # Install or update Node.js to v18 if required
@@ -399,8 +485,12 @@ jobs:
             fi
 
             if [ ! -d "${{ env.APP_DIR }}/src" ]; then
-              echo "WARNING: src directory is missing!"
+              echo "ERROR: src directory is missing!"
+              exit 1
             fi
+
+            echo "Showing src directory contents:"
+            ls -la ${{ env.APP_DIR }}/src
 
             # Check if application is running with timeout
             echo "Testing application health..."
