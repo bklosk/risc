@@ -131,9 +131,11 @@ jobs:
               "script": "node_modules/.bin/next",
               "args": "start",
               "instances": "1",
+              "interpreter": "'$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin/node'",
               "env": {
                 "NODE_ENV": "production",
-                "PORT": "'${{ env.APP_PORT }}'"
+                "PORT": "'${{ env.APP_PORT }}'",
+                "PATH": "'$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH'"
               }
             }]
           }' > /tmp/deployment-files/ecosystem.config.json
@@ -175,8 +177,8 @@ jobs:
 
           # Create healthcheck script
           echo '#!/bin/bash
-          MAX_RETRIES=10
-          RETRY_INTERVAL=10
+          MAX_RETRIES=5
+          RETRY_INTERVAL=5
           PORT=${{ env.APP_PORT }}
 
           # Give the Next.js app time to initialize before first check
@@ -250,7 +252,6 @@ jobs:
             echo "✅ src directory found in tarball"
             echo "Sample of src files in tarball:"
             tar -tf deployment.tar.gz | grep -E "src/" | head -5
-          fi
 
       - name: Deploy to DigitalOcean
         uses: appleboy/scp-action@master
@@ -395,9 +396,19 @@ jobs:
             echo "Stopping existing application..."
             pm2 stop nextjs-app 2>/dev/null || true
 
+            # Export NVM and Node.js paths to make them available for PM2
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            export PATH="$NVM_DIR/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH"
+
+            # Show which node version will be used
+            echo "Current Node.js version: $(node --version)"
+            echo "Node.js path: $(which node)"
+            echo "PM2 path: $(which pm2)"
+
             # Start new app with PM2
             echo "Starting application..."
-            if ! pm2 start ecosystem.config.json; then
+            if ! PM2_DISCRETE_MODE=true pm2 start ecosystem.config.json; then
               echo "Failed to start application, rolling back"
               pm2 delete nextjs-app 2>/dev/null || true
               
