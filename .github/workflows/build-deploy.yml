@@ -56,40 +56,114 @@ jobs:
 
       - name: Prepare deployment files
         run: |
-          # Create deployment directory
-          mkdir -p deployment
+          # Create a temporary directory for deployment files
+          mkdir -p /tmp/deployment-files
 
-          # Copy all repository files to deployment directory
           # First ensure the .next directory exists (built app)
           if [ ! -d ".next" ]; then
             echo "Build failed - .next directory not found"
             exit 1
           fi
 
-          # Use a different approach to ensure all files are properly copied
-          # Copy the entire repository content to deployment directory
+          # Copy necessary files to the temporary directory, excluding what we don't want
           echo "Copying repository files to deployment directory..."
-          cp -r . deployment/
-
-          # Remove excluded directories from the deployment directory
-          rm -rf deployment/node_modules
-          rm -rf deployment/.git
-          rm -rf deployment/.github
+          rsync -av --progress . /tmp/deployment-files/ \
+            --exclude node_modules \
+            --exclude .git \
+            --exclude .github \
+            --exclude deployment \
+            --exclude deployment.tar.gz
 
           echo "Files being deployed (top level):"
-          ls -la deployment/
+          ls -la /tmp/deployment-files/
 
           echo "Checking for critical directories:"
           echo "- .next directory:" 
-          ls -la deployment/.next || echo ".next directory not found!"
+          ls -la /tmp/deployment-files/.next || echo ".next directory not found!"
           echo "- src directory:" 
-          ls -la deployment/src || echo "src directory not found!"
+          ls -la /tmp/deployment-files/src || echo "src directory not found!"
 
-          # Compress deployment package differently to ensure all files are included
-          cd deployment
-          echo "Creating tarball from inside deployment directory..."
-          tar -czf ../deployment.tar.gz .
-          cd ..
+          # Add server start script with environment variable
+          echo "#!/bin/bash
+          export PORT=${{ env.APP_PORT }}
+          cd ${{ env.APP_DIR }}
+          pnpm start" > /tmp/deployment-files/start.sh
+          chmod +x /tmp/deployment-files/start.sh
+
+          # Add process management (PM2) config
+          echo '{
+            "apps": [{
+              "name": "nextjs-app",
+              "script": "pnpm",
+              "args": "start",
+              "instances": "1",
+              "env": {
+                "NODE_ENV": "production",
+                "PORT": "'${{ env.APP_PORT }}'"
+              }
+            }]
+          }' > /tmp/deployment-files/ecosystem.config.json
+
+          # Create Apache proxy configuration
+          echo '<VirtualHost *:80>
+              ServerName ${{ env.DOMAIN_NAME }}
+              ServerAdmin benklosky@uchicago.edu
+              
+              ProxyPreserveHost On
+              ProxyPass / http://localhost:${{ env.APP_PORT }}/
+              ProxyPassReverse / http://localhost:${{ env.APP_PORT }}/
+              
+              ErrorLog ${APACHE_LOG_DIR}/error.log
+              CustomLog ${APACHE_LOG_DIR}/access.log combined
+              
+              <Directory "/var/www">
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+              
+              RewriteEngine on
+              RewriteCond %{SERVER_NAME} =${{ env.DOMAIN_NAME }}
+              RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+          </VirtualHost>' > /tmp/deployment-files/apache-nextjs.conf
+
+          # Create backup script
+          echo '#!/bin/bash
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          BACKUP_DIR="/var/www/nextjs-app-backup-${TIMESTAMP}"
+          if [ -d "${{ env.APP_DIR }}" ]; then
+            cp -r ${{ env.APP_DIR }} ${BACKUP_DIR}
+            echo "Backup created at ${BACKUP_DIR}"
+            
+            # Clean up old backups (older than 7 days)
+            find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d -mtime +${{ env.BACKUP_RETENTION_DAYS }} -exec rm -rf {} \;
+          fi' > /tmp/deployment-files/backup.sh
+          chmod +x /tmp/deployment-files/backup.sh
+
+          # Create healthcheck script
+          echo '#!/bin/bash
+          MAX_RETRIES=5
+          RETRY_INTERVAL=3
+
+          for i in $(seq 1 ${MAX_RETRIES}); do
+            echo "Health check attempt ${i}/${MAX_RETRIES}..."
+            if curl -s --max-time 5 http://localhost:${{ env.APP_PORT }}/api/health || curl -s --max-time 5 http://localhost:${{ env.APP_PORT }}; then
+              echo "Application is healthy!"
+              exit 0
+            fi
+            
+            echo "Health check failed, retrying in ${RETRY_INTERVAL} seconds..."
+            sleep ${RETRY_INTERVAL}
+          done
+
+          echo "Health check failed after ${MAX_RETRIES} attempts!"
+          exit 1' > /tmp/deployment-files/healthcheck.sh
+          chmod +x /tmp/deployment-files/healthcheck.sh
+
+          # Create deployment package from our temporary directory
+          echo "Creating tarball from deployment files..."
+          cd /tmp/deployment-files
+          tar -czf $GITHUB_WORKSPACE/deployment.tar.gz .
+          cd $GITHUB_WORKSPACE
 
           echo "Tarball created. Verifying content:"
           tar -tf deployment.tar.gz | grep -E "^\.next|^src" || echo "Critical directories not found in tarball!"
