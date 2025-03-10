@@ -21,7 +21,7 @@ const carouselItems = [
     title: "The Levitt Lab",
     description: "Reimagining high school.",
     color: "#071535", // Light green
-    carousel: "/images/carousel/TLL.jpeg",
+    carousel: "/images/carousel/tll.jpeg",
     status: "Active",
   },
   {

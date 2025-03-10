@@ -26,7 +26,7 @@ export default function Team() {
       name: "Jeffrey Severts",
       position: "Co-Founder, Executive Director",
       image: "/images/team/Jeff.png",
-      bio: "Probably a super-taster. Can tell the difference between diet coke, coke zero, and diet pepsi.",
+      bio: "Probably a super-taster. Can somehow tell the difference between diet coke, coke zero, and diet pepsi.",
       linkedinUrl: "https://linkedin.com/in/ben-thevathasan",
       githubUrl: "https://github.com/benthevathasan",
     },
