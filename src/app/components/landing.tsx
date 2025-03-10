@@ -27,7 +27,7 @@ export default function Landing() {
   return (
     <motion.div
       style={{ opacity: fadeOpacity, y: fadeY }} // fade out as it moves out of view
-      className="w-full grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 "
+      className="w-full bg-white grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 "
       id="intro"
     >
       <motion.video
@@ -35,7 +35,7 @@ export default function Landing() {
         loop
         muted
         playsInline
-        className="w-full object-cover px-8 md:px-0"
+        className="w-full object-cover md:px-0"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.5, delay: 0.5 }}

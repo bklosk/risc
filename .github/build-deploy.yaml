@@ -1,0 +1,322 @@
+name: Deploy Next.js to DigitalOcean
+
+on:
+  push:
+    branches: [main] # Adjust this to match your main branch name
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    # Ensure the job doesn't run too long
+    timeout-minutes: 30
+
+    env:
+      APP_PORT: ${{ secrets.APP_PORT || 3000 }}
+      DOMAIN_NAME: ${{ secrets.DOMAIN_NAME || 'risc.uchicago.edu' }}
+      APP_DIR: "/var/www/nextjs-app"
+      BACKUP_RETENTION_DAYS: 7
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # Use the Node.js version your Next.js app requires
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8 # Use your preferred pnpm version
+          run_install: false
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js app
+        run: pnpm build
+
+      - name: Check build success
+        run: |
+          if [ ! -d ".next" ]; then
+            echo "Build failed - .next directory not found"
+            exit 1
+          fi
+
+      - name: Prepare deployment files
+        run: |
+          # Create deployment directory
+          mkdir -p deployment
+
+          # Copy build assets
+          cp -r .next deployment/
+          cp -r public deployment/
+          cp package.json deployment/
+          cp pnpm-lock.yaml deployment/
+          cp next.config.js deployment/
+
+          # Add .env file if it exists
+          if [ -f ".env.production" ]; then
+            cp .env.production deployment/.env
+          elif [ -f ".env" ]; then
+            cp .env deployment/.env
+          fi
+
+          # Add server start script with environment variable
+          echo "#!/bin/bash
+          export PORT=${{ env.APP_PORT }}
+          cd ${{ env.APP_DIR }}
+          pnpm start" > deployment/start.sh
+          chmod +x deployment/start.sh
+
+          # Add process management (PM2) config
+          echo '{
+            "apps": [{
+              "name": "nextjs-app",
+              "script": "pnpm",
+              "args": "start",
+              "instances": "1",
+              "env": {
+                "NODE_ENV": "production",
+                "PORT": "'${{ env.APP_PORT }}'"
+              }
+            }]
+          }' > deployment/ecosystem.config.json
+
+          # Create Apache proxy configuration with legacy settings
+          echo '<VirtualHost *:80>
+              ServerName ${{ env.DOMAIN_NAME }}
+              ServerAdmin benklosky@uchicago.edu
+              
+              ProxyPreserveHost On
+              ProxyPass / http://localhost:${{ env.APP_PORT }}/
+              ProxyPassReverse / http://localhost:${{ env.APP_PORT }}/
+              
+              ErrorLog ${APACHE_LOG_DIR}/error.log
+              CustomLog ${APACHE_LOG_DIR}/access.log combined
+              
+              <Directory "/var/www">
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+              
+              RewriteEngine on
+              RewriteCond %{SERVER_NAME} =${{ env.DOMAIN_NAME }}
+              RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+          </VirtualHost>' > deployment/apache-nextjs.conf
+
+          # Create backup script
+          echo '#!/bin/bash
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          BACKUP_DIR="/var/www/nextjs-app-backup-${TIMESTAMP}"
+          if [ -d "${{ env.APP_DIR }}" ]; then
+            cp -r ${{ env.APP_DIR }} ${BACKUP_DIR}
+            echo "Backup created at ${BACKUP_DIR}"
+            
+            # Clean up old backups (older than 7 days)
+            find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d -mtime +${{ env.BACKUP_RETENTION_DAYS }} -exec rm -rf {} \;
+          fi' > deployment/backup.sh
+          chmod +x deployment/backup.sh
+
+          # Create healthcheck script
+          echo '#!/bin/bash
+          MAX_RETRIES=5
+          RETRY_INTERVAL=3
+
+          for i in $(seq 1 ${MAX_RETRIES}); do
+            echo "Health check attempt ${i}/${MAX_RETRIES}..."
+            if curl -s --max-time 5 http://localhost:${{ env.APP_PORT }}/api/health || curl -s --max-time 5 http://localhost:${{ env.APP_PORT }}; then
+              echo "Application is healthy!"
+              exit 0
+            fi
+            
+            echo "Health check failed, retrying in ${RETRY_INTERVAL} seconds..."
+            sleep ${RETRY_INTERVAL}
+          done
+
+          echo "Health check failed after ${MAX_RETRIES} attempts!"
+          exit 1' > deployment/healthcheck.sh
+          chmod +x deployment/healthcheck.sh
+
+          # Compress deployment package
+          tar -czf deployment.tar.gz -C deployment .
+
+      - name: Deploy to DigitalOcean
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          port: ${{ secrets.DO_PORT || 22 }}
+          source: "deployment.tar.gz"
+          target: "/tmp"
+
+      - name: Setup and start application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          port: ${{ secrets.DO_PORT || 22 }}
+          command_timeout: "10m"
+          script: |
+            # Extract deployment package first to get the backup script
+            mkdir -p /tmp/deployment
+            tar -xzf /tmp/deployment.tar.gz -C /tmp/deployment
+
+            # Create backup of current deployment
+            if [ -f "/tmp/deployment/backup.sh" ]; then
+              bash /tmp/deployment/backup.sh
+            else
+              echo "Warning: Backup script not found"
+            fi
+
+            # Create app directory if it doesn't exist
+            mkdir -p ${{ env.APP_DIR }}
+
+            # Extract deployment package
+            tar -xzf /tmp/deployment.tar.gz -C ${{ env.APP_DIR }}
+
+            # Install pnpm if not already installed
+            if ! command -v pnpm &> /dev/null; then
+              echo "Installing pnpm..."
+              npm install -g pnpm
+            fi
+
+            # Install production dependencies
+            cd ${{ env.APP_DIR }}
+            echo "Installing dependencies..."
+            if ! pnpm install --prod; then
+              echo "Failed to install dependencies, rolling back"
+              LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
+              if [ -n "$LATEST_BACKUP" ]; then
+                echo "Rolling back to $LATEST_BACKUP"
+                rm -rf ${{ env.APP_DIR }}
+                cp -r "$LATEST_BACKUP" ${{ env.APP_DIR }}
+              else
+                echo "No backup found for rollback!"
+              fi
+              exit 1
+            fi
+
+            # Install PM2 if not already installed
+            if ! command -v pm2 &> /dev/null; then
+              echo "Installing PM2..."
+              npm install -g pm2
+            fi
+
+            # Stop existing app if running
+            echo "Stopping existing application..."
+            pm2 stop nextjs-app 2>/dev/null || true
+
+            # Start new app with PM2
+            echo "Starting application..."
+            if ! pm2 start ecosystem.config.json; then
+              echo "Failed to start application, rolling back"
+              pm2 delete nextjs-app 2>/dev/null || true
+              
+              LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
+              if [ -n "$LATEST_BACKUP" ]; then
+                echo "Rolling back to $LATEST_BACKUP"
+                rm -rf ${{ env.APP_DIR }}
+                cp -r "$LATEST_BACKUP" ${{ env.APP_DIR }}
+                cd ${{ env.APP_DIR }}
+                pm2 start ecosystem.config.json || echo "Failed to restart previous version"
+              fi
+              exit 1
+            fi
+
+            # Save PM2 config to start on reboot
+            echo "Saving PM2 configuration..."
+            pm2 save
+
+            # Run health check
+            if [ -f "healthcheck.sh" ]; then
+              echo "Running health check..."
+              if ! bash healthcheck.sh; then
+                echo "Health check failed, rolling back"
+                pm2 delete nextjs-app 2>/dev/null || true
+                
+                LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
+                if [ -n "$LATEST_BACKUP" ]; then
+                  echo "Rolling back to $LATEST_BACKUP"
+                  rm -rf ${{ env.APP_DIR }}
+                  cp -r "$LATEST_BACKUP" ${{ env.APP_DIR }}
+                  cd ${{ env.APP_DIR }}
+                  pm2 start ecosystem.config.json || echo "Failed to restart previous version"
+                fi
+                exit 1
+              fi
+            else
+              echo "Warning: Health check script not found"
+            fi
+
+            # Apache configuration using sudo with proper error handling
+            if sudo -n true 2>/dev/null; then
+              echo "Configuring Apache..."
+              sudo cp apache-nextjs.conf /etc/apache2/sites-available/nextjs-app.conf
+              
+              # Enable site if not already enabled
+              if [ ! -f "/etc/apache2/sites-enabled/nextjs-app.conf" ]; then
+                sudo a2ensite nextjs-app
+              fi
+              
+              # Enable required Apache modules
+              echo "Enabling Apache modules..."
+              sudo a2enmod proxy proxy_http rewrite ssl
+              
+              # Test Apache config
+              echo "Testing Apache configuration..."
+              if ! sudo apache2ctl configtest; then
+                echo "Apache configuration test failed"
+                exit 1
+              fi
+              
+              # Reload Apache
+              echo "Reloading Apache..."
+              sudo systemctl reload apache2 || sudo service apache2 reload
+            else
+              echo "Warning: No sudo access. Apache configuration not updated."
+            fi
+
+            # Clean up
+            echo "Cleaning up..."
+            rm -rf /tmp/deployment
+            rm /tmp/deployment.tar.gz
+
+      - name: Verify deployment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          port: ${{ secrets.DO_PORT || 22 }}
+          command_timeout: "2m"
+          script: |
+            echo "Verifying deployment..."
+
+            # Check if application is running with timeout
+            if ! curl -s --max-time 10 http://localhost:${{ env.APP_PORT }} > /dev/null; then
+              echo "Deployment verification failed - application not responding"
+              exit 1
+            fi
+
+            # Check PM2 status
+            echo "Checking PM2 status:"
+            pm2 status | grep nextjs-app
+
+            # Check for any errors in the application logs
+            echo "Checking for errors in logs:"
+            pm2 logs nextjs-app --lines 10 --nostream | grep -i "error\|exception\|fail" || echo "No obvious errors found in logs"
+
+            echo "Deployment verification completed successfully!"

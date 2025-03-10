@@ -15,40 +15,40 @@ const Footer = () => {
   };
 
   return (
-    <footer className="border-t mt-20 mx-48 border-gray-200 bg-white py-12">
+    <footer className="border-t mt-20 mx-4 sm:mx-8 md:mx-16 lg:mx-24 xl:mx-48 border-gray-200 bg-white py-12">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           {/* Logo Section */}
-          <div className="flex items-center space-x-8">
-            <div className="relative h-24 w-24">
+          <div className="flex flex-row items-center space-y-4 sm:space-y-0 space-x-8">
+            <div className="relative h-16 sm:h-24 w-16 sm:w-24">
               <Image
                 src="/images/footer_logo.svg"
                 alt="Footer Logo"
                 fill
                 className="object-contain"
-                sizes="(max-width: 768px) 24vw, 10vw"
+                sizes="(max-width: 640px) 16vw, (max-width: 768px) 24vw, 10vw"
                 priority
               />
             </div>
 
-            <div className="relative h-24 w-48">
+            <div className="relative h-16 sm:h-24 w-32 sm:w-48">
               <Image
                 src="/images/uchicago.png"
                 alt="Footer Logo"
                 fill
                 className="object-contain"
-                sizes="(max-width: 768px) 24vw, 10vw"
+                sizes="(max-width: 640px) 32vw, (max-width: 768px) 24vw, 10vw"
                 priority
               />
             </div>
           </div>
 
           {/* Email Subscription Form */}
-          <div className="mt-8 md:mt-0">
+          <div className="mt-8 md:mt-0 w-full md:w-auto">
             <h3 className="text-sm font-medium mb-4">
               Subscribe to our newsletter
             </h3>
-            <form onSubmit={handleSubmit} className="flex">
+            <form onSubmit={handleSubmit} className="flex max-w-md">
               <div className="relative flex-grow">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-400" />
@@ -76,8 +76,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-gray-200 flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+        <div className="mt-8 pt-8 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between">
+          <p className="text-sm text-gray-500 mb-4 sm:mb-0 text-center sm:text-left">
             © {new Date().getFullYear()} Center for RISC. All rights reserved.
           </p>
           <div className="flex items-center space-x-4">

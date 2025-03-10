@@ -6,6 +6,13 @@ import team from "../../../../public/data/team.json";
 import TeamMember from "./team_member";
 
 export default function Team() {
+  // Sort team members by last name
+  const sortedTeam = [...team].sort((a, b) => {
+    const lastNameA = a.name.split(" ").pop() || "";
+    const lastNameB = b.name.split(" ").pop() || "";
+    return lastNameA.localeCompare(lastNameB);
+  });
+
   const founders = [
     {
       name: "Steve Levitt",
@@ -52,7 +59,7 @@ export default function Team() {
   return (
     <motion.div
       id="team"
-      className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 mr-20"
+      className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 md:mr-20"
     >
       <motion.div
         ref={introRef}
@@ -144,12 +151,12 @@ export default function Team() {
         </motion.div>
         <motion.div
           ref={teamGridRef}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-auto md:mx-0"
           initial="hidden"
           animate={teamGridInView ? "visible" : "hidden"}
           variants={fadeInUp}
         >
-          {team.map((member, index) => (
+          {sortedTeam.map((member, index) => (
             <motion.div
               key={index}
               variants={{

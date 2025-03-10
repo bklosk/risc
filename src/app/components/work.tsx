@@ -54,7 +54,7 @@ const carouselItems = [
     title: "Canopy",
     description: "Peer mentorship at scale.",
     color: "#d9f99d", // Light blue
-    carousel: "/images/carousel/canopy.svg",
+    carousel: "/images/carousel/canopy.png",
     status: "Closed",
   },
 
@@ -214,7 +214,7 @@ export default function WorkCarousel() {
   return (
     <motion.div
       id="work"
-      className="w-full overflow-hidden mt-8 py-8 relative"
+      className="w-full overflow-hidden md:mt-8 py-8 relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 3 }}
