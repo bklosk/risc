@@ -63,7 +63,7 @@ jobs:
           cp -r public deployment/
           cp package.json deployment/
           cp pnpm-lock.yaml deployment/
-          cp next.config.js deployment/
+          cp next.config.ts deployment/
 
           # Add .env file if it exists
           if [ -f ".env.production" ]; then
