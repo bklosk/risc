@@ -1,11 +1,11 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import os from "os";
 
 /**
  * Health check API endpoint for monitoring application status
  * Used by deployment scripts and external monitoring tools
  */
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET() {
   // Basic health information
   const healthData = {
     status: "healthy",
@@ -19,5 +19,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   };
 
   // Return 200 OK with health data
-  res.status(200).json(healthData);
+  return NextResponse.json(healthData, { status: 200 });
 }
