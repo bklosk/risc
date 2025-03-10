@@ -67,7 +67,8 @@ jobs:
           fi
 
           # Copy entire repository except excluded directories
-          rsync -av --progress ./ deployment/ \
+          # Using dot-slash pattern to ensure complete directory structure is preserved
+          rsync -av --progress . deployment/ \
             --exclude node_modules \
             --exclude .git \
             --exclude .github \
@@ -76,6 +77,8 @@ jobs:
 
           echo "Files being deployed:"
           ls -la deployment/
+          echo "Verifying src directory:"
+          ls -la deployment/src || echo "src directory not found!"
 
           # Add server start script with environment variable
           echo "#!/bin/bash
