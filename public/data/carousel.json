@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "title": "Foster Insights",
+    "description": "Using data to improve child welfare.",
+    "color": "#1f3e51",
+    "status": "Active",
+    "carousel": "/images/carousel/fi.jpg",
+    "link": "https://www.fosterinsights.org"
+  },
+  {
+    "id": 2,
+    "title": "The Levitt Lab",
+    "description": "Reimagining high school.",
+    "color": "#071535",
+    "carousel": "/images/carousel/tll.jpeg",
+    "status": "Active"
+  },
+  {
+    "id": 3,
+    "title": "Project Donor",
+    "description": "Helping kidney donors reach eligibility.",
+    "color": "#cd7029",
+    "carousel": "/images/carousel/pd.jpeg",
+    "status": "Active"
+  },
+  {
+    "id": 5,
+    "title": "Data Science 4 Everyone",
+    "description": "Modernizing our outdated math curriculum",
+    "color": "#fffff0",
+    "status": "Graduated",
+    "carousel": "/images/carousel/ds4e.png"
+  },
+  {
+    "id": 4,
+    "title": "Decision Aid",
+    "description": "Minimizing unnecessary law enforcement encounters.",
+    "color": "#000000",
+    "status": "Closed",
+    "carousel": "/images/carousel/da.jpg"
+  },
+  {
+    "id": 7,
+    "title": "Canopy",
+    "description": "Peer mentorship at scale.",
+    "color": "#d9f99d",
+    "carousel": "/images/carousel/canopy.png",
+    "status": "Closed"
+  },
+  {
+    "id": 6,
+    "title": "Community Notes",
+    "description": "Fighting misinformation on social media",
+    "color": "#075985",
+    "carousel": "/images/carousel/cn.png",
+    "status": "Graduated"
+  },
+  {
+    "id": 9,
+    "title": "Green Concrete",
+    "description": "Replacing Portland cement with smarter, more sustainable alternatives.",
+    "color": "#1f3e51",
+    "carousel": "/images/carousel/concrete.jpg",
+    "status": "Closed"
+  },
+  {
+    "id": 10,
+    "title": "Vaccine Lotteries",
+    "description": "Using behavioral economics to end outbreaks.",
+    "color": "#1f3e51",
+    "carousel": "/images/carousel/vac.jpg",
+    "status": "Closed"
+  },
+  {
+    "id": 11,
+    "title": "VR for Social Good",
+    "description": "1:1 instruction, accessible and available for everyone.",
+    "color": "#1f3e51",
+    "carousel": "/images/carousel/vr.jpg",
+    "status": "Closed"
+  }
+]

@@ -19,16 +19,13 @@ export default function Team() {
       position: "Co-Founder, Faculty Director",
       image: "/images/team/Steve.jpeg",
       bio: "Scrolls on Instagram just for the ads. He really loves them for some reason.",
-      linkedinUrl: "https://linkedin.com/in/noah-duncan",
-      githubUrl: "https://github.com/noahduncan",
     },
     {
       name: "Jeffrey Severts",
       position: "Co-Founder, Executive Director",
       image: "/images/team/Jeff.png",
       bio: "Probably a super-taster. Can somehow tell the difference between diet coke, coke zero, and diet pepsi.",
-      linkedinUrl: "https://linkedin.com/in/ben-thevathasan",
-      githubUrl: "https://github.com/benthevathasan",
+      linkedinUrl: "https://www.linkedin.com/in/jeffrey-severts-27b433",
     },
   ];
 
@@ -136,6 +133,7 @@ export default function Team() {
                 name={member.name}
                 role={member.position}
                 bio={member.bio}
+                linkedinUrl={member.linkedinUrl}
               />
             </motion.div>
           ))}
@@ -178,6 +176,8 @@ export default function Team() {
                 name={member.name}
                 role={member.position}
                 bio={member.bio}
+                githubUrl={member.githubUrl}
+                linkedinUrl={member.linkedinUrl}
               />
             </motion.div>
           ))}

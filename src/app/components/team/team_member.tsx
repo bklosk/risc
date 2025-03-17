@@ -12,6 +12,8 @@ interface TeamMemberProps {
   bio?: string;
   width?: number;
   height?: number;
+  githubUrl?: string;
+  linkedinUrl?: string;
 }
 
 export default function TeamMember({
@@ -21,6 +23,8 @@ export default function TeamMember({
   role = "",
   bio = "",
   width = 160,
+  githubUrl,
+  linkedinUrl,
 }: TeamMemberProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -178,20 +182,28 @@ export default function TeamMember({
 
                   {/* Right side - Group of action buttons */}
                   <div className="flex gap-3">
-                    <motion.button
-                      className="px-4 py-2 bg-[#EC4d14] text-white rounded hover:bg-[rgb(255,110,57)] transition-colors"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Linkedin />
-                    </motion.button>
-                    <motion.button
-                      className="px-4 py-2 bg-[#EC4d14] text-white rounded hover:bg-[rgb(255,110,57)] transition-colors"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Github />
-                    </motion.button>
+                    {linkedinUrl && (
+                      <motion.button
+                        className="px-4 py-2 bg-[#EC4d14] text-white rounded hover:bg-[rgb(255,110,57)] transition-colors"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() =>
+                          linkedinUrl && window.open(linkedinUrl, "_blank")
+                        }
+                      >
+                        <Linkedin />
+                      </motion.button>
+                    )}
+                    {githubUrl && (
+                      <motion.button
+                        className="px-4 py-2 bg-[#EC4d14] text-white rounded hover:bg-[rgb(255,110,57)] transition-colors"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => window.open(githubUrl, "_blank")}
+                      >
+                        <Github />
+                      </motion.button>
+                    )}
                   </div>
                 </motion.div>
               </motion.div>

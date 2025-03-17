@@ -1,97 +1,19 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-// Sample data structure for the carousel items
-const carouselItems = [
-  {
-    id: 1,
-    title: "Foster Insights",
-    description: "Using data to improve child welfare.",
-    color: "#1f3e51", // Light blue
-    status: "Active",
-    carousel: "/images/carousel/fi.jpg",
-    link: "https://www.fosterinsights.org",
-  },
-  {
-    id: 2,
-    title: "The Levitt Lab",
-    description: "Reimagining high school.",
-    color: "#071535", // Light green
-    carousel: "/images/carousel/tll.jpeg",
-    status: "Active",
-  },
-  {
-    id: 3,
-    title: "Project Donor",
-    description: "Helping kidney donors reach eligibility.",
-    color: "#cd7029", // Light orange
-    carousel: "/images/carousel/pd.jpeg",
-    status: "Active",
-  },
-  {
-    id: 5,
-    title: "Data Science 4 Everyone",
-    description: "Modernizing our outdated math curriculum",
-    color: "#fffff0", // Light teal
-    status: "Graduated",
-    carousel: "/images/carousel/ds4e.png",
-  },
-  {
-    id: 4,
-    title: "Decision Aid",
-    description: "Minimizing unnecessary law enforcement encounters.",
-    color: "#000000", // Light purple
-    status: "Closed",
-    carousel: "/images/carousel/da.png",
-  },
-
-  {
-    id: 7,
-    title: "Canopy",
-    description: "Peer mentorship at scale.",
-    color: "#d9f99d", // Light blue
-    carousel: "/images/carousel/canopy.png",
-    status: "Closed",
-  },
-
-  {
-    id: 6,
-    title: "Community Notes",
-    description: "Fighting misinformation on social media",
-    color: "#075985", // Light red
-    carousel: "/images/carousel/cn.png",
-    status: "Graduated",
-  },
-  {
-    id: 9,
-    title: "Community Utility",
-    description: "Mutual aid for utility bills.",
-    color: "#1f3e51", // Light blue
-    carousel: "/images/carousel/cu.jpeg",
-    status: "Closed",
-    link: "https://communityutility.org",
-  },
-  {
-    id: 10,
-    title: "Vaccine Lotteries",
-    description: "Using behavioral economics to end outbreaks.",
-    color: "#1f3e51", // Light blue
-    carousel: "/images/carousel/vac.jpg",
-    status: "Closed",
-  },
-  {
-    id: 11,
-    title: "VR for Social Good",
-    description: "1:1 instruction, accessible and available for everyone.",
-    color: "#1f3e51", // Light blue
-    carousel: "/images/carousel/vr.jpg",
-    status: "Closed",
-  },
-];
+interface CarouselItem {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  color: string;
+  carousel?: string;
+  link?: string;
+}
 
 export default function WorkCarousel() {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -100,6 +22,25 @@ export default function WorkCarousel() {
   const [isDragging, setIsDragging] = useState(false);
   const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
   const itemRefs = useRef<Map<number, DOMRect>>(new Map());
+  const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
+
+  // Fetch carousel data from JSON file
+  useEffect(() => {
+    const fetchCarouselData = async () => {
+      try {
+        const response = await fetch("/data/carousel.json");
+        if (!response.ok) {
+          throw new Error("Failed to fetch carousel data");
+        }
+        const data = await response.json();
+        setCarouselItems(data);
+      } catch (error) {
+        console.error("Error loading carousel data:", error);
+      }
+    };
+
+    fetchCarouselData();
+  }, []);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -107,11 +48,6 @@ export default function WorkCarousel() {
         const scrollWidth = innerCarouselRef.current.scrollWidth;
         const clientWidth = carouselRef.current.clientWidth;
         const calculatedWidth = Math.max(0, scrollWidth - clientWidth);
-        console.log("Carousel width calculated:", {
-          scrollWidth,
-          clientWidth,
-          calculatedWidth,
-        });
         setWidth(calculatedWidth);
       }
     };
@@ -155,10 +91,25 @@ export default function WorkCarousel() {
     };
   }, []);
 
+  // Create a reusable function to update item positions
+  const updateItemPositions = useCallback(() => {
+    if (!innerCarouselRef.current) return;
+
+    const items = innerCarouselRef.current.querySelectorAll(".carousel-item");
+    items.forEach((item) => {
+      const id = Number(item.getAttribute("data-id"));
+      const rect = item.getBoundingClientRect();
+      itemRefs.current.set(id, rect);
+    });
+  }, []);
+
   // Track cursor position to determine which item is being hovered
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) return; // Don't update hover state while dragging
+
+      // First make sure positions are up to date
+      updateItemPositions();
 
       // Check if cursor is over any carousel item
       const mouseX = e.clientX;
@@ -184,19 +135,6 @@ export default function WorkCarousel() {
       }
     };
 
-    // Update item positions when scrolling or resizing
-    const updateItemPositions = () => {
-      if (innerCarouselRef.current) {
-        const items =
-          innerCarouselRef.current.querySelectorAll(".carousel-item");
-        items.forEach((item) => {
-          const id = Number(item.getAttribute("data-id"));
-          const rect = item.getBoundingClientRect();
-          itemRefs.current.set(id, rect);
-        });
-      }
-    };
-
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("scroll", updateItemPositions);
     window.addEventListener("resize", updateItemPositions);
@@ -209,7 +147,7 @@ export default function WorkCarousel() {
       window.removeEventListener("scroll", updateItemPositions);
       window.removeEventListener("resize", updateItemPositions);
     };
-  }, [isDragging]);
+  }, [isDragging, updateItemPositions]);
 
   return (
     <motion.div
@@ -239,18 +177,16 @@ export default function WorkCarousel() {
           dragElastic={0.2}
           dragMomentum={true}
           onDragStart={() => setIsDragging(true)}
+          onDrag={() => {
+            // Update positions periodically during drag to keep them accurate
+            requestAnimationFrame(updateItemPositions);
+          }}
           onDragEnd={() => {
             setIsDragging(false);
-            // Update item positions after dragging ends
-            setTimeout(() => {
-              const items =
-                innerCarouselRef.current?.querySelectorAll(".carousel-item");
-              items?.forEach((item) => {
-                const id = Number(item.getAttribute("data-id"));
-                const rect = item.getBoundingClientRect();
-                itemRefs.current.set(id, rect);
-              });
-            }, 100);
+            // Update item positions immediately after dragging ends
+            updateItemPositions();
+            // And once more after animation completes
+            setTimeout(updateItemPositions, 100);
           }}
           style={{
             cursor: isDragging ? "grabbing" : "grab",

@@ -5,7 +5,7 @@
     "image": "/images/team/BenT.jpeg",
     "bio": "Ben's restaurant selections are revered around the RISC office.",
     "linkedinUrl": "https://linkedin.com/in/ben-thevathasan",
-    "githubUrl": "https://github.com/benthevathasan"
+    "githubUrl": "https://github.com/benthev"
   },
   {
     "name": "Noah Duncan",
@@ -13,15 +13,15 @@
     "image": "/images/team/Noah.png",
     "bio": "His puppy brings pure love (and pure chaos) to the office.",
     "linkedinUrl": "https://linkedin.com/in/noah-duncan",
-    "githubUrl": "https://github.com/noahduncan"
+    "githubUrl": "https://github.com/duncandonuts6"
   },
   {
     "name": "Jack Tait",
     "position": "Senior Analyst",
     "image": "/images/team/Jack.png",
     "bio": "Proud football podcast host, prouder dog dad.",
-    "linkedinUrl": "https://linkedin.com/in/jack-tait",
-    "githubUrl": "https://github.com/jacktait"
+    "linkedinUrl": "https://www.linkedin.com/in/jack-tait-13229b10a/",
+    "githubUrl": "https://github.com/JackTait97"
   },
   {
     "name": "Claire Sukumar",
@@ -29,87 +29,80 @@
     "image": "/images/team/Claire.png",
     "bio": "Has taken up full-time residence inside a little free library.",
     "linkedinUrl": "https://linkedin.com/in/claire-sukumar",
-    "githubUrl": "https://github.com/clairesukumar"
+    "githubUrl": "https://github.com/csukumar"
   },
   {
     "name": "Ruby Rorty",
     "position": "Analyst",
     "image": "/images/team/Ruby.png",
     "bio": "Big name in tiny fiction.",
-    "linkedinUrl": "https://linkedin.com/in/ruby-rorty",
-    "githubUrl": "https://github.com/rubyrorty"
+    "linkedinUrl": "https://www.linkedin.com/in/ruby-rorty-692472195/"
   },
   {
     "name": "Davis Johnstone",
     "position": "Analyst",
     "image": "/images/team/Davis.png",
     "bio": "Gave us all an hour long talk ranking Taco Bell menu items. He provided samples, so we forgive him.",
-    "linkedinUrl": "https://linkedin.com/in/davis-johnstone",
-    "githubUrl": "https://github.com/davisjohnstone"
+    "linkedinUrl": "https://www.linkedin.com/in/davis-johnstone-941a7921a"
   },
   {
     "name": "Katherine Leahy",
     "position": "Analyst",
     "image": "/images/team/Katherine.png",
     "bio": "Willing to share her sourdough starter.",
-    "linkedinUrl": "https://linkedin.com/in/katherine-leahy",
-    "githubUrl": "https://github.com/katherineleahy"
+    "linkedinUrl": "https://www.linkedin.com/in/katherine-leahy-4b223317a/",
+    "githubUrl": "https://github.com/kmleahy"
   },
   {
     "name": "Cami Brix",
     "position": "Analyst",
     "image": "/images/team/Cami.png",
     "bio": "Plato super-fan and our resident chef.",
-    "linkedinUrl": "https://linkedin.com/in/cami-brix",
-    "githubUrl": "https://github.com/camibrix"
+    "linkedinUrl": "https://www.linkedin.com/in/cami-brix-7ba68b1a2/"
   },
   {
     "name": "Devin Haas",
     "position": "Analyst",
     "image": "/images/team/Devin.jpeg",
     "bio": "Probably exploring Afghanistan right now.",
-    "linkedinUrl": "https://linkedin.com/in/devin-haas",
-    "githubUrl": "https://github.com/devinhaas"
+    "linkedinUrl": "https://www.linkedin.com/in/devin-haas-930341248/"
   },
   {
     "name": "Hana Horiuchi",
     "position": "Analyst",
     "image": "/images/team/Hana.png",
     "bio": "From NYC, but claims Minnesota? We're as confused as you are.",
-    "linkedinUrl": "https://linkedin.com/in/hana-horiuchi",
-    "githubUrl": "https://github.com/hanahoriuchi"
+    "linkedinUrl": "https://www.linkedin.com/in/hana-horiuchi-072a611a2/",
+    "githubUrl": "https://github.com/hanah0riuchi"
   },
   {
     "name": "Daniela Shuman",
     "position": "Analyst",
     "image": "/images/team/Daniela.png",
     "bio": "Saves 3,000 shrimp lives per minute. Probably the most effective altruist in the world.",
-    "linkedinUrl": "https://linkedin.com/in/daniela-shuman",
-    "githubUrl": "https://github.com/danielashuman"
+    "linkedinUrl": "https://www.linkedin.com/in/daniela-shuman/",
+    "githubUrl": "https://github.com/dshuman12"
   },
   {
     "name": "Kali Enkhbayar",
     "position": "Analyst",
     "image": "/images/team/Khali.png",
     "bio": "Most stylish RISC analyst. Has never been seen in the same outfit twice.",
-    "linkedinUrl": "https://linkedin.com/in/kali-enkhbayar",
-    "githubUrl": "https://github.com/kalienkhbayar"
+    "linkedinUrl": "https://www.linkedin.com/in/khaliun-enkhbayar-9918281b2/"
   },
   {
     "name": "Micah Ross",
     "position": "Analyst",
     "image": "/images/team/Micah.png",
     "bio": "True California girl, singer-songwriter, and polyglot. Also feared and respected for her survival skills.",
-    "linkedinUrl": "https://linkedin.com/in/micah-ross",
-    "githubUrl": "https://github.com/micahross"
+    "linkedinUrl": "https://www.linkedin.com/in/micah-ross-558670233/"
   },
   {
     "name": "Josie Maier",
     "position": "Analyst",
     "image": "/images/team/Josie.png",
     "bio": "Former monkey scientist, current design wizard. Still loves monkeys.",
-    "linkedinUrl": "https://linkedin.com/in/josie-maier",
-    "githubUrl": "https://github.com/josiemaier"
+    "linkedinUrl": "https://www.linkedin.com/in/josie-maier-4b46201ab/"
   },
   {
     "name": "Ben Klosky",
@@ -117,6 +110,6 @@
     "image": "/images/team/BenK.png",
     "bio": "Does improv, has yet to be funny on purpose. We believe in ya, buddy.",
     "linkedinUrl": "https://linkedin.com/in/ben-klosky",
-    "githubUrl": "https://github.com/benklosky"
+    "githubUrl": "https://github.com/bklosk"
   }
 ]
