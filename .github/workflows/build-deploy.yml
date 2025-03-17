@@ -598,6 +598,162 @@ jobs:
               echo "Enabling Apache modules..."
               sudo a2enmod proxy proxy_http proxy_wstunnel rewrite ssl
               
+              # Check for existing SSL certificates for the domain
+              DOMAIN="${{ env.DOMAIN_NAME }}"
+              echo "Checking for SSL certificates for $DOMAIN..."
+              
+              # Parse domain components for wildcard certificate search
+              DOMAIN_PARTS=(${DOMAIN//./ })
+              if [ ${#DOMAIN_PARTS[@]} -ge 3 ]; then
+                ROOT_DOMAIN="${DOMAIN_PARTS[-2]}.${DOMAIN_PARTS[-1]}"
+                WILDCARD_DOMAIN="*.${ROOT_DOMAIN}"
+                echo "Also checking for wildcard certificates: $WILDCARD_DOMAIN"
+                echo "And root domain certificates: $ROOT_DOMAIN"
+              fi
+              
+              # Initialize certificate paths
+              CERT_PATH=""
+              KEY_PATH=""
+              
+              # Check if Let's Encrypt certificates exist
+              if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ] && [ -f "/etc/letsencrypt/live/$DOMAIN/privkey.pem" ]; then
+                CERT_PATH="/etc/letsencrypt/live/$DOMAIN/fullchain.pem"
+                KEY_PATH="/etc/letsencrypt/live/$DOMAIN/privkey.pem"
+                echo "Found Let's Encrypt certificates for $DOMAIN"
+              fi
+              
+              # UChicago Certificate Check: Check for specific UChicago certificate locations
+              if [ -z "$CERT_PATH" ] || [ -z "$KEY_PATH" ]; then
+                echo "Looking for UChicago certificates..."
+                
+                # Common UChicago wildcard certificate locations (adjust as needed)
+                UCHICAGO_CERT_PATHS=(
+                  "/etc/ssl/certs/uchicago.edu.pem"
+                  "/etc/ssl/certs/uchicago.edu.crt"
+                  "/etc/ssl/uchicago/uchicago.edu.crt"
+                  "/etc/ssl/uchicago/wildcard.uchicago.edu.crt"
+                  "/etc/ssl/uchicago/star.uchicago.edu.crt"
+                  "/etc/ssl/private/uchicago.edu.pem"
+                  "/etc/pki/tls/certs/uchicago.edu.crt"
+                  "/etc/apache2/ssl/uchicago.edu.crt"
+                )
+                
+                UCHICAGO_KEY_PATHS=(
+                  "/etc/ssl/private/uchicago.edu.key"
+                  "/etc/ssl/private/wildcard.uchicago.edu.key"
+                  "/etc/ssl/private/star.uchicago.edu.key"
+                  "/etc/ssl/uchicago/uchicago.edu.key"
+                  "/etc/ssl/uchicago/wildcard.uchicago.edu.key"
+                  "/etc/pki/tls/private/uchicago.edu.key"
+                  "/etc/apache2/ssl/uchicago.edu.key"
+                )
+                
+                # Find all potential certificate files in /etc/ssl
+                echo "Searching for potential UChicago certificate files..."
+                sudo find /etc/ssl -type f -name "*uchicago*" | while read -r file; do
+                  echo "Found potential UChicago file: $file"
+                done
+                
+                # Check UChicago certificate paths
+                for cert in "${UCHICAGO_CERT_PATHS[@]}"; do
+                  if [ -f "$cert" ]; then
+                    CERT_PATH="$cert"
+                    echo "Found UChicago certificate at $CERT_PATH"
+                    break
+                  fi
+                done
+                
+                for key in "${UCHICAGO_KEY_PATHS[@]}"; do
+                  if [ -f "$key" ]; then
+                    KEY_PATH="$key"
+                    echo "Found UChicago key at $KEY_PATH"
+                    break
+                  fi
+                done
+                
+                # If still not found, check for wildcard certificates
+                if [ -z "$CERT_PATH" ] || [ -z "$KEY_PATH" ]; then
+                  # Look for any wildcard certs that might cover our domain
+                  if sudo ls /etc/ssl/certs/*wildcard* 2>/dev/null || sudo ls /etc/ssl/private/*wildcard* 2>/dev/null; then
+                    echo "Found wildcard certificates that might be usable"
+                    
+                    # You can add more specific logic here to select the right wildcard cert
+                    WILDCARD_CERTS=$(sudo find /etc/ssl -name "*wildcard*" -o -name "*star*")
+                    if [ -n "$WILDCARD_CERTS" ]; then
+                      echo "Potential wildcard certificates:"
+                      echo "$WILDCARD_CERTS"
+                    fi
+                  fi
+                fi
+              fi
+              
+              # Check standard certificate locations if UChicago-specific search didn't find anything
+              if [ -z "$CERT_PATH" ] || [ -z "$KEY_PATH" ]; then
+                COMMON_CERT_PATHS=(
+                  "/etc/ssl/certs/$DOMAIN.pem"
+                  "/etc/ssl/certs/$DOMAIN.crt"
+                  "/etc/ssl/$DOMAIN.crt"
+                  "/etc/ssl/private/$DOMAIN.pem"
+                )
+                
+                COMMON_KEY_PATHS=(
+                  "/etc/ssl/private/$DOMAIN.key"
+                  "/etc/ssl/private/$DOMAIN-key.pem"
+                  "/etc/ssl/$DOMAIN.key"
+                )
+                
+                for cert in "${COMMON_CERT_PATHS[@]}"; do
+                  if [ -f "$cert" ]; then
+                    CERT_PATH="$cert"
+                    echo "Found certificate at $CERT_PATH"
+                    break
+                  fi
+                done
+                
+                for key in "${COMMON_KEY_PATHS[@]}"; do
+                  if [ -f "$key" ]; then
+                    KEY_PATH="$key"
+                    echo "Found key at $KEY_PATH"
+                    break
+                  fi
+                done
+              fi
+              
+              # If no certificates found, attempt to install Let's Encrypt
+              if [ -z "$CERT_PATH" ] || [ -z "$KEY_PATH" ]; then
+                echo "No SSL certificates found for $DOMAIN. Attempting to install Let's Encrypt certificates..."
+                
+                # Check if certbot is installed
+                if ! command -v certbot &> /dev/null; then
+                  echo "Installing certbot..."
+                  sudo apt-get update
+                  sudo apt-get install -y certbot python3-certbot-apache
+                fi
+                
+                # Get SSL certificate using certbot
+                echo "Requesting Let's Encrypt certificate for $DOMAIN..."
+                sudo certbot --apache -d $DOMAIN --non-interactive --agree-tos --email benklosky@uchicago.edu --redirect
+                
+                # Check if certificate was successfully installed
+                if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
+                  CERT_PATH="/etc/letsencrypt/live/$DOMAIN/fullchain.pem"
+                  KEY_PATH="/etc/letsencrypt/live/$DOMAIN/privkey.pem"
+                  echo "Let's Encrypt certificates installed successfully"
+                else
+                  echo "Warning: Failed to install Let's Encrypt certificates. Using existing configuration."
+                fi
+              fi
+              
+              # Update Apache configuration with the correct certificate paths
+              if [ -n "$CERT_PATH" ] && [ -n "$KEY_PATH" ] && [ -f "$CERT_PATH" ] && [ -f "$KEY_PATH" ]; then
+                echo "Updating Apache configuration with SSL certificate paths..."
+                sudo sed -i "s|SSLCertificateFile .*|SSLCertificateFile $CERT_PATH|g" /etc/apache2/sites-available/nextjs-app.conf
+                sudo sed -i "s|SSLCertificateKeyFile .*|SSLCertificateKeyFile $KEY_PATH|g" /etc/apache2/sites-available/nextjs-app.conf
+                echo "SSL certificate configuration updated for $DOMAIN"
+              else
+                echo "Warning: Valid SSL certificate paths not found. Using default configuration."
+              fi
+              
               # Test Apache config
               echo "Testing Apache configuration..."
               if ! sudo apache2ctl configtest; then
