@@ -3,6 +3,7 @@ import Work from "./components/work";
 import Team from "./components/team/team";
 import Footer from "./components/footer";
 import Contact from "./components/contact";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export default function Page() {
   // risc paths! storing here for funsies
@@ -27,6 +28,7 @@ export default function Page() {
         />
       </div>
       <Footer />
+      <GoogleAnalytics gaId="G-2ETDS1RGWV" />
     </main>
   );
 }
