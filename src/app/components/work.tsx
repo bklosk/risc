@@ -24,6 +24,23 @@ export default function WorkCarousel() {
   const itemRefs = useRef<Map<number, DOMRect>>(new Map());
   const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
 
+  // Track scroll position
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  // Monitor scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setHasScrolled(scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    // Check initial scroll position
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   // Fetch carousel data from JSON file
   useEffect(() => {
     const fetchCarouselData = async () => {
@@ -154,8 +171,8 @@ export default function WorkCarousel() {
       id="work"
       className="w-full overflow-hidden md:mt-8 py-8 relative"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 3 }}
+      animate={{ opacity: hasScrolled ? 1 : 0 }}
+      transition={{ duration: 0.5 }}
     >
       <div className="flex items-center justify-center mb-4">
         <h1 className="text-4xl md:text-5xl mx-auto font-albert-sans font-extrabold text-[#FC4512] md:ml-8 mb-4">

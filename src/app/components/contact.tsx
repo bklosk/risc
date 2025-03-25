@@ -63,9 +63,14 @@ const Contact: React.FC<ContactFormProps> = ({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: -40 }}
+      initial={{ opacity: 0, y: -75 }}
       animate={{ opacity: isInView ? 1 : 0, y: 0 }}
-      transition={{ duration: 1.8, ease: "easeInOut" }}
+      transition={{
+        type: "spring",
+        stiffness: 60,
+        damping: 12,
+        mass: 1,
+      }}
       className="rounded-2xl shadow-lg overflow-hidden max-w-5xl mx-auto bg-white flex flex-col md:flex-row"
       id="contact"
     >
