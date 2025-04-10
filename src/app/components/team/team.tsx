@@ -6,8 +6,21 @@ import team from "../../../../public/data/team.json";
 import TeamMember from "./team_member";
 
 export default function Team() {
-  // Sort team members by last name
+  // Sort team members: regular team members first (sorted by last name),
+  // then entrepreneurs in residence (also sorted by last name)
   const sortedTeam = [...team].sort((a, b) => {
+    const isEIRA = a.position
+      .toLowerCase()
+      .includes("entrepreneur in residence");
+    const isEIRB = b.position
+      .toLowerCase()
+      .includes("entrepreneur in residence");
+
+    // If one is EIR and the other isn't, sort accordingly
+    if (isEIRA && !isEIRB) return 1; // a is EIR, so it comes after
+    if (!isEIRA && isEIRB) return -1; // b is EIR, so it comes after
+
+    // Otherwise, sort by last name
     const lastNameA = a.name.split(" ").pop() || "";
     const lastNameB = b.name.split(" ").pop() || "";
     return lastNameA.localeCompare(lastNameB);

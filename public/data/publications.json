@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Neural Networks in Cognitive Science",
+    "authors": "Smith, J., Johnson, P., Williams, R.",
+    "journal": "Journal of Cognitive Science",
+    "year": "2023",
+    "url": "https://example.com/publication1",
+    "color": "#1E293B",
+    "image": "/images/pub1.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Advances in Machine Learning",
+    "authors": "Brown, A., Davis, M., Garcia, J.",
+    "journal": "AI Review",
+    "year": "2022",
+    "url": "https://example.com/publication2",
+    "color": "#2D3748",
+    "image": "/images/pub2.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Deep Learning Applications",
+    "authors": "Clark, T., Miller, S., Wilson, L.",
+    "journal": "Computational Intelligence",
+    "year": "2023",
+    "url": "https://example.com/publication3",
+    "color": "#374151",
+    "image": "/images/pub3.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Ethics in Artificial Intelligence",
+    "authors": "Anderson, R., Thompson, J., Lee, K.",
+    "journal": "Technology Ethics",
+    "year": "2022",
+    "url": "https://example.com/publication4",
+    "color": "#4B5563",
+    "image": "/images/pub4.jpg"
+  }
+]
