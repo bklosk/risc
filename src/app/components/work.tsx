@@ -265,11 +265,19 @@ export default function WorkCarousel() {
                     {item.status}
                   </h3>
                 </div>
-                <div className="absolute bottom-3 right-3 px-3 py-1 z-20">
-                  <Link className="z-50" href={item.link || "#"}>
-                    <ArrowRight className="text-white" size={20} />
-                  </Link>
-                </div>
+                {item.link && (
+                  <div
+                    className="absolute bottom-3 right-3 px-3 py-1 z-20"
+                    style={{ pointerEvents: "auto" }}
+                  >
+                    <Link
+                      href={item.link}
+                      className="block p-1 hover:scale-110 transition-transform"
+                    >
+                      <ArrowRight className="text-white" size={20} />
+                    </Link>
+                  </div>
+                )}
               </motion.div>
 
               {/* Title box always visible - higher z-index ensures it's above the overlay */}

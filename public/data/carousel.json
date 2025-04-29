@@ -14,7 +14,8 @@
     "description": "Reimagining high school.",
     "color": "#071535",
     "carousel": "/images/carousel/tll.jpeg",
-    "status": "Active"
+    "status": "Active",
+    "link": "https://www.thelevittlab.com"
   },
   {
     "id": 3,
@@ -22,7 +23,8 @@
     "description": "Helping kidney donors reach eligibility.",
     "color": "#cd7029",
     "carousel": "/images/carousel/pd.jpeg",
-    "status": "Active"
+    "status": "Active",
+    "link": "https://www.projectdonor.org"
   },
   {
     "id": 5,
@@ -30,7 +32,8 @@
     "description": "Modernizing our outdated math curriculum",
     "color": "#fffff0",
     "status": "Graduated",
-    "carousel": "/images/carousel/ds4e.png"
+    "carousel": "/images/carousel/ds4e.png",
+    "link": "https://www.datascience4everyone.org"
   },
   {
     "id": 4,
@@ -38,7 +41,8 @@
     "description": "Minimizing unnecessary law enforcement encounters.",
     "color": "#000000",
     "status": "Closed",
-    "carousel": "/images/carousel/da.jpg"
+    "carousel": "/images/carousel/da.jpg",
+    "link": "https://demo.emdecisionaid.com"
   },
   {
     "id": 7,
@@ -54,7 +58,8 @@
     "description": "Fighting misinformation on social media",
     "color": "#075985",
     "carousel": "/images/carousel/cn.png",
-    "status": "Graduated"
+    "status": "Graduated",
+    "link": "https://asteriskmag.com/issues/08/the-making-of-community-notes"
   },
   {
     "id": 9,
@@ -70,7 +75,8 @@
     "description": "Using behavioral economics to end outbreaks.",
     "color": "#1f3e51",
     "carousel": "/images/carousel/vac.jpg",
-    "status": "Closed"
+    "status": "Closed",
+    "link": "https://www.chicagotribune.com/2021/06/03/op-ed-a-vaccine-lottery-would-be-a-win-for-all-of-illinois/"
   },
   {
     "id": 11,
