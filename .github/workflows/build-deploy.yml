@@ -226,7 +226,7 @@ jobs:
               continue
             fi
             
-            echo "Testing connection to localhost:${PORT}..."
+            echo "Testing connection to localhost:${PORT}"
             
             # Try multiple endpoints with more detailed output
             if curl -v --max-time 10 http://localhost:${PORT}/api/health 2>&1; then
