@@ -17,6 +17,11 @@ jobs:
       APP_DIR: "/var/www/risc"
       BACKUP_RETENTION_DAYS: 7
       NODE_VERSION: "18.18" # Updated to a version that meets pnpm's requirements (at least 18.12)
+      EMAIL_SERVER_HOST: ${{ secrets.EMAIL_SERVER_HOST }}
+      EMAIL_SERVER_PORT: ${{ secrets.EMAIL_SERVER_PORT }}
+      EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
 
     steps:
       - name: Checkout repository
@@ -136,7 +141,12 @@ jobs:
               "env": {
                 "NODE_ENV": "production",
                 "PORT": "'${{ env.APP_PORT }}'",
-                "PATH": "$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH"
+                "PATH": "$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH",
+                "EMAIL_SERVER_HOST": "'${{ env.EMAIL_SERVER_HOST }}'",
+                "EMAIL_SERVER_PORT": "'${{ env.EMAIL_SERVER_PORT }}'",
+                "EMAIL_USERNAME": "'${{ env.EMAIL_USERNAME }}'",
+                "EMAIL_PASSWORD": "'${{ env.EMAIL_PASSWORD }}'",
+                "EMAIL_SENDER": "'${{ env.EMAIL_SENDER }}'"
               }
             }]
           }' > /tmp/deployment-files/ecosystem.config.json
@@ -289,7 +299,12 @@ jobs:
               "max_restarts": 5,
               "env": {
                 "NODE_ENV": "production",
-                "PORT": "'${{ env.APP_PORT }}'"
+                "PORT": "'${{ env.APP_PORT }}'",
+                "EMAIL_SERVER_HOST": "'${{ env.EMAIL_SERVER_HOST }}'",
+                "EMAIL_SERVER_PORT": "'${{ env.EMAIL_SERVER_PORT }}'",
+                "EMAIL_USERNAME": "'${{ env.EMAIL_USERNAME }}'",
+                "EMAIL_PASSWORD": "'${{ env.EMAIL_PASSWORD }}'",
+                "EMAIL_SENDER": "'${{ env.EMAIL_SENDER }}'"
               },
               "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
             }]
