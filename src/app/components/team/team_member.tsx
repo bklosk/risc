@@ -64,8 +64,8 @@ export default function TeamMember({
               priority
             />
           </div>
-          <h3 className="text-lg font-medium mt-2">{name}</h3>
-          {role && <p className="text-gray-600">{role}</p>}
+          <h3 className="text-lg font-medium mt-2 text-center">{name}</h3>
+          {role && <p className="text-gray-600 text-center">{role}</p>}
         </motion.div>
       </div>
 
@@ -134,7 +134,7 @@ export default function TeamMember({
                     </div>
                   </motion.div>
                   <motion.div
-                    className="flex flex-col justify-center"
+                    className="flex flex-col justify-center w-full"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{
                       opacity: 1,
@@ -145,11 +145,13 @@ export default function TeamMember({
                       },
                     }}
                   >
-                    <h2 className="text-2xl font-bold">{name}</h2>
-                    {role && <p className="text-gray-600 mb-4">{role}</p>}
+                    <h2 className="text-2xl font-bold text-center">{name}</h2>
+                    {role && (
+                      <p className="text-gray-600 mb-4 text-center">{role}</p>
+                    )}
                     {bio && (
                       <motion.p
-                        className="text-gray-800"
+                        className="text-gray-800 text-center"
                         initial={{ opacity: 0 }}
                         animate={{
                           opacity: 1,
