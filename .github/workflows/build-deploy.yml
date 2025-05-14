@@ -129,10 +129,11 @@ jobs:
           chmod +x /tmp/deployment-files/start.sh
 
           # Add process management (PM2) config
-          echo '{
+          cat <<EOF > /tmp/deployment-files/ecosystem.config.json
+          {
             "apps": [{
               "name": "nextjs-app",
-              "cwd": "'${{ env.APP_DIR }}'",
+              "cwd": "${{ env.APP_DIR }}",
               "script": "node_modules/.bin/next",
               "args": "start",
               "instances": "1",
@@ -140,175 +141,17 @@ jobs:
               "interpreter": "$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin/node",
               "env": {
                 "NODE_ENV": "production",
-                "PORT": "'${{ env.APP_PORT }}'",
-                "PATH": "$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH",
-                "EMAIL_SERVER_HOST": "'${{ env.EMAIL_SERVER_HOST }}'",
-                "EMAIL_SERVER_PORT": "'${{ env.EMAIL_SERVER_PORT }}'",
-                "EMAIL_USERNAME": "'${{ env.EMAIL_USERNAME }}'",
-                "EMAIL_PASSWORD": "'${{ env.EMAIL_PASSWORD }}'",
-                "EMAIL_SENDER": "'${{ env.EMAIL_SENDER }}'"
-              }
-            }]
-          }' > /tmp/deployment-files/ecosystem.config.json
-
-          # Create Apache proxy configuration with both HTTP and HTTPS VirtualHosts
-          echo '<VirtualHost *:80>
-              ServerName ${{ env.DOMAIN_NAME }}
-              ServerAdmin benklosky@uchicago.edu
-              
-              # Redirect HTTP to HTTPS
-              RewriteEngine On
-              RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
-              
-              ErrorLog ${APACHE_LOG_DIR}/error.log
-              CustomLog ${APACHE_LOG_DIR}/access.log combined
-          </VirtualHost>
-
-          <VirtualHost *:443>
-              ServerName ${{ env.DOMAIN_NAME }}
-              ServerAdmin benklosky@uchicago.edu
-              
-              # SSL Configuration - adjust paths as needed for your existing certificates
-              SSLEngine on
-              SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
-              SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
-              
-              # Proxy configuration for Next.js app
-              ProxyPreserveHost On
-              ProxyRequests Off
-              ProxyPass / http://localhost:${{ env.APP_PORT }}/
-              ProxyPassReverse / http://localhost:${{ env.APP_PORT }}/
-              
-              # Ensure WebSockets work for Next.js
-              RewriteEngine On
-              RewriteCond %{HTTP:Upgrade} =websocket [NC]
-              RewriteRule /(.*) ws://localhost:${{ env.APP_PORT }}/$1 [P,L]
-              
-              ErrorLog ${APACHE_LOG_DIR}/error.log
-              CustomLog ${APACHE_LOG_DIR}/access.log combined
-              
-              <Directory "/var/www">
-                  AllowOverride All
-                  Require all granted
-              </Directory>
-          </VirtualHost>' > /tmp/deployment-files/apache-nextjs.conf
-
-          # Create backup script
-          echo '#!/bin/bash
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          BACKUP_DIR="/var/www/nextjs-app-backup-${TIMESTAMP}"
-          if [ -d "${{ env.APP_DIR }}" ]; then
-            cp -r ${{ env.APP_DIR }} ${BACKUP_DIR}
-            echo "Backup created at ${BACKUP_DIR}"
-            
-            # Clean up old backups (older than 7 days)
-            find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d -mtime +${{ env.BACKUP_RETENTION_DAYS }} -exec rm -rf {} \;
-          fi' > /tmp/deployment-files/backup.sh
-          chmod +x /tmp/deployment-files/backup.sh
-
-          # Create healthcheck script
-          echo '#!/bin/bash
-          MAX_RETRIES=5
-          RETRY_INTERVAL=5
-          PORT=${{ env.APP_PORT }}
-
-          # Give the Next.js app time to initialize before first check
-          echo "Waiting 20 seconds for application to fully initialize..."
-          sleep 20
-
-          for i in $(seq 1 ${MAX_RETRIES}); do
-            echo "Health check attempt ${i}/${MAX_RETRIES}..."
-            
-            # Check if the process is running
-            if ! pm2 list | grep -q "nextjs-app"; then
-              echo "PM2 process not found!"
-              pm2 list
-              continue
-            fi
-            
-            echo "Testing connection to localhost:${PORT}"
-            
-            # Try multiple endpoints with more detailed output
-            if curl -v --max-time 10 http://localhost:${PORT}/api/health 2>&1; then
-              echo "✓ Application is healthy at /api/health!"
-              exit 0
-            fi
-            
-            if curl -v --max-time 10 http://localhost:${PORT} 2>&1; then
-              echo "✓ Application is healthy at root endpoint!"
-              exit 0
-            fi
-            
-            # Check if Next.js is actually listening
-            echo "Checking if port ${PORT} is open:"
-            netstat -tuln | grep ${PORT} || echo "Port ${PORT} not in use"
-            
-            # Check PM2 logs for any clues
-            echo "Recent PM2 logs:"
-            pm2 logs nextjs-app --lines 5 --nostream
-            
-            echo "Health check failed, retrying in ${RETRY_INTERVAL} seconds..."
-            sleep ${RETRY_INTERVAL}
-          done
-
-          echo "Health check failed after ${MAX_RETRIES} attempts!"
-          exit 1' > /tmp/deployment-files/healthcheck.sh
-          chmod +x /tmp/deployment-files/healthcheck.sh
-
-          # Make sure .next directory is included
-          if [ -d ".next" ]; then
-            echo "Copying .next directory..."
-            mkdir -p /tmp/deployment-files/.next
-            cp -r .next/* /tmp/deployment-files/.next/
-            echo "✓ .next directory copied explicitly"
-          else
-            echo "ERROR: .next directory not found! Build may have failed."
-            exit 1
-          fi
-
-          # Create a startup script for Next.js
-          echo '#!/bin/bash
-          # Custom Next.js startup script
-          export NODE_ENV=production
-          export PORT=${{ env.APP_PORT }}
-          export PATH="$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH"
-
-          # Ensure we are using the correct Node.js version
-          if ! command -v node &> /dev/null || [[ "$(node --version)" != v${{ env.NODE_VERSION }}* ]]; then
-            echo "Activating Node.js ${{ env.NODE_VERSION }}..."
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm use ${{ env.NODE_VERSION }} || { echo "Failed to activate Node.js ${{ env.NODE_VERSION }}"; exit 1; }
-          fi
-
-          echo "Starting Next.js with Node $(node --version)..."
-          cd "${{ env.APP_DIR }}"
-          exec node node_modules/next/dist/bin/next start
-          ' > /tmp/deployment-files/start-nextjs.sh
-          chmod +x /tmp/deployment-files/start-nextjs.sh
-
-          # Add process management (PM2) config - use our custom script
-          echo '{
-            "apps": [{
-              "name": "nextjs-app",
-              "script": "${{ env.APP_DIR }}/start-nextjs.sh",
-              "cwd": "'${{ env.APP_DIR }}'",
-              "exec_mode": "fork",
-              "instances": 1,
-              "autorestart": true,
-              "max_restarts": 5,
-              "env": {
-                "NODE_ENV": "production",
-                "PORT": "'${{ env.APP_PORT }}'",
-                "EMAIL_SERVER_HOST": "'${{ env.EMAIL_SERVER_HOST }}'",
-                "EMAIL_SERVER_PORT": "'${{ env.EMAIL_SERVER_PORT }}'",
-                "EMAIL_USERNAME": "'${{ env.EMAIL_USERNAME }}'",
-                "EMAIL_PASSWORD": "'${{ env.EMAIL_PASSWORD }}'",
-                "EMAIL_SENDER": "'${{ env.EMAIL_SENDER }}'"
+                "PORT": "${{ env.APP_PORT }}",
+                "EMAIL_SERVER_HOST": "${{ secrets.EMAIL_SERVER_HOST }}",
+                "EMAIL_SERVER_PORT": "${{ secrets.EMAIL_SERVER_PORT }}",
+                "EMAIL_USERNAME": "${{ secrets.EMAIL_USERNAME }}",
+                "EMAIL_PASSWORD": "${{ secrets.EMAIL_PASSWORD }}",
+                "EMAIL_SENDER": "${{ secrets.EMAIL_SENDER }}"
               },
               "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
             }]
-          }' > /tmp/deployment-files/ecosystem.config.json
+          }
+          EOF
 
           # Create deployment package from our temporary directory
           echo "Creating tarball from deployment files..."
