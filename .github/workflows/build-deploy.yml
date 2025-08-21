@@ -43,14 +43,15 @@ jobs:
           # Ensure Node >= 18.12.0
           node -e "const [maj,min,pat]=process.versions.node.split('.').map(Number); if(maj<18|| (maj===18&&min<12)){ console.error('Node.js >= 18.12.0 is required'); process.exit(1)}"
 
-      - name: Enable Corepack (pnpm)
+      - name: Tooling diagnostics (non-blocking)
         run: |
-          corepack enable
-          corepack prepare pnpm@9 --activate
+          # Don't let optional tooling setup fail the job
+          corepack --version || true
+          corepack enable || true
           echo "Using Node: $(node -v)"
-          echo "pnpm: $(pnpm -v)"
-          echo "node path: $(which node)"
-          echo "pnpm path: $(which pnpm)"
+          echo "npx pnpm version: $(npx -y pnpm@9 --version)"
+          echo "node path: $(command -v node)"
+          echo "pnpm path: $(command -v pnpm || echo 'not found')"
 
       - name: Setup pnpm cache
         uses: actions/cache@v4
@@ -316,11 +317,6 @@ jobs:
             # Verify which node will be used
             echo "Node.js in PATH: $(which node)"
             echo "Node.js version: $(node --version)"
-
-            # Enable Corepack and activate pnpm@9 for this session
-            echo "Enabling Corepack and preparing pnpm..."
-            corepack enable
-            corepack prepare pnpm@9 --activate
 
             # Verify pnpm version (force via npx to avoid global older pnpm)
             echo "pnpm version: $(npx -y pnpm@9 --version)"
