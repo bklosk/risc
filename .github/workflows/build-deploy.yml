@@ -318,11 +318,11 @@ jobs:
             echo "Node.js in PATH: $(which node)"
             echo "Node.js version: $(node --version)"
 
-            # Resolve actual Node and npx paths from the active Node runtime
-            NODE_BIN_DIR=$(dirname "$(node -p \"process.execPath\")")
-            NPX_CMD="$NODE_BIN_DIR/npx"
-            echo "Resolved Node path: $(node -p 'process.execPath')"
-            echo "Resolved npx path: $NPX_CMD"
+            # Resolve actual Node and npm paths from the active Node runtime
+            RESOLVED_NODE=$(node -p 'process.execPath')
+            NPM_CMD="$(dirname "$RESOLVED_NODE")/npm"
+            echo "Resolved Node path: $RESOLVED_NODE"
+            echo "Resolved npm path: $NPM_CMD"
 
             # Update PM2 ecosystem to use the resolved Node interpreter
             if [ -f "${{ env.APP_DIR }}/ecosystem.config.json" ]; then
@@ -330,13 +330,13 @@ jobs:
               sed -i "s|\"interpreter\": \".*\"|\"interpreter\": \"${INTERPRETER_PATH}\"|g" "${{ env.APP_DIR }}/ecosystem.config.json"
             fi
 
-            # Verify pnpm version (via Node 18 npx)
-            echo "pnpm version: $($NPX_CMD -y pnpm@9 -- --version)"
+            # Verify pnpm version (via Node 18 npm exec)
+            echo "pnpm version: $($NPM_CMD exec -y pnpm@9 -- --version)"
 
             # Install production dependencies
             cd ${{ env.APP_DIR }}
             echo "Installing dependencies..."
-            if ! $NPX_CMD -y pnpm@9 -- install; then
+            if ! $NPM_CMD exec -y pnpm@9 -- install; then
               echo "Failed to install dependencies, rolling back"
               LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
               if [ -n "$LATEST_BACKUP" ]; then
@@ -355,7 +355,7 @@ jobs:
               echo "ERROR: .next directory not found. Checking if we need to build..."
               if [ -f "${{ env.APP_DIR }}/package.json" ]; then
                 echo "Attempting to build Next.js application..."
-                if ! $NPX_CMD -y pnpm@9 -- build; then
+                if ! $NPM_CMD exec -y pnpm@9 -- build; then
                   echo "Build failed, cannot continue deployment"
                   LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
                   if [ -n "$LATEST_BACKUP" ]; then
@@ -380,7 +380,7 @@ jobs:
             echo "Verifying Next.js is installed..."
             if [ ! -d "${{ env.APP_DIR }}/node_modules/next" ]; then
               echo "ERROR: next module not found in node_modules! Trying to repair..."
-              $NPX_CMD -y pnpm@9 -- add next@latest
+              $NPM_CMD exec -y pnpm@9 -- add next@latest
             fi
 
             # Install PM2 if not already installed
