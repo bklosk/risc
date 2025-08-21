@@ -150,7 +150,7 @@ jobs:
               "name": "nextjs-app",
               "cwd": "${{ env.APP_DIR }}",
               "script": "node_modules/.bin/next",
-              "args": "start",
+              "args": "start -p ${{ env.APP_PORT }} -H 127.0.0.1",
               "instances": "1",
               "exec_mode": "fork",
               "interpreter": "$HOME/.nvm/versions/node/v${{ env.NODE_VERSION }}/bin/node",
@@ -436,8 +436,8 @@ jobs:
               exit 1
             fi
 
-            # Check for any immediate startup errors
-            sleep 3
+            # Give the server time to boot
+            sleep 8
             if ! pm2 show nextjs-app | grep -q "online"; then
               echo "Application didn't start properly. PM2 status:"
               pm2 show nextjs-app
@@ -684,10 +684,14 @@ jobs:
             echo "Verifying Apache modules are enabled:"
             sudo apache2ctl -M | grep proxy
 
-            # Check if application is running with timeout
+            # Check if application is running with timeout (health endpoint)
             echo "Testing application health..."
-            if ! curl -s --max-time 10 http://localhost:${{ env.APP_PORT }} > /dev/null; then
-              echo "Deployment verification failed - application not responding"
+            if ! curl -s --max-time 12 http://127.0.0.1:${{ env.APP_PORT }}/api/health > /dev/null; then
+              echo "Deployment verification failed - health endpoint not responding"
+              echo "PM2 show output:"
+              pm2 show nextjs-app || true
+              echo "Recent PM2 logs:"
+              pm2 logs nextjs-app --lines 50 --nostream || true
               exit 1
             fi
 
