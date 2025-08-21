@@ -8,43 +8,6 @@
     "githubUrl": "https://github.com/benthev"
   },
   {
-    "name": "Noah Duncan",
-    "position": "Senior Analyst",
-    "image": "/images/team/Noah.png",
-    "bio": "His puppy brings pure love (and pure chaos) to the office.",
-    "linkedinUrl": "https://linkedin.com/in/noah-duncan",
-    "githubUrl": "https://github.com/duncandonuts6"
-  },
-  {
-    "name": "Jack Tait",
-    "position": "Senior Analyst",
-    "image": "/images/team/Jack.png",
-    "bio": "Proud football podcast host, prouder dog dad.",
-    "linkedinUrl": "https://www.linkedin.com/in/jack-tait-13229b10a/",
-    "githubUrl": "https://github.com/JackTait97"
-  },
-  {
-    "name": "Claire Sukumar",
-    "position": "Senior Analyst",
-    "image": "/images/team/Claire.png",
-    "bio": "Has taken up full-time residence inside a little free library.",
-    "linkedinUrl": "https://linkedin.com/in/claire-sukumar",
-    "githubUrl": "https://github.com/csukumar"
-  },
-  {
-    "name": "Catherine Murphy",
-    "position": "Entrepreneur in Residence",
-    "image": "/images/team/Catherine.png",
-    "bio": "An advisor to our team."
-  },
-  {
-    "name": "Ruby Rorty",
-    "position": "Analyst",
-    "image": "/images/team/Ruby.png",
-    "bio": "Big name in tiny fiction.",
-    "linkedinUrl": "https://www.linkedin.com/in/ruby-rorty-692472195/"
-  },
-  {
     "name": "Davis Johnstone",
     "position": "Analyst",
     "image": "/images/team/Davis.png",
@@ -67,13 +30,6 @@
     "linkedinUrl": "https://www.linkedin.com/in/cami-brix-7ba68b1a2/"
   },
   {
-    "name": "Devin Haas",
-    "position": "Analyst",
-    "image": "/images/team/Devin.jpeg",
-    "bio": "Probably exploring Afghanistan right now.",
-    "linkedinUrl": "https://www.linkedin.com/in/devin-haas-930341248/"
-  },
-  {
     "name": "Hana Horiuchi",
     "position": "Analyst",
     "image": "/images/team/Hana.png",
@@ -88,13 +44,6 @@
     "bio": "Saves 3,000 shrimp lives per minute. Probably the most effective altruist in the world.",
     "linkedinUrl": "https://www.linkedin.com/in/daniela-shuman/",
     "githubUrl": "https://github.com/dshuman12"
-  },
-  {
-    "name": "Kali Enkhbayar",
-    "position": "Analyst",
-    "image": "/images/team/Khali.png",
-    "bio": "Most stylish RISC analyst. Has never been seen in the same outfit twice.",
-    "linkedinUrl": "https://www.linkedin.com/in/khaliun-enkhbayar-9918281b2/"
   },
   {
     "name": "Micah Ross",

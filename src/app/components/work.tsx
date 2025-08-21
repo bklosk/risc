@@ -24,8 +24,9 @@ export default function WorkCarousel() {
   const itemRefs = useRef<Map<number, DOMRect>>(new Map());
   const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
 
-  // Track scroll position
+  // Track scroll position and landing animation completion
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [landingComplete, setLandingComplete] = useState(false);
 
   // Monitor scroll position
   useEffect(() => {
@@ -40,6 +41,19 @@ export default function WorkCarousel() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Timer to trigger fade-in after landing animations complete
+  useEffect(() => {
+    // Landing animations complete after: video delay (0.5s) + text delay (4s) + text duration (~0.5s) = ~5s
+    const timer = setTimeout(() => {
+      setLandingComplete(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Determine if carousel should be visible
+  const shouldShow = hasScrolled || landingComplete;
 
   // Fetch carousel data from JSON file
   useEffect(() => {
@@ -171,7 +185,7 @@ export default function WorkCarousel() {
       id="work"
       className="w-full overflow-hidden md:mt-8 py-8 relative"
       initial={{ opacity: 0 }}
-      animate={{ opacity: hasScrolled ? 1 : 0 }}
+      animate={{ opacity: shouldShow ? 1 : 0 }}
       transition={{ duration: 0.5 }}
     >
       <div className="flex items-center justify-center mb-4">
@@ -224,10 +238,10 @@ export default function WorkCarousel() {
                 pointerEvents: "none", // Allow drag events to pass through to parent
               }}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: shouldShow ? 1 : 0 }}
               transition={{
                 duration: 0.5,
-                delay: 3 + 0.15 * index, // Start after parent animation + staggered delay
+                delay: shouldShow ? 0.15 * index : 0, // Staggered delay only when visible
               }}
               whileHover={{ scale: 1 }}
               ref={(el) => {
