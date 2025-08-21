@@ -43,11 +43,14 @@ jobs:
           # Ensure Node >= 18.12.0
           node -e "const [maj,min,pat]=process.versions.node.split('.').map(Number); if(maj<18|| (maj===18&&min<12)){ console.error('Node.js >= 18.12.0 is required'); process.exit(1)}"
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9 # Align with lockfile v9 and Node >= 18.12
-          run_install: false
+      - name: Enable Corepack (pnpm)
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
+          echo "Using Node: $(node -v)"
+          echo "pnpm: $(pnpm -v)"
+          echo "node path: $(which node)"
+          echo "pnpm path: $(which pnpm)"
 
       - name: Setup pnpm cache
         uses: actions/cache@v4
@@ -58,10 +61,10 @@ jobs:
             ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npx -y pnpm@9 install --no-frozen-lockfile
 
       - name: Build Next.js app
-        run: pnpm build
+        run: npx -y pnpm@9 build
 
       - name: Check build success
         run: |
@@ -307,27 +310,25 @@ jobs:
 
             # Add node to path for this session
             export PATH="$NVM_DIR/versions/node/v${{ env.NODE_VERSION }}/bin:$PATH"
+            # Clear command hash cache so updated PATH is respected
+            hash -r
 
             # Verify which node will be used
             echo "Node.js in PATH: $(which node)"
             echo "Node.js version: $(node --version)"
 
-            # Install pnpm if not already installed (with correct Node.js version)
-            if ! command -v pnpm &> /dev/null; then
-              echo "Installing pnpm..."
-              npm install -g pnpm
-            else
-              echo "Updating pnpm..."
-              npm install -g pnpm
-            fi
+            # Enable Corepack and activate pnpm@9 for this session
+            echo "Enabling Corepack and preparing pnpm..."
+            corepack enable
+            corepack prepare pnpm@9 --activate
 
-            # Verify pnpm version
-            echo "pnpm version: $(pnpm --version)"
+            # Verify pnpm version (force via npx to avoid global older pnpm)
+            echo "pnpm version: $(npx -y pnpm@9 --version)"
 
             # Install production dependencies
             cd ${{ env.APP_DIR }}
             echo "Installing dependencies..."
-            if ! pnpm install; then
+            if ! npx -y pnpm@9 install; then
               echo "Failed to install dependencies, rolling back"
               LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
               if [ -n "$LATEST_BACKUP" ]; then
@@ -346,7 +347,7 @@ jobs:
               echo "ERROR: .next directory not found. Checking if we need to build..."
               if [ -f "${{ env.APP_DIR }}/package.json" ]; then
                 echo "Attempting to build Next.js application..."
-                if ! pnpm build; then
+                if ! npx -y pnpm@9 build; then
                   echo "Build failed, cannot continue deployment"
                   LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
                   if [ -n "$LATEST_BACKUP" ]; then
@@ -371,7 +372,7 @@ jobs:
             echo "Verifying Next.js is installed..."
             if [ ! -d "${{ env.APP_DIR }}/node_modules/next" ]; then
               echo "ERROR: next module not found in node_modules! Trying to repair..."
-              pnpm add next@latest
+              npx -y pnpm@9 add next@latest
             fi
 
             # Install PM2 if not already installed
