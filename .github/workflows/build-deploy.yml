@@ -149,7 +149,7 @@ jobs:
             "apps": [{
               "name": "nextjs-app",
               "cwd": "${{ env.APP_DIR }}",
-              "script": "node_modules/.bin/next",
+              "script": "node_modules/next/dist/bin/next",
               "args": "start -p ${{ env.APP_PORT }} -H 127.0.0.1",
               "instances": "1",
               "exec_mode": "fork",
