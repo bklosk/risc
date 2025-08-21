@@ -318,13 +318,25 @@ jobs:
             echo "Node.js in PATH: $(which node)"
             echo "Node.js version: $(node --version)"
 
-            # Verify pnpm version (force via npx to avoid global older pnpm)
-            echo "pnpm version: $(npx -y pnpm@9 --version)"
+            # Resolve actual Node and npx paths from the active Node runtime
+            NODE_BIN_DIR=$(dirname "$(node -p \"process.execPath\")")
+            NPX_CMD="$NODE_BIN_DIR/npx"
+            echo "Resolved Node path: $(node -p 'process.execPath')"
+            echo "Resolved npx path: $NPX_CMD"
+
+            # Update PM2 ecosystem to use the resolved Node interpreter
+            if [ -f "${{ env.APP_DIR }}/ecosystem.config.json" ]; then
+              INTERPRETER_PATH="$(node -p 'process.execPath')"
+              sed -i "s|\"interpreter\": \".*\"|\"interpreter\": \"${INTERPRETER_PATH}\"|g" "${{ env.APP_DIR }}/ecosystem.config.json"
+            fi
+
+            # Verify pnpm version (via Node 18 npx)
+            echo "pnpm version: $($NPX_CMD -y pnpm@9 -- --version)"
 
             # Install production dependencies
             cd ${{ env.APP_DIR }}
             echo "Installing dependencies..."
-            if ! npx -y pnpm@9 install; then
+            if ! $NPX_CMD -y pnpm@9 -- install; then
               echo "Failed to install dependencies, rolling back"
               LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
               if [ -n "$LATEST_BACKUP" ]; then
@@ -343,7 +355,7 @@ jobs:
               echo "ERROR: .next directory not found. Checking if we need to build..."
               if [ -f "${{ env.APP_DIR }}/package.json" ]; then
                 echo "Attempting to build Next.js application..."
-                if ! npx -y pnpm@9 build; then
+                if ! $NPX_CMD -y pnpm@9 -- build; then
                   echo "Build failed, cannot continue deployment"
                   LATEST_BACKUP=$(find /var/www -maxdepth 1 -name "nextjs-app-backup-*" -type d | sort -r | head -1)
                   if [ -n "$LATEST_BACKUP" ]; then
@@ -368,7 +380,7 @@ jobs:
             echo "Verifying Next.js is installed..."
             if [ ! -d "${{ env.APP_DIR }}/node_modules/next" ]; then
               echo "ERROR: next module not found in node_modules! Trying to repair..."
-              npx -y pnpm@9 add next@latest
+              $NPX_CMD -y pnpm@9 -- add next@latest
             fi
 
             # Install PM2 if not already installed
