@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Image from "next/image";
 import { Mail, MessageSquare, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
@@ -16,47 +17,19 @@ const Contact: React.FC<ContactFormProps> = ({
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isPending, startTransition] = useTransition();
-  const [formStatus, setFormStatus] = useState<{
-    success?: boolean;
-    message?: string;
-  } | null>(null);
 
   // Reference for the container element to detect when it's in view
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.4 });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    startTransition(async () => {
-      try {
-        // Send form data to your API or endpoint
-        const response = await fetch("/api/contact", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, message }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to submit");
-        }
-
-        // Reset form
-        setEmail("");
-        setMessage("");
-        setFormStatus({
-          success: true,
-          message: "Thank you for your message! We will get back to you soon.",
-        });
-      } catch (error) {
-        console.error("Error submitting form:", error);
-        setFormStatus({
-          success: false,
-          message: "Failed to send message. Please try again later.",
-        });
-      }
+    startTransition(() => {
+      const subject = encodeURIComponent("RISC website contact");
+      const body = encodeURIComponent(`From: ${email}\n\n${message}`);
+      const mailtoUrl = `mailto:centerforrisc@gmail.com?subject=${subject}&body=${body}`;
+      window.location.href = mailtoUrl;
     });
   };
 
@@ -76,10 +49,11 @@ const Contact: React.FC<ContactFormProps> = ({
     >
       {/* Left side - Image */}
       <div className="w-full md:w-1/2 h-64 md:h-auto relative">
-        <img
+        <Image
           src={imageSrc}
           alt="Reach out to us"
-          className="w-full h-full object-cover"
+          fill
+          style={{ objectFit: "cover" }}
         />
       </div>
 
@@ -91,21 +65,9 @@ const Contact: React.FC<ContactFormProps> = ({
             Have an idea we could pursue? Want to partner with us?
           </p>
 
-          {formStatus && (
-            <div
-              className={`p-3 mb-4 rounded-md ${
-                formStatus.success
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-              }`}
-            >
-              {formStatus.message}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-medium mb-2 flex items-center">
+              <label className="text-gray-700 text-sm font-medium mb-2 flex items-center">
                 <Mail className="mr-2 h-4 w-4" />
                 <span>Email</span>
               </label>
@@ -121,7 +83,7 @@ const Contact: React.FC<ContactFormProps> = ({
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-medium mb-2 flex items-center">
+              <label className="text-gray-700 text-sm font-medium mb-2 flex items-center">
                 <MessageSquare className="mr-2 h-4 w-4" />
                 <span>Message</span>
               </label>
