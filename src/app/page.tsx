@@ -21,7 +21,7 @@ export default function Page() {
       <Landing />
       <Work />
       <Team />
-      <div className="container mx-auto py-12 px-4">
+      <div className="container mx-auto py-12 px-4 snap-section">
         <Contact
           // Optional: provide a custom image
           imageSrc="/images/risc_desk.jpeg"

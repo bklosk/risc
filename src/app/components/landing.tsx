@@ -27,7 +27,7 @@ export default function Landing() {
   return (
     <motion.div
       style={{ opacity: fadeOpacity, y: fadeY }} // fade out as it moves out of view
-      className="w-full bg-white grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 "
+      className="w-full bg-white grid md:grid-cols-2 md:grid-rows-1 grid-cols-1 grid-rows-2 snap-section "
       id="intro"
     >
       <motion.video
@@ -36,9 +36,9 @@ export default function Landing() {
         muted
         playsInline
         className="w-full object-cover md:px-0"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, delay: 0.4 }}
       >
         <source src={randomVideo} type="video/mp4" />
       </motion.video>
@@ -52,7 +52,7 @@ export default function Landing() {
           className="text-4xl font-albert-sans font-extrabold text-[#FC4512]"
         />
         <motion.p
-          className="mt-4 lg:w-3/4 font-medium text-lg"
+          className="mt-4 ml-1 lg:w-3/4 font-medium text-xl"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 4 }}

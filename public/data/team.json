@@ -56,14 +56,14 @@
     "name": "Josie Maier",
     "position": "Analyst",
     "image": "/images/team/Josie.png",
-    "bio": "Former monkey scientist, current design wizard. Still loves monkeys.",
+    "bio": "Kitty and kidney enthusiast.",
     "linkedinUrl": "https://www.linkedin.com/in/josie-maier-4b46201ab/"
   },
   {
     "name": "Ben Klosky",
     "position": "Analyst",
     "image": "/images/team/BenK.png",
-    "bio": "Does improv, has yet to be funny on purpose. We believe in ya, buddy.",
+    "bio": "Does improv, has yet to be funny on purpose.",
     "linkedinUrl": "https://linkedin.com/in/ben-klosky",
     "githubUrl": "https://github.com/bklosk"
   }

@@ -94,10 +94,13 @@ export default function WorkCarousel() {
 
     calculateAfterRender();
 
+    // Cache current element to avoid stale ref in cleanup
+    const carouselEl = carouselRef.current;
+
     // Use MutationObserver to detect changes to the DOM
     const observer = new MutationObserver(calculateAfterRender);
-    if (carouselRef.current) {
-      observer.observe(carouselRef.current, {
+    if (carouselEl) {
+      observer.observe(carouselEl, {
         childList: true,
         subtree: true,
         attributes: true,
@@ -106,8 +109,8 @@ export default function WorkCarousel() {
 
     // Use ResizeObserver for more reliable size detection
     const resizeObserver = new ResizeObserver(updateWidth);
-    if (carouselRef.current) {
-      resizeObserver.observe(carouselRef.current);
+    if (carouselEl) {
+      resizeObserver.observe(carouselEl);
     }
 
     // Also listen for window resize and orientation change
@@ -116,7 +119,7 @@ export default function WorkCarousel() {
 
     return () => {
       observer.disconnect();
-      if (carouselRef.current) resizeObserver.unobserve(carouselRef.current);
+      if (carouselEl) resizeObserver.unobserve(carouselEl);
       window.removeEventListener("resize", updateWidth);
       window.removeEventListener("orientationchange", updateWidth);
     };
@@ -183,22 +186,25 @@ export default function WorkCarousel() {
   return (
     <motion.div
       id="work"
-      className="w-full overflow-hidden md:mt-8 py-8 relative"
+      className="w-full overflow-hidden md:mt-8 py-8 relative px-4 md:px-8 snap-section"
       initial={{ opacity: 0 }}
       animate={{ opacity: shouldShow ? 1 : 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="flex items-center justify-center mb-4">
-        <h1 className="text-4xl md:text-5xl mx-auto font-albert-sans font-extrabold text-[#FC4512] md:ml-8 mb-4">
+      <div className="mb-4">
+        <h1 className="text-4xl md:text-5xl font-albert-sans font-extrabold text-[#FC4512] mb-4">
           Some of our projects
         </h1>
       </div>
 
       {/* Carousel container with fallback scrolling */}
-      <div ref={carouselRef} className="overflow-hidden mx-4 md:mx-8 pb-4">
+      <div
+        ref={carouselRef}
+        className="overflow-hidden pb-4 rounded-r-2xl rounded-br-2xl"
+      >
         <motion.div
           ref={innerCarouselRef}
-          className={`grid grid-rows-1 md:grid-rows-2 grid-flow-col gap-6 w-max mx-auto`}
+          className={`grid grid-rows-1 md:grid-rows-2 grid-flow-col gap-6 w-max rounded-r-2xl rounded-br-2xl overflow-hidden`}
           drag="x"
           dragConstraints={{ right: 100, left: -width - 100 }}
           dragTransition={{
@@ -221,6 +227,8 @@ export default function WorkCarousel() {
           }}
           style={{
             cursor: isDragging ? "grabbing" : "grab",
+            clipPath: "inset(0 round 0 1rem 1rem 0)",
+            touchAction: "pan-y", // allow vertical scrolling on mobile while enabling horizontal drag
           }}
         >
           {carouselItems.map((item, index) => (

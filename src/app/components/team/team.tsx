@@ -69,7 +69,7 @@ export default function Team() {
   return (
     <motion.div
       id="team"
-      className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 md:mr-20"
+      className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 md:mr-20 snap-section"
     >
       <motion.div
         ref={introRef}
@@ -78,14 +78,14 @@ export default function Team() {
         animate={introInView ? "visible" : "hidden"}
         variants={fadeInUp}
       >
-        <h1 className="text-6xl max-w-[400px] mx-auto font-extrabold text-[#FC4512] mb-8">
+        <h1 className="text-6xl max-w-[400px] lg:mx-auto font-extrabold text-[#FC4512] mb-8">
           Who we are
         </h1>
-        <p className="mb-4 text-lg font-bold max-w-[400px] mx-auto">
+        <p className="mb-4 text-lg font-bold max-w-[400px] lg:mx-auto">
           Our mission is to generate breakthrough problems to the world&apos;s
           hardest problems.
         </p>
-        <p className="mb-4 text-lg max-w-[400px] mx-auto">
+        <p className="mb-4 text-lg max-w-[400px] lg:mx-auto">
           The Center for RISC is the brainchild of Steven Levitt, professor of
           economics at the University of Chicago and co-author of Freakonomics.
           We are not an academic group or research lab. Instead, we investigate
@@ -95,12 +95,12 @@ export default function Team() {
           partnerships with academics, nonprofits, government agencies,
           international organizations, and private corporations.
         </p>
-        <p className="mb-4 text-lg max-w-[400px] mx-auto">
+        <p className="mb-4 text-lg max-w-[400px] lg:mx-auto">
           Our team holds degrees from the world’s leading universities, and our
           Analysts have trained in the fields of data science, economics,
           political science, applied mathematics, and more.
         </p>
-        <p className=" text-lg max-w-[400px] mx-auto">
+        <p className=" text-lg max-w-[400px] lg:mx-auto">
           After their time at RISC, our alumni have continued their
           distinguished paths, pursuing further education, embarking on projects
           abroad, and taking on roles in tech, academia, philanthropy, and
@@ -162,7 +162,7 @@ export default function Team() {
         </motion.div>
         <motion.div
           ref={teamGridRef}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-auto md:mx-0"
+          className="flex flex-wrap gap-8 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-8"
           initial="hidden"
           animate={teamGridInView ? "visible" : "hidden"}
           variants={fadeInUp}
