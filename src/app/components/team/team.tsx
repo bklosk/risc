@@ -82,7 +82,7 @@ export default function Team() {
           Who we are
         </h1>
         <p className="mb-4 text-lg font-bold max-w-[400px] lg:mx-auto">
-          Our mission is to generate breakthrough problems to the world&apos;s
+          Our mission is to generate breakthrough solutions to the world&apos;s
           hardest problems.
         </p>
         <p className="mb-4 text-lg max-w-[400px] lg:mx-auto">
