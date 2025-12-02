@@ -76,6 +76,12 @@ jobs:
             exit 1
           fi
 
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_POSTHOG_KEY=${{ env.NEXT_PUBLIC_POSTHOG_KEY }}" >> .env
+          echo "NEXT_PUBLIC_POSTHOG_HOST=${{ env.NEXT_PUBLIC_POSTHOG_HOST }}" >> .env
+          echo "Created .env file with PostHog keys"
+
       - name: Prepare deployment files
         run: |
           # Create a temporary directory for deployment files
