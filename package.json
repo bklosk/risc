@@ -16,6 +16,7 @@
     "motion": "^12.4.4",
     "next": "15.1.6",
     "nodemailer": "^7.0.3",
+    "posthog-js": "^1.299.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-text-transition": "^3.1.0",

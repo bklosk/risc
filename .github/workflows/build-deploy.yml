@@ -22,6 +22,8 @@ jobs:
       EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
       EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+      NEXT_PUBLIC_POSTHOG_KEY: "phc_iBrfWB9gBM0nNB0BWP28HUochcv9doWXD3vfNKe8xND"
+      NEXT_PUBLIC_POSTHOG_HOST: "https://us.i.posthog.com"
 
     steps:
       - name: Checkout repository
@@ -161,7 +163,9 @@ jobs:
                 "EMAIL_SERVER_PORT": "${{ secrets.EMAIL_SERVER_PORT }}",
                 "EMAIL_USERNAME": "${{ secrets.EMAIL_USERNAME }}",
                 "EMAIL_PASSWORD": "${{ secrets.EMAIL_PASSWORD }}",
-                "EMAIL_SENDER": "${{ secrets.EMAIL_SENDER }}"
+                "EMAIL_SENDER": "${{ secrets.EMAIL_SENDER }}",
+                "NEXT_PUBLIC_POSTHOG_KEY": "${{ env.NEXT_PUBLIC_POSTHOG_KEY }}",
+                "NEXT_PUBLIC_POSTHOG_HOST": "${{ env.NEXT_PUBLIC_POSTHOG_HOST }}"
               },
               "log_date_format": "YYYY-MM-DD HH:mm:ss Z"
             }]
