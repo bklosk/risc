@@ -16,7 +16,7 @@ jobs:
       DOMAIN_NAME: ${{ secrets.DOMAIN_NAME || 'risc.uchicago.edu' }}
       APP_DIR: "/var/www/risc"
       BACKUP_RETENTION_DAYS: 7
-      NODE_VERSION: "18.18" # Updated to a version that meets pnpm's requirements (at least 18.12)
+      NODE_VERSION: "20" # Updated to a version that meets Next.js requirements (at least 20.9.0)
       EMAIL_SERVER_HOST: ${{ secrets.EMAIL_SERVER_HOST }}
       EMAIL_SERVER_PORT: ${{ secrets.EMAIL_SERVER_PORT }}
       EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
@@ -40,10 +40,10 @@ jobs:
           echo "Node.js version: $(node --version)"
           REQUIRED="v${{ env.NODE_VERSION }}"
           if [ "$(node --version)" != "${REQUIRED}" ]; then
-            echo "Warning: Node.js version does not exactly match ${REQUIRED}. Proceeding as long as >= 18.12.0"
+            echo "Warning: Node.js version does not exactly match ${REQUIRED}. Proceeding as long as >= 20.9.0"
           fi
-          # Ensure Node >= 18.12.0
-          node -e "const [maj,min,pat]=process.versions.node.split('.').map(Number); if(maj<18|| (maj===18&&min<12)){ console.error('Node.js >= 18.12.0 is required'); process.exit(1)}"
+          # Ensure Node >= 20.9.0
+          node -e "const [maj,min,pat]=process.versions.node.split('.').map(Number); if(maj<20|| (maj===20&&min<9)){ console.error('Node.js >= 20.9.0 is required'); process.exit(1)}"
 
       - name: Tooling diagnostics (non-blocking)
         run: |
@@ -286,7 +286,7 @@ jobs:
               exit 1
             fi
 
-            # Install or update Node.js to v18.18 if required
+            # Install or update Node.js to v20 if required
             echo "Checking Node.js version..."
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
