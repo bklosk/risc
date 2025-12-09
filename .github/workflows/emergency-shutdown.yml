@@ -1,0 +1,21 @@
+name: Emergency SSH Shutdown
+
+on:
+  workflow_dispatch:
+
+jobs:
+  emergency-shutdown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Attempt SSH Shutdown
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          port: ${{ secrets.DO_PORT || 22 }}
+          command_timeout: "2m"
+          script: |
+            echo "Attempting emergency shutdown..."
+            sudo poweroff || echo "Failed to poweroff"
+
